@@ -1,12 +1,6 @@
-import Link from "next/link";
-import { RoleSwitcher } from "@/components/styles/role-switcher";
+import { redirect } from 'next/navigation';
 
-
-export default function Home() {
-  return (
-    <div className="min-h-screen bg-background">
-      <RoleSwitcher />
-      <h1>Task Management System</h1>
-    </div>
-  );
+export default function HomePage() {
+  // Redirect to login page for admin access
+  redirect('/login');
 }
