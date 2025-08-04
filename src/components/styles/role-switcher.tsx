@@ -1,6 +1,6 @@
 "use client"
 
-import { useRoleTheme } from "./theme-provider"
+import { useRoleTheme } from "../provider/theme-provider"
 
 export function RoleSwitcher() {
   const { role, setRole, isLoading } = useRoleTheme()

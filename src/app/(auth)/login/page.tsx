@@ -1,5 +1,5 @@
 import AdminLoginForm from '@/components/auth/AdminLoginForm';
-import RoleThemeProvider from '@/components/auth/RoleThemeProvider';
+import RoleThemeProvider from '@/components/provider/RoleThemeProvider';
 import { UserRole } from '@/types/auth';
 
 export default function LoginPage() {
