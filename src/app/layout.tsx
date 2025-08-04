@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-  import { RoleThemeProvider  } from "@/components/provider/theme-provider";
+import { RoleThemeProvider  } from "@/components/provider/theme-provider";
+import { UserRole } from "@/types/auth";
+import { ToastProvider } from "@/components/hooks/use-toast";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,7 +28,8 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-          <RoleThemeProvider defaultRole="admin">
+        <ToastProvider />
+          <RoleThemeProvider defaultRole={UserRole.ADMIN}>
             {children}
           </RoleThemeProvider>
 

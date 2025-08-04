@@ -62,7 +62,9 @@ export default function AdminLoginForm({ onSuccess }: LoginFormProps) {
         setCookieValue(ICookieKeys.REFRESH_TOKEN, result.data?.refreshToken || '');
         setCookieValue(ICookieKeys.USER_ROLE, result.data?.user?.role || UserRole.ADMIN);
         // setCookieValue(ICookieKeys.USER_ID, result.data?.user?.id || '');
-        router.push('/admin');
+        setTimeout(() => {
+          router.push('/admin');
+        }, 2000);
       } else {
         setError(result.message || 'Login failed');
       }

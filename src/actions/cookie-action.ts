@@ -1,6 +1,7 @@
 'use server'
 
 import { getCookieValue, setCookie, hasCookie, deleteCookie } from '@/lib/common/cookie-utils'
+import { ICookieKeys } from '@/types/common'
 
 // Generic cookie setter - accepts any key-value pair
 export async function setCookieValue(key: string, value: string) {
@@ -64,11 +65,9 @@ export async function deleteMultipleCookies(keys: string[]) {
 export async function clearAllCookies() {
   try {
     const commonKeys = [
-      'user-role',
-      'access-token', 
-      'refresh-token',
-      'user-data',
-      'theme'
+      ICookieKeys.TOKEN,
+      ICookieKeys.REFRESH_TOKEN,
+      ICookieKeys.USER_ROLE,
     ]
     
     await deleteMultipleCookies(commonKeys)

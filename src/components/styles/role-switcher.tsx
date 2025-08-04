@@ -1,11 +1,12 @@
 "use client"
 
 import { useRoleTheme } from "../provider/theme-provider"
+import { UserRole } from "@/types/auth"
 
 export function RoleSwitcher() {
   const { role, setRole, isLoading } = useRoleTheme()
 
-  const handleRoleChange = async (newRole: "admin" | "manager" | "member") => {
+  const handleRoleChange = async (newRole: UserRole) => {
     try {
       await setRole(newRole)
     } catch (error) {
@@ -33,9 +34,9 @@ export function RoleSwitcher() {
       <h3 className="text-sm font-medium text-gray-900 mb-2">Switch Role</h3>
       <div className="space-y-2">
         <button
-          onClick={() => handleRoleChange("admin")}
+          onClick={() => handleRoleChange(UserRole.ADMIN)}
           className={`w-full px-3 py-2 text-sm rounded-md transition-colors ${
-            role === "admin"
+            role === UserRole.ADMIN
               ? "bg-indigo-600 text-white"
               : "bg-gray-100 text-gray-700 hover:bg-gray-200"
           }`}
@@ -43,9 +44,9 @@ export function RoleSwitcher() {
           Admin
         </button>
         <button
-          onClick={() => handleRoleChange("manager")}
+          onClick={() => handleRoleChange(UserRole.MANAGER)}
           className={`w-full px-3 py-2 text-sm rounded-md transition-colors ${
-            role === "manager"
+            role === UserRole.MANAGER
               ? "bg-teal-600 text-white"
               : "bg-gray-100 text-gray-700 hover:bg-gray-200"
           }`}
@@ -53,9 +54,9 @@ export function RoleSwitcher() {
           Manager
         </button>
         <button
-          onClick={() => handleRoleChange("member")}
+          onClick={() => handleRoleChange(UserRole.MEMBER)}
           className={`w-full px-3 py-2 text-sm rounded-md transition-colors ${
-            role === "member"
+            role === UserRole.MEMBER
               ? "bg-emerald-600 text-white"
               : "bg-gray-100 text-gray-700 hover:bg-gray-200"
           }`}

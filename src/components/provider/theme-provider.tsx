@@ -3,8 +3,10 @@
 import * as React from "react"
 import { createContext, useContext, useEffect, useState } from "react"
 import { getCookieValueAction, setCookieValue } from "@/actions/cookie-action"  
+import { ICookieKeys } from "@/types/common"
+import { UserRole } from "@/types/auth"
 
-export type Role = "admin" | "manager" | "member"
+export type Role = UserRole
 
 interface RoleThemeContextType {
   role: Role
@@ -29,7 +31,7 @@ interface RoleThemeProviderProps {
 
 export function RoleThemeProvider({
   children,
-  defaultRole = "admin"
+  defaultRole = UserRole.ADMIN
 }: RoleThemeProviderProps) {
   const [role, setRoleState] = useState<Role>(defaultRole)
   const [mounted, setMounted] = useState(false)
@@ -39,7 +41,7 @@ export function RoleThemeProvider({
   useEffect(() => {
     async function loadRoleFromCookie() {
       try {
-        const result = await getCookieValueAction('user-role')
+        const result = await getCookieValueAction(ICookieKeys.USER_ROLE)
         if (result.success && result.value) {
           setRoleState(result.value as Role)
         }
@@ -57,7 +59,7 @@ export function RoleThemeProvider({
   // Update role in cookie and state
   const setRole = async (newRole: Role) => {
     try {
-      const result = await setCookieValue('user-role', newRole)
+        const result = await setCookieValue(ICookieKeys.USER_ROLE, newRole)
       if (result.success) {
         setRoleState(newRole)
       } else {

@@ -1,10 +1,22 @@
 import "server-only";
-import { getCookieValue } from "@/lib/common/cookie-utils";
-import { ErrorCodes, ICookieKeys } from "@/types/common";
-import { ResponseHandler } from "./response-handler";
+import { ICookieKeys } from "@/types/common";
+import { redirect } from "next/navigation";
+import { deleteCookieValue, getCookieValueAction } from "@/actions/cookie-action";
+import { refreshTokenAction } from "@/actions/auth";
 
 export type RequestOptions = {
   isWithToken: boolean;
+};
+
+// Refresh token function
+const refreshToken = async (): Promise<boolean> => {
+  try {
+    const result = await refreshTokenAction();
+    return result.success;
+  } catch (error) {
+    console.error('Token refresh failed:', error);
+    return false;
+  }
 };
 
 const fetchRequest = async (
@@ -13,18 +25,45 @@ const fetchRequest = async (
   body: any,
   requestOption: RequestOptions
 ) => {
+  const requestInput: any = await _getRequestInput(
+    method,
+    body,
+    requestOption
+  );
+  console.log(`Request ${method} to ${url}`, "debug", body, requestInput);
 
-    const requestInput: any = await _getRequestInput(
-      method,
-      body,
-      requestOption
-    );
-    console.log(`Request ${method} to ${url}`, "debug", body, requestInput);
-
-    const response = await fetch(url, requestInput);
-    const responseData = await response.json();
-    console.log("responseData", responseData);
-    return ResponseHandler.handleResponse(response, responseData);
+  const response = await fetch(url, requestInput);
+  const responseData = await response.json();
+  console.log("responseData", responseData);
+  
+  // Handle 401 Unauthorized - try to refresh token
+  if (response.status === 401 && requestOption.isWithToken) {
+    console.log("Received 401, attempting token refresh...");
+    
+    const refreshSuccess = await refreshToken();
+    
+    if (refreshSuccess) {
+      console.log("Token refreshed successfully, retrying original request...");
+      
+      // Retry the original request with new token
+      const retryRequestInput = await _getRequestInput(method, body, requestOption);
+      const retryResponse = await fetch(url, retryRequestInput);
+      const retryResponseData = await retryResponse.json();
+      
+      console.log("Retry responseData", retryResponseData);
+      return retryResponseData;
+    } else {
+      console.log("Token refresh failed, clearing cookies and redirecting to login");
+      
+      // Clear all auth cookies on refresh failure
+      await deleteCookieValue(ICookieKeys.TOKEN);
+      await deleteCookieValue(ICookieKeys.REFRESH_TOKEN);
+      await deleteCookieValue(ICookieKeys.USER_ROLE);   
+      redirect('/login');
+    }
+  }
+  
+  return responseData;
 };
 
 // HTTP Methods
@@ -79,5 +118,7 @@ const _getRequestInput = async (
 };
 
 // Get Token
-export const _getAccessToken = async (): Promise<string> =>
-  await getCookieValue(ICookieKeys.TOKEN);
+export const _getAccessToken = async (): Promise<string> => {
+  const result = await getCookieValueAction(ICookieKeys.TOKEN);
+  return result.value;
+};

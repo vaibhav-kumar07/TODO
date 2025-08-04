@@ -7,11 +7,20 @@ export interface LoginCredentials {
 export interface User {
   id: string;
   email: string;
-  name: string;
+  firstName: string;
+  lastName: string;
   role: UserRole;
+  isEmailVerified: boolean;
   isActive: boolean;
   createdAt: string;
-  updatedAt: string;
+  updatedAt?: string;
+}
+
+export interface UpdateProfileData {
+  firstName?: string;
+  lastName?: string;
+  currentPassword?: string;
+  newPassword?: string;
 }
 
 export enum UserRole {
@@ -32,11 +41,5 @@ export const AUTH_ENDPOINTS = {
   LOGOUT: '/auth/logout',
   REFRESH: '/auth/refresh',
   PROFILE: '/auth/profile',
-} as const;
-
-export const AUTH_COOKIES = {
-  ACCESS_TOKEN: 'token',
-  REFRESH_TOKEN: 'refreshToken',
-  USER_ROLE: 'userRole',
 } as const;
 

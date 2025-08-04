@@ -1,8 +1,7 @@
-import AdminLayout from '@/components/layout/AdminLayout';
 
 export default function AdminDashboard() {
   return (
-    <AdminLayout>
+
       <div className="max-w-7xl mx-auto">
         <div className="px-4 py-6 sm:px-0">
           <div className="border-4 border-dashed border-border rounded-lg p-8">
@@ -91,6 +90,6 @@ export default function AdminDashboard() {
           </div>
         </div>
       </div>
-    </AdminLayout>
+
   );
 } 
