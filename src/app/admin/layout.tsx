@@ -1,47 +1,42 @@
-import { getCookieValue } from '@/lib/common/cookie-utils';
-import { ICookieKeys } from '@/types/common';
-import { redirect } from 'next/navigation';
-import LogoutButton from '@/components/auth/LogoutButton';
-import { UserRole } from '@/types/auth';
+import type { Metadata } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
+import ".././globals.css";
+import { RoleThemeProvider  } from "@/components/provider/theme-provider";
+import { UserRole } from "@/types/auth";
+import { ToastProvider } from "@/components/hooks/use-toast";
+import Sidebar from "@/components/layout/Sidebar";
 
-interface AdminLayoutProps {
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
+export const metadata: Metadata = {
+  title: "TaskManager",
+  description: "Team task management system",
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
   children: React.ReactNode;
-}
-
-export default async function AdminLayout({ children }: AdminLayoutProps) {
-  const token = await getCookieValue(ICookieKeys.TOKEN);
-  const userRole = await getCookieValue(ICookieKeys.USER_ROLE);
-  
-  if (userRole !== UserRole.ADMIN) {
-    redirect('/login');
-  }
-
+}>) {
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b border-border bg-card">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <h1 className="text-xl font-bold text-foreground">Admin Dashboard</h1>
-              <span className="text-sm text-muted-foreground">
-                Welcome, {userRole || 'Admin'}
-              </span>
-            </div>
-
-            <div className="flex items-center space-x-4">
-              <LogoutButton variant="button" className="text-sm">
-                Logout
-              </LogoutButton>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Main Content */}
-      <main className="container mx-auto px-4 py-8">
-        {children}
-      </main>
-    </div>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <ToastProvider />
+          <RoleThemeProvider defaultRole={UserRole.ADMIN} >
+          <main className="flex ">
+            <Sidebar />
+            {children}
+          </main>
+          </RoleThemeProvider>
+      </body>
+    </html>
   );
-} 
+}

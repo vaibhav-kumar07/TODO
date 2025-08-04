@@ -3,15 +3,21 @@ import { ICookieKeys } from '@/types/common';
 import { redirect } from 'next/navigation';
 import Sidebar from './Sidebar';
 
-interface AdminLayoutProps {
+interface RoleLayoutProps {
   children: React.ReactNode;
+  allowedRoles?: string[];
 }
 
-export default async function AdminLayout({ children }: AdminLayoutProps) {
+export default async function RoleLayout({ children, allowedRoles }: RoleLayoutProps) {
   const token = await getCookieValue(ICookieKeys.TOKEN);
   const userRole = await getCookieValue(ICookieKeys.USER_ROLE);
   
   if (!token || !userRole) {
+    redirect('/login');
+  }
+
+  // Check if user has access to this page
+  if (allowedRoles && !allowedRoles.includes(userRole)) {
     redirect('/login');
   }
 
