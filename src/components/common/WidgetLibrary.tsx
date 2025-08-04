@@ -1,61 +1,26 @@
-import ClassCapacityWidget from "../classes/widget/ClassCapacityWidget";
-import ClassDetailWidget from "../classes/widget/ClassDetailWidget";
-import ClassTableStatus from "../classes/widget/ClassStatusWidget";
-import EditAndDeleteClassWidget from "../classes/widget/EditAndDeleteClass";
-import EquipmentDetailWidget from "../equipment/widget/EquipmentDetailWidget";
-import EditAndDeleteMemberWidget from "../member/owner/widget/EditAndDeleteMemberWidget";
-import MemberDetailWidget from "../member/owner/widget/MemberDetailWidget";
-import MemberTableStatus from "../member/owner/widget/MemberTableStatus";
-import OwnerPriorityBadge from "../profile/owner/OwnerPriorityBadge";
-import OwnerStatusBadge from "../profile/owner/OwnerStatusBadge";
+
 import StatusWidget from "./StatusWidget";
-import { IClass } from "@/lib/classes";
-import { IEquipment } from "@/lib/equipment";
-import { IMember } from "@/lib/member";
+import UserUpdateWidget from "@/components/admin/users/widget/UserUpdateWidget";
+import UpdateStatus from "@/components/admin/users/widget/UpdateStatus";
+import UserStatusWidget from "@/components/admin/users/widget/UserStatusWidget";
+import { User } from "@/lib/user-api-client";
+
 
 const widgets: any = {
   statusWidget: () => {
     return <StatusWidget />;
   },
-  memberDetailWidget: (value: string, rowData: IMember) => {
-    console.log("value", value);
-    return <MemberDetailWidget rowData={rowData} />;
+
+  userUpdateWidget: (value: string, rowData: User) => {
+    return <UserUpdateWidget user={rowData} />;
   },
 
-  memberTableStatus: (value: string, rowData: IMember) => {
-    console.log("rowData", rowData);
-    return <MemberTableStatus value={value} />;
+  updateStatusWidget: (value: string, rowData: User) => {
+    return <UpdateStatus user={rowData} />;
   },
 
-  editAndDeleteMemberWidget: () => {
-    return <EditAndDeleteMemberWidget />;
-  },
-  classDetailWidget: (value: string, rowData: IClass) => {
-    console.log("value", value);
-    return <ClassDetailWidget rowData={rowData} />;
-  },
-
-  classTableStatus: (value: string, rowData: IMember) => {
-    console.log("rowData", rowData);
-    return <ClassTableStatus value={value} />;
-  },
-  editAndDeleteClassWidget: () => {
-    return <EditAndDeleteClassWidget />;
-  },
-  classCapacityWidget: (value: string, rowData: IClass) => {
-    console.log("value", value);
-    return <ClassCapacityWidget rowData={rowData} />;
-  },
-  equipmentDetailWidget: (value: string, rowData: IEquipment) => {
-    console.log("value", value);
-    return <EquipmentDetailWidget rowData={rowData} />;
-  },
-
-  ownerStatusBadge: (value: string) => {
-    return <OwnerStatusBadge value={value} />;
-  },
-  ownerPriorityBadge: (value: string) => {
-    return <OwnerPriorityBadge value={value} />;
+  userStatusWidget: (value: string, rowData: User) => {
+    return <UserStatusWidget user={rowData} />;
   },
 };
 export default function WidgetLibrary({

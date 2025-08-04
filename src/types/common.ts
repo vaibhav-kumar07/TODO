@@ -1,4 +1,4 @@
-// Common API Response Types
+
 export interface ApiSuccessResponse<T = any> {
   success: true;
   message: string;
@@ -16,14 +16,21 @@ export interface ApiErrorResponse {
 
 export type ApiResponse<T = any> = ApiSuccessResponse<T> | ApiErrorResponse;
 
-// Cookie Keys
+export interface QueryParameters {
+  [key: string]: string | string[] | number | boolean | undefined;
+}
+
+export enum SortOrder {
+  ASC = 'asc',
+  DESC = 'desc'
+}
+
 export const ICookieKeys = {
   TOKEN: 'token',
   REFRESH_TOKEN: 'refreshToken',
   USER_ROLE: 'role',
 } as const;
 
-// Common Error Codes
 export const ErrorCodes = {
   BUSINESS_ERROR: 'BUSINESS_ERROR',
   VALIDATION_ERROR: 'VALIDATION_ERROR',
@@ -32,7 +39,6 @@ export const ErrorCodes = {
  
 } as const;
 
-// Common Response Handler
 export interface ResponseHandlerResult<T = any> {
   success: boolean;
   data?: T;
@@ -42,4 +48,11 @@ export interface ResponseHandlerResult<T = any> {
     description: string;
   };
   
+}
+
+export enum paginationLimit{
+  LIMIT_5=5,
+  LIMIT_10=10,
+  LIMIT_20=20,
+  LIMIT_50=50
 }

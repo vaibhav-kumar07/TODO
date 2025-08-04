@@ -9,23 +9,13 @@ export const navigationItems = {
       icon: 'LayoutDashboard'
     },
     {
-      label: 'Profile',
-      href: '/admin/profile',
-      icon: 'User'
-    },
-    {
       label: 'User Management',
       href: '/admin/users',
       icon: 'Users'
     },
     {
-      label: 'Team Management',
-      href: '/admin/teams',
-      icon: 'Building2'
-    },
-    {
       label: 'Settings',
-      href: '/admin/settings',
+      href: '/admin/profile',
       icon: 'Settings'
     }
   ],
