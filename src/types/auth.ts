@@ -15,9 +15,9 @@ export interface User {
 }
 
 export enum UserRole {
-  ADMIN = 'admin',
-  MANAGER = 'manager',
-  MEMBER = 'member'
+  ADMIN = 'ADMIN',
+  MANAGER = 'MANAGER',
+  MEMBER = 'MEMBER'
 }
 
 export interface AuthData {
