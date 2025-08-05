@@ -8,11 +8,11 @@ import { getAllUsers } from '@/lib/user-api';
 import { UserRole } from '@/types/auth';
 
 interface UserManagementPageProps {
-  searchParams: {
+  searchParams:Promise<{
     role?: UserRole.MEMBER | UserRole.MANAGER;
     isActive?: string;
     search?: string;
-  };
+  }>;
 }
 
 export default async function UserManagementPage({ searchParams }: UserManagementPageProps) {
@@ -23,9 +23,9 @@ export default async function UserManagementPage({ searchParams }: UserManagemen
     redirect('/login');
   
 
-  const role = searchParams.role === UserRole.MEMBER ? UserRole.MEMBER : searchParams.role === UserRole.MANAGER ? UserRole.MANAGER : undefined;
-  const isActive = searchParams.isActive !== undefined ? searchParams.isActive === 'true' : undefined;
-  const search = searchParams.search || undefined;
+  const role = (await searchParams).role === UserRole.MEMBER ? UserRole.MEMBER : (await searchParams).role === UserRole.MANAGER ? UserRole.MANAGER : undefined;
+  const isActive = (await searchParams).isActive !== undefined ? (await searchParams).isActive === 'true' : undefined;
+  const search = (await searchParams).search || undefined;
 
   const filterParams = {
     role: role as any,
