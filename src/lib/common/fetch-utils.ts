@@ -34,8 +34,6 @@ const fetchRequest = async (
 
   const response = await fetch(url, requestInput);
   const responseData = await response.json();
-  console.log("responseData", responseData);
-  
   // Handle 401 Unauthorized - try to refresh token
   if (response.status === 401 && requestOption.isWithToken) {
     console.log("Received 401, attempting token refresh...");
@@ -49,8 +47,6 @@ const fetchRequest = async (
       const retryRequestInput = await _getRequestInput(method, body, requestOption);
       const retryResponse = await fetch(url, retryRequestInput);
       const retryResponseData = await retryResponse.json();
-      
-      console.log("Retry responseData", retryResponseData);
       return retryResponseData;
     } else {
       console.log("Token refresh failed, clearing cookies and redirecting to login");

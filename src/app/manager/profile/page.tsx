@@ -6,7 +6,6 @@ import ProfileForm from '@/components/admin/ProfileForm';
 import ChangePasswordDialog from '@/components/admin/ChangePasswordDialog';
 import { AuthApiService } from '@/lib/auth-api';
 import RoleLayout from '@/components/layout/RoleLayout';
-import { User } from '@/types/auth';
 
 export default async function AdminProfilePage() {
   // Server-side auth check
@@ -17,20 +16,38 @@ export default async function AdminProfilePage() {
 
   // Fetch profile data
   const profileResult = await AuthApiService.getProfile();
-  const profile = profileResult.data;
+  if (!profileResult.success) {
+    return (
+   
+        <div className="min-h-screen flex items-center justify-center bg-background">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold text-foreground mb-4">Error Loading Profile</h1>
+            <p className="text-muted-foreground mb-4">{profileResult.message}</p>
+            <a 
+              href="/admin" 
+              className="inline-flex items-center px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90"
+            >
+              Back to Dashboard
+            </a>
+          </div>
+        </div>
+    );
+  }
+
+  const profile = profileResult.data!;
   return (
 
       <section className='w-full flex justify-center items-center'>
         <div className="p-6 ">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">Profile</h1>
+          <h1 className="text-3xl font-bold text-foreground mb-2"> Profile</h1>
           <p className="text-muted-foreground">Manage your account information and settings</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Profile Information */}
           <div className="lg:col-span-2">
-            <ProfileForm profile={profile as User} />
+            <ProfileForm profile={profile} />
           </div>
 
           {/* Quick Actions */}

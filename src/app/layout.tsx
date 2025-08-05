@@ -4,6 +4,7 @@ import "./globals.css";
 import { RoleThemeProvider  } from "@/components/provider/theme-provider";
 import { UserRole } from "@/types/auth";
 import { ToastProvider } from "@/components/hooks/use-toast";
+import Sidebar from "@/components/layout/Sidebar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,7 +33,6 @@ export default function RootLayout({
           <RoleThemeProvider defaultRole={UserRole.ADMIN}>
             {children}
           </RoleThemeProvider>
-
       </body>
     </html>
   );
