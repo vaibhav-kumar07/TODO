@@ -23,8 +23,7 @@ export interface User {
   firstName: string;             
   lastName: string;              
   role: UserRole
-  teamId?: string;               
-  isEmailVerified: boolean;      
+  teamId?: string;                     
   isActive: boolean;             
   invitedBy?: string;            
   invitedAt?: Date;              
@@ -119,7 +118,7 @@ export async function createUser(userData: {
 }
 
 export async function updateUser(userId: string, userData: Partial<User>) {
-  const response = await FetchUtils.put(`${API_BASE_URL}/auth/admin/update-user/${userId}`, userData, {
+  const response = await FetchUtils.put(`${API_BASE_URL}/auth/users/${userId}`, userData, {
     isWithToken: true,
   });
   console.log('Update user response:', response);

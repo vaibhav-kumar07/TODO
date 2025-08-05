@@ -1,33 +1,35 @@
 import { getCookieValue } from '@/lib/common/cookie-utils';
-import { ICookieKeys } from '@/types/common';
+import { ICookieKeys, paginationLimit } from '@/types/common';
 import { redirect } from 'next/navigation';
 import UserManagementHeader from '@/components/admin/users/UserManagementHeader';
 import UserTable from '@/components/admin/users/UserTable';
 import FilterContainer from '@/components/admin/users/filters/FilterContainer';
 import { getAllUsers } from '@/lib/user-api';
-import { paginationLimit } from '@/types/common';
 import { UserRole } from '@/types/auth';
 
 interface UserManagementPageProps {
-  searchParams: Promise<{
-    role?: string;
+  searchParams: {
+    role?: UserRole.MEMBER | UserRole.MANAGER;
     isActive?: string;
     search?: string;
-  }>;
+  };
 }
 
 export default async function UserManagementPage({ searchParams }: UserManagementPageProps) {
   const token = await getCookieValue(ICookieKeys.TOKEN);
   const userRole = await getCookieValue(ICookieKeys.USER_ROLE);
   
-  if (!token || !userRole || userRole.toLowerCase() !== UserRole.ADMIN.toString().toLowerCase()) {
+  if (!token || !userRole || userRole.toLowerCase() !== UserRole.MANAGER.toString().toLowerCase()) 
     redirect('/login');
-  }
+  
 
-  const {role, isActive, search} = await searchParams;
+  const role = searchParams.role === UserRole.MEMBER ? UserRole.MEMBER : searchParams.role === UserRole.MANAGER ? UserRole.MANAGER : undefined;
+  const isActive = searchParams.isActive !== undefined ? searchParams.isActive === 'true' : undefined;
+  const search = searchParams.search || undefined;
+
   const filterParams = {
     role: role as any,
-    isActive: isActive === 'true' ? true : isActive === 'false' ? false : undefined,
+    isActive,
     search: search || undefined,
     page: 1,
     limit: paginationLimit.LIMIT_10
@@ -35,9 +37,8 @@ export default async function UserManagementPage({ searchParams }: UserManagemen
 
   const usersResponse = await getAllUsers(filterParams);
   const users = usersResponse.success ? usersResponse.data?.users || [] : [];
-
   return (
-    <div className="space-y-4  px-4">
+    <div className="space-y-6 py-8 px-4">
       <UserManagementHeader />
       <div className="border rounded-lg">
         <FilterContainer  />

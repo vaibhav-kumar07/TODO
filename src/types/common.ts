@@ -29,6 +29,7 @@ export const ICookieKeys = {
   TOKEN: 'token',
   REFRESH_TOKEN: 'refreshToken',
   USER_ROLE: 'role',
+  USER_ID: 'userId',
 } as const;
 
 export const ErrorCodes = {

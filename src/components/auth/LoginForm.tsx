@@ -7,11 +7,13 @@ import { useRouter } from 'next/navigation';
 import { setCookieValue } from '@/actions/cookie-action';
 import { ICookieKeys } from '@/types/common';
 
+
 interface LoginFormProps {
   onSuccess?: () => void;
+  userRole?: UserRole;
 }
 
-export default function AdminLoginForm({ onSuccess }: LoginFormProps) {
+export default function LoginForm({ onSuccess, userRole }: LoginFormProps) {
   const [credentials, setCredentials] = useState<LoginCredentials>({
     email: '',
     password: ''
@@ -47,6 +49,33 @@ export default function AdminLoginForm({ onSuccess }: LoginFormProps) {
     return true;
   };
 
+  const getRedirectPath = (role: UserRole): string => {
+    switch (role) {
+      case UserRole.ADMIN:
+        return '/admin';
+      case UserRole.MANAGER:
+        return '/manager';
+      case UserRole.MEMBER:
+        return '/member';
+      default:
+        return '/';
+    }
+  };
+
+  const getFormTitle = (): string => {
+    if (userRole) {
+      return `${userRole.charAt(0).toUpperCase() + userRole.slice(1).toLowerCase()} Login`;
+    }
+    return 'Login';
+  };
+
+  const getFormSubtitle = (): string => {
+    if (userRole) {
+      return `Sign in to access the ${userRole.toLowerCase()} dashboard`;
+    }
+    return 'Sign in to access your dashboard';
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm()) return;
@@ -56,14 +85,17 @@ export default function AdminLoginForm({ onSuccess }: LoginFormProps) {
     try {
       const result = await AdminLoginAction(credentials);
       console.log("result", result);
-        if (result.success) {
-        // Redirect to admin dashboard
+      
+      if (result.success) {
+        // Set cookies
         setCookieValue(ICookieKeys.TOKEN, result.data?.accessToken || '');
         setCookieValue(ICookieKeys.REFRESH_TOKEN, result.data?.refreshToken || '');
-        setCookieValue(ICookieKeys.USER_ROLE, result.data?.user?.role || UserRole.ADMIN);
-        // setCookieValue(ICookieKeys.USER_ID, result.data?.user?.id || '');
+        setCookieValue(ICookieKeys.USER_ROLE, result.data?.user?.role);
+        
+        // Redirect based on user role
+        const redirectPath = getRedirectPath(result.data?.user?.role);
         setTimeout(() => {
-          router.push('/admin');
+          router.push(redirectPath);
         }, 2000);
       } else {
         setError(result.message || 'Login failed');
@@ -96,10 +128,10 @@ export default function AdminLoginForm({ onSuccess }: LoginFormProps) {
             </svg>
           </div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-foreground">
-            Admin Login
+            {getFormTitle()}
           </h2>
           <p className="mt-2 text-center text-sm text-muted-foreground">
-            Sign in to access the admin dashboard
+            {getFormSubtitle()}
           </p>
         </div>
         
@@ -197,7 +229,7 @@ export default function AdminLoginForm({ onSuccess }: LoginFormProps) {
 
           <div className="text-center">
             <p className="text-xs text-muted-foreground">
-              This login is restricted to admin users only
+              {userRole ? `This login is for ${userRole.toLowerCase()} users only` : 'Enter your credentials to sign in'}
             </p>
           </div>
         </form>

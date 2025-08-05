@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Switch } from '@/components/ui/switch';
 import { User } from '@/lib/user-api';
 import { UserRole } from '@/types/auth';
-import { errorToast, successToast } from '@/components/hooks/use-toast';
+import { errorToast,  } from '@/components/hooks/use-toast';
 import { z } from 'zod';
 import CommonButton from '@/components/common/Button';
 
@@ -25,10 +25,9 @@ const updateUserSchema = z.object({
   lastName: z.string().min(1, 'Last name is required'),
   role: z.nativeEnum(UserRole),
   isActive: z.boolean(),
-  isEmailVerified: z.boolean(),
 });
 
-interface UserFormData {
+export interface UserFormData {
   email: string;
   firstName: string;
   lastName: string;
@@ -39,6 +38,7 @@ interface UserFormData {
 interface UserFormProps {
   mode: 'create' | 'update';
   user?: User;
+  currentUserRole?: UserRole; // Current user's role for permissions
   onSubmit: (data: UserFormData) => Promise<void>;
   onCancel: () => void;
   isLoading?: boolean;
@@ -47,6 +47,7 @@ interface UserFormProps {
 export default function UserForm({ 
   mode, 
   user, 
+  currentUserRole,
   onSubmit, 
   onCancel, 
   isLoading = false 
@@ -55,8 +56,9 @@ export default function UserForm({
     email: '',
     firstName: '',
     lastName: '',
-    role: UserRole.MEMBER,
+    role: user?.role.toUpperCase()===UserRole.MEMBER ? UserRole.MEMBER : user?.role.toUpperCase() ===UserRole.MANAGER ? UserRole.MANAGER : UserRole.ADMIN,
     isActive: true,
+    
   });
 
   // Initialize form data when user is provided (update mode)
@@ -66,7 +68,7 @@ export default function UserForm({
         email: user.email,
         firstName: user.firstName,
         lastName: user.lastName,
-        role: user.role,
+        role: user.role.toUpperCase()===UserRole.MEMBER ? UserRole.MEMBER : user.role.toUpperCase() ===UserRole.MANAGER ? UserRole.MANAGER : UserRole.ADMIN,
         isActive: user.isActive,
       });
     }
@@ -77,6 +79,25 @@ export default function UserForm({
       ...prev,
       [field]: value
     }));
+  };
+
+  // Get available role options based on current user's role
+  const getAvailableRoles = (): UserRole[] => {
+    if (!currentUserRole) return [UserRole.MEMBER, UserRole.MANAGER];
+
+    switch (currentUserRole) {
+      case UserRole.ADMIN:
+        // Admin can assign any role except to themselves
+        return [UserRole.MEMBER, UserRole.MANAGER, UserRole.ADMIN];
+      case UserRole.MANAGER:
+        // Manager can only assign MEMBER and MANAGER roles
+        return [UserRole.MEMBER, UserRole.MANAGER];
+      case UserRole.MEMBER:
+        // Members cannot assign roles
+        return [];
+      default:
+        return [UserRole.MEMBER, UserRole.MANAGER];
+    }
   };
 
   const validateForm = (): boolean => {
@@ -105,6 +126,8 @@ export default function UserForm({
 
     await onSubmit(formData);
   };
+
+  const availableRoles = getAvailableRoles();
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
@@ -149,24 +172,28 @@ export default function UserForm({
         />
       </div>
 
-      {/* Role */}
-      <div>
-        <Label htmlFor="role">Role</Label>
-        <Select
-          value={formData.role}
-          onValueChange={(value) => handleInputChange('role', value as UserRole)}
-          disabled={isLoading}
-        >
-          <SelectTrigger>
-            <SelectValue placeholder="Select role" />
-          </SelectTrigger>
-          <SelectContent>
-            {/* <SelectItem value={UserRole.ADMIN}>Admin</SelectItem> */}
-            <SelectItem value={UserRole.MANAGER}>Manager</SelectItem>
-            <SelectItem value={UserRole.MEMBER}>Member</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+      {/* Role - only show if there are available roles */}
+      {availableRoles.length > 0 && (
+        <div>
+          <Label htmlFor="role">Role</Label>
+          <Select
+            value={formData.role}
+            onValueChange={(value) => handleInputChange('role', value as UserRole)}
+            disabled={isLoading}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Select role" />
+            </SelectTrigger>
+            <SelectContent>
+              {availableRoles.map((role) => (
+                <SelectItem key={role} value={role}>
+                  {role.charAt(0).toUpperCase() + role.slice(1).toLowerCase()}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      )}
 
       {/* Status switches - only for update mode */}
       {mode === 'update' && (

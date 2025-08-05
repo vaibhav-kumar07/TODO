@@ -11,7 +11,8 @@ import {
   CheckSquare
 } from 'lucide-react';
 import LogoutButton from '@/components/auth/LogoutButton';  
-
+import { cn } from '@/lib/utils';
+  
 interface NavigationItem {
   label: string;
   href: string; 
@@ -21,6 +22,7 @@ interface NavigationItem {
 interface SidebarClientProps {
   items: NavigationItem[];
   userRole: string;
+  className?: string;
 }
 
 // Icon mapping
@@ -33,7 +35,7 @@ const iconMap = {
   CheckSquare
 };
 
-export default function SidebarClient({ items, userRole }: SidebarClientProps) {
+export default function SidebarClient({ items, userRole,className }: SidebarClientProps) {
   const pathname = usePathname();
 
   const getIcon = (iconName: string) => {
@@ -49,7 +51,7 @@ export default function SidebarClient({ items, userRole }: SidebarClientProps) {
   };
 
   return (
-    <div className="w-64 bg-card border-r border-border h-screen">
+    <div className={cn("w-64 bg-card border-r border-border h-screen", className)}>
       <div className="flex flex-col h-full">
         {/* Header */}
         <div className="flex items-center justify-between h-16 px-6 border-b border-border">

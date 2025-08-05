@@ -5,6 +5,7 @@ import TableRow from "@/components/common/table/TableRow";
 import { User } from "@/lib/user-api-client";
 import { cn } from "@/lib/utils";
 import { formatDate } from "@/lib/common/date-utils";
+import { UserRole } from "@/types/auth";
 
 interface UserTableProps {
     users: User[];
@@ -17,7 +18,7 @@ const userTableMetadata: ITableMetadata[] = [
         headerLabel: "User",
         sortable: true,
         columnClass: "w-full md:w-[30%] lg:w-[25%] text-left text-muted-foreground md:pl-4",
-        cellClass: "w-full md:w-[30%] lg:w-[25%] text-left md:pl-3",
+        cellClass: "w-full md:w-[30%] lg:w-[25%] text-left md:pl-2",
         // type: "widget",
         // widgetName: "userDetailWidget",
     },
@@ -83,6 +84,7 @@ export default function UserTable(props: UserTableProps) {
                         status: user, // Pass the full user object for the widget
                         fullName: `${user.firstName} ${user.lastName}`,
                         createdAt: formatDate(user.createdAt,"MMM DD, YYYY"),
+                        role: user.role==UserRole.ADMIN ? "Admin" : user.role==UserRole.MEMBER ? "Member" : "Manager",
                     }
                     return (
                         <TableRow
@@ -94,7 +96,7 @@ export default function UserTable(props: UserTableProps) {
                     );
                 })
             ) : (
-                <div className="py-8 text-center">
+                <div className="py-2 text-center">
                     <Label className="text-muted-foreground" variant="semibold">
                         No users found with matching criteria
                     </Label>

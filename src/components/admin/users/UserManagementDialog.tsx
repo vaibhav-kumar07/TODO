@@ -1,27 +1,18 @@
 'use client';
-
 import { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { User } from '@/lib/user-api';
 import { UserRole } from '@/types/auth';
 import { inviteUserAction, updateUserAction } from '@/actions/user';
 import { errorToast, successToast } from '@/components/hooks/use-toast';
-import { Plus, Edit, User as UserIcon, Pencil } from 'lucide-react';
-import UserForm from './UserForm';
+import { Plus, User as UserIcon, Pencil } from 'lucide-react';
+import UserForm, { UserFormData } from './UserForm';
 import CommonButton from '@/components/common/Button';
-
-interface UserFormData {
-  email: string;
-  firstName: string;
-  lastName: string;
-  role: UserRole;
-  isActive: boolean;
-  isEmailVerified: boolean;
-}
 
 interface UserManagementDialogProps {
   mode: 'create' | 'update';
   user?: User;
+  currentUserRole?: UserRole;
   children?: React.ReactNode;
   onSuccess?: () => void;
 }
@@ -29,6 +20,7 @@ interface UserManagementDialogProps {
 export default function UserManagementDialog({ 
   mode, 
   user, 
+  currentUserRole,
   children, 
   onSuccess 
 }: UserManagementDialogProps) {
@@ -59,7 +51,6 @@ export default function UserManagementDialog({
           lastName: formData.lastName,
           role: formData.role,
           isActive: formData.isActive,
-          isEmailVerified: formData.isEmailVerified,
         });
       }
 
@@ -114,6 +105,7 @@ export default function UserManagementDialog({
         <UserForm
           mode={mode}
           user={user}
+          currentUserRole={currentUserRole}
           onSubmit={handleSubmit}
           onCancel={handleCancel}
           isLoading={isLoading}

@@ -9,5 +9,5 @@ export default async function Sidebar() {
   const userRole = await getCookieValue(ICookieKeys.USER_ROLE) as UserRole;
   const items = navigationItems[userRole];
 
-  return <SidebarClient items={items} userRole={userRole} />;
+  return <SidebarClient items={items} userRole={userRole} className="sticky top-0 hidden lg:block" />;
 } 

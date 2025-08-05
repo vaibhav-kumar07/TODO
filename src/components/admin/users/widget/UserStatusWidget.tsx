@@ -9,7 +9,6 @@ interface UserStatusWidgetProps {
 
 export default function UserStatusWidget({ user }: UserStatusWidgetProps) {
   const isActive = user.isActive;
-  
   return (
     <div className="flex items-center justify-center">
       <Badge 
