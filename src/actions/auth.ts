@@ -64,13 +64,13 @@ export async function updateProfileAction(profileData: any): Promise<ResponseHan
 }
 
 export async function refreshTokenAction(): Promise<ResponseHandlerResult<{ accessToken: string; refreshToken: string }>> {
-
     const refreshTokenResult = await getCookieValueAction(ICookieKeys.REFRESH_TOKEN);
     const refreshToken = refreshTokenResult.value;
+    console.log("refresh token action", refreshToken);
     if (!refreshToken) {
      redirect('/login');
     }
-    const API_BASE_URL = `${process.env.NEXT_PUBLIC_API_URL}/api/v1` || 'http://localhost:3001';
+    const API_BASE_URL = `${process.env.NEXT_PUBLIC_API_URL}/api/v1`;
     const response = await fetch(`${API_BASE_URL}/auth/refresh`, {
       method: 'POST',
       headers: {
@@ -78,10 +78,10 @@ export async function refreshTokenAction(): Promise<ResponseHandlerResult<{ acce
       },
       body: JSON.stringify({ refreshToken }),
     });
- 
+    console.log("refresh token response", response);
     if (response.ok) {
       const data = await response.json();
-      console.log("data", data);
+     
       await setCookieValue(ICookieKeys.TOKEN, data.accessToken);
       await setCookieValue(ICookieKeys.REFRESH_TOKEN, data.refreshToken);
       return {

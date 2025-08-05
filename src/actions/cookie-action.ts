@@ -18,6 +18,7 @@ export async function setCookieValue(key: string, value: string) {
 export async function getCookieValueAction(key: string) {
   try {
     const value = await getCookieValue(key)
+    console.log("getCookieValueAction key :",key,"Value :", value);
     return { success: true, key, value }
   } catch (error) {
     console.error('Error getting cookie:', error)
