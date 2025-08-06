@@ -98,9 +98,12 @@ export async function createUser(userData: {
 }
 
 export async function updateUser(userId: string, userData: Partial<User>) {
-  const response = await FetchUtils.put(`${API_BASE_URL}/auth/users/${userId}`, userData, {
+  console.log("userData :",userData)
+  console.log("userId :",userId)
+  const response = await FetchUtils.put(`${API_BASE_URL}/auth/update-users/${userId}`, userData, {
     isWithToken: true,
   });
+  console.log("response :",response)
   return response;
 }
 

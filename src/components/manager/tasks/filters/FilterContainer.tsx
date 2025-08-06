@@ -13,7 +13,6 @@ export default function FilterContainer() {
       <AllFilter />    
       <StatusFilter />
       <PriorityFilter />
-     
       <SearchFilter className="ml-auto" />
       <DueDateFilter />
     </div>

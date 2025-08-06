@@ -13,7 +13,7 @@ const buildTaskQueryString = (params: TaskFilters) => {
   if (params.priority) queryParams["priority"] = params.priority;
   if (params.assignedTo) queryParams["assignedTo"] = params.assignedTo;
   if (params.search) queryParams["search"] = params.search;
-  if (params.dueDate) queryParams["dueDateFrom"] = params.dueDate;
+  if (params.dueDate) queryParams["dueDateTo"] = params.dueDate;
   if (params.page) queryParams["page"] = params.page.toString();
   if (params.limit) queryParams["limit"] = params.limit.toString();
 

@@ -40,6 +40,7 @@ export default async function TaskManagementPage({ searchParams }: TaskManagemen
 
   const tasksResponse = await getAllTasks(filterParams);
   const tasks = tasksResponse.success ? tasksResponse.data?.tasks || [] : [];
+  console.log(tasks);
 
   return (
     <div className="space-y-4 px-4">
