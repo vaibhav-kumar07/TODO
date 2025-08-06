@@ -6,26 +6,14 @@ import { QueryParameters, SortOrder } from "@/types/common";
 
 const API_BASE_URL = `${process.env.NEXT_PUBLIC_API_URL}/api/v1` || 'http://localhost:3001';
 
-export enum UserView {
-  ALL = 'ALL',
-  ACTIVE = 'ACTIVE',
-  INACTIVE = 'INACTIVE',
-  VERIFIED = 'VERIFIED',
-  UNVERIFIED = 'UNVERIFIED',
-  BY_ROLE = 'BY_ROLE'
-}
-
-
 
 export interface User {
   id: string;                    
   email: string;                 
   firstName: string;             
   lastName: string;              
-  role: UserRole
-  teamId?: string;                     
+  role: UserRole      
   isActive: boolean;             
-  isEmailVerified: boolean;             
   invitedBy?: string;            
   invitedAt?: Date;              
   createdAt: Date;               
@@ -33,11 +21,8 @@ export interface User {
 }
 
 export interface IUserParams {
-  view?: UserView;
   role?: UserRole;
-  teamId?: string;
   isActive?: boolean;
-  isEmailVerified?: boolean
   search?: string;
   invitedBy?: string;
   page?: number;
@@ -62,13 +47,8 @@ export interface UsersResponse {
 const buildUserQueryString = (params: IUserParams) => {
   const queryParams: QueryParameters = {};
 
-  if (params.view) queryParams["view"] = params.view;
-  
   if (params.role) queryParams["role"] = params.role;
-  if (params.teamId) queryParams["teamId"] = params.teamId;
-  
   if (params.isActive !== undefined) queryParams["isActive"] = params.isActive.toString();
-  if (params.isEmailVerified !== undefined) queryParams["isEmailVerified"] = params.isEmailVerified.toString();
   
   if (params.search) queryParams["search"] = params.search;
   if (params.invitedBy) queryParams["invitedBy"] = params.invitedBy;
@@ -131,21 +111,3 @@ export async function deleteUser(userId: string) {
   
   return response;
 }
-
-export async function toggleUserStatus(userId: string, isActive: boolean) {
-  const response = await FetchUtils.patch(`${API_BASE_URL}/auth/users/${userId}/status`, {
-    isActive
-  }, {
-    isWithToken: true,
-  });
-  
-  return response;
-}
-
-export async function resendInvitation(userId: string) {
-  const response = await FetchUtils.post(`${API_BASE_URL}/auth/users/${userId}/resend-invitation`, {}, {
-    isWithToken: true,
-  });
-  
-  return response;
-} 

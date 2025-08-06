@@ -14,6 +14,7 @@ interface TaskManagementPageProps {
     status?: string;
     priority?: string;
     search?: string;
+    dueDate?: string;
     page?: string;
     limit?: string;
   }>;
@@ -27,17 +28,17 @@ export default async function TaskManagementPage({ searchParams }: TaskManagemen
     redirect('/login');
   }
 
-  const { status, priority, search, page, limit } = await searchParams;
+  const { status, priority, search, dueDate, page, limit } = await searchParams;
   const filterParams: TaskFilters = {
     status: status as any,
     priority: priority as any,
     search: search || undefined,
+    dueDate: dueDate || undefined,
     page: parseInt(page || '1'),
     limit: parseInt(limit || paginationLimit.LIMIT_10.toString())
   };
 
   const tasksResponse = await getAllTasks(filterParams);
-
   const tasks = tasksResponse.success ? tasksResponse.data?.tasks || [] : [];
 
   return (

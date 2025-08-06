@@ -9,8 +9,7 @@ export enum TaskStatus {
 export enum TaskPriority {
   LOW = 'LOW',
   MEDIUM = 'MEDIUM',
-  HIGH = 'HIGH',
-  URGENT = 'URGENT'
+  HIGH = 'HIGH'
 }
 
 // User interface for task assignments
@@ -57,6 +56,7 @@ export interface TaskFilters {
   priority?: TaskPriority;
   assignedTo?: string;
   search?: string;
+  dueDate?: string;
   page?: number;
   limit?: number;
   sortBy?: string;

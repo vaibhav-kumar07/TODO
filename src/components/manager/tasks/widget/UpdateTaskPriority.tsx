@@ -30,12 +30,6 @@ const PRIORITY_CONFIG = {
     variant: 'outline' as const,
     color: 'bg-orange-100 text-orange-800 border-orange-200',
     icon: AlertTriangle
-  },
-  [TaskPriority.URGENT]: {
-    label: 'Urgent',
-    variant: 'destructive' as const,
-    color: 'bg-red-100 text-red-800 border-red-200',
-    icon: AlertOctagon
   }
 } as const;
 
