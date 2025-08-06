@@ -4,7 +4,7 @@ export async function getCookieValue(key: string) {
   const cookieStore = await cookies();
   const token = cookieStore.get(key);
   if (!token) {
-    console.log("Cookie not found with key:", key);
+
     return "";
   }
   return token.value;

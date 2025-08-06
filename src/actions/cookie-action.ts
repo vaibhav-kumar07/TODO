@@ -18,6 +18,7 @@ export async function setCookieValue(key: string, value: string) {
 export async function getCookieValueAction(key: string) {
   try {
     const value = await getCookieValue(key)
+
     return { success: true, key, value }
   } catch (error) {
     console.error('Error getting cookie:', error)
@@ -53,7 +54,7 @@ export async function deleteMultipleCookies(keys: string[]) {
     const results = await Promise.all(
       keys.map(key => deleteCookie(key))
     )
-    console.log('results', results)
+
     return { success: true, deletedKeys: keys }
   } catch (error) {
     console.error('Error deleting multiple cookies:', error)

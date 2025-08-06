@@ -35,7 +35,7 @@ const iconMap = {
   CheckSquare
 };
 
-export default function SidebarClient({ items, userRole,className }: SidebarClientProps) {
+export default function SidebarClient({ items, userRole, className }: SidebarClientProps) {
   const pathname = usePathname();
 
   const getIcon = (iconName: string) => {
@@ -51,12 +51,12 @@ export default function SidebarClient({ items, userRole,className }: SidebarClie
   };
 
   return (
-    <div className={cn("w-64 bg-card border-r border-border h-screen", className)}>
+    <div className={cn("w-64 h-screen border-r bg-card text-card-foreground border-border", className)}>
       <div className="flex flex-col h-full">
         {/* Header */}
         <div className="flex items-center justify-between h-16 px-6 border-b border-border">
           <div className="flex items-center">
-            <h1 className="text-lg font-semibold text-foreground">
+            <h1 className="text-lg font-semibold text-card-foreground">
               {userRole.charAt(0).toUpperCase() + userRole.slice(1).toLowerCase()} Panel
             </h1>
           </div>
@@ -70,13 +70,12 @@ export default function SidebarClient({ items, userRole,className }: SidebarClie
               <Link
                 key={item.href}
                 href={item.href}
-                className={`
-                  flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors
-                  ${active 
-                    ? 'bg-primary text-primary-foreground' 
-                    : 'text-muted-foreground hover:text-foreground hover:bg-accent'
-                  }
-                `}
+                className={cn(
+                  "flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors",
+                  active 
+                    ? "bg-primary text-primary-foreground" 
+                    : "text-muted-foreground hover:text-foreground hover:bg-accent"
+                )}
               >
                 <span className="mr-3">
                   {getIcon(item.icon)}
@@ -89,12 +88,7 @@ export default function SidebarClient({ items, userRole,className }: SidebarClie
 
         {/* Footer */}
         <div className="p-4 border-t border-border">
-          <LogoutButton 
-            variant="button" 
-            className="w-full justify-start"
-          >
-            Logout
-          </LogoutButton>
+          <LogoutButton />
         </div>
       </div>
     </div>

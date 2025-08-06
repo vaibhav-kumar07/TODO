@@ -38,7 +38,10 @@ export default async function UserManagementPage({ searchParams }: UserManagemen
 
   return (
     <div className="space-y-4  px-4">
-      <UserManagementHeader />
+      <UserManagementHeader 
+        title="User Management"
+        description="Create and manage users for your team "
+      />
       <div className="border rounded-lg">
         <FilterContainer  />
         <UserTable users={users} className='rounded-lg  border-none'/>

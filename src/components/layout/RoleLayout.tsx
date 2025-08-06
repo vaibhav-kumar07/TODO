@@ -22,14 +22,14 @@ export default async function RoleLayout({ children, allowedRoles }: RoleLayoutP
   }
 
   return (
-    <div className="min-h-screen bg-background sticky top-0">
+    <div className="min-h-screen bg-background text-foreground sticky top-0">
       <div className="flex">
         {/* Sidebar */}
         <Sidebar />
         
         {/* Main content */}
         <div className="flex-1 lg:ml-0">
-          <main className="p-6 overflow-y-auto">
+          <main className="p-6 overflow-y-auto bg-background text-foreground">
             {children}
           </main>
         </div>

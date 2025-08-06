@@ -6,6 +6,7 @@ import { LoginCredentials, UserRole } from '@/types/auth';
 import { useRouter } from 'next/navigation';
 import { setCookieValue } from '@/actions/cookie-action';
 import { ICookieKeys } from '@/types/common';
+import { errorToast, successToast } from '../hooks/use-toast';
 
 
 interface LoginFormProps {
@@ -84,9 +85,10 @@ export default function LoginForm({ onSuccess, userRole }: LoginFormProps) {
 
     try {
       const result = await AdminLoginAction(credentials);
-      console.log("result", result);
+
       
       if (result.success) {
+        successToast('Login successful');
         // Set cookies
         setCookieValue(ICookieKeys.TOKEN, result.data?.accessToken || '');
         setCookieValue(ICookieKeys.REFRESH_TOKEN, result.data?.refreshToken || '');
@@ -98,6 +100,7 @@ export default function LoginForm({ onSuccess, userRole }: LoginFormProps) {
           router.push(redirectPath);
         }, 2000);
       } else {
+        errorToast(result.message || 'Login failed');
         setError(result.message || 'Login failed');
       }
     } catch (error) {

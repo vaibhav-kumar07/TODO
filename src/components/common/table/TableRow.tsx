@@ -12,7 +12,7 @@ export default function TableRow(props: ITableRowProps) {
   return (
     <div
       className={cn(
-        "flex w-full flex-col lg:flex-row  lg:flex-nowrap bg-white  border  rounded-lg md:rounded-none shadow lg:shadow-none hover:bg-gray-100 transition-all duration-200 md:items-center  ",
+        "flex w-full flex-col lg:flex-row  lg:flex-nowrap bg-white  border  rounded-lg md:rounded-none shadow lg:shadow-none  transition-all duration-200 md:items-center  ",
         props.className
       )}
     >
