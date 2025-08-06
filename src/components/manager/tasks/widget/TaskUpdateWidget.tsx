@@ -35,7 +35,7 @@ export default function TaskUpdateWidget({ task }: TaskUpdateWidgetProps) {
     fetchUsers();
   }, []);
 
-  console.log('task', task);
+
   return (
     <TaskManagementDialog
       mode='update'

@@ -47,7 +47,7 @@ export default function SearchFilter({ className }: SearchFilterProps) {
           placeholder="Search users..."
           value={searchValue}
           onChange={(e) => handleSearchChange(e.target.value)}
-          className="pl-10 h-7"
+          className="pl-10 h-7 rounded-full"
         />
       </div>
     </div>

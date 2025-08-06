@@ -8,7 +8,7 @@ import AllFilter from './AllFilter';
 
 export default function FilterContainer() {
   return (
-    <div className="flex flex-wrap items-center gap-2 px-2 py-1 border-b">
+    <div className="flex flex-wrap items-center gap-2 px-2 py-1 ">
        <AllFilter />    
       <StatusFilter />
       <PriorityFilter />

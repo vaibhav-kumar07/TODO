@@ -13,15 +13,23 @@ export enum TaskPriority {
   URGENT = 'URGENT'
 }
 
+// User interface for task assignments
+export interface TaskUser {
+  _id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+}
+
 export interface Task {
-  id: string;
+  _id: string;
   title: string;
   description: string;
   status: TaskStatus;
   priority: TaskPriority;
   dueDate: Date;
-  assignedTo: string; // User ID
-  assignedBy: string; // User ID (creator)
+  assignedTo: TaskUser; // Full user object
+  assignedBy: TaskUser; // Full user object (creator)
   createdAt: Date;
   updatedAt: Date;
   teamId?: string;
@@ -32,7 +40,7 @@ export interface CreateTaskData {
   description: string;
   priority: TaskPriority;
   dueDate: Date;
-  assignedTo: string;
+  assignedTo: string; // User ID for creation
 }
 
 export interface UpdateTaskData {
@@ -40,7 +48,7 @@ export interface UpdateTaskData {
   description?: string;
   priority?: TaskPriority;
   dueDate?: Date;
-  assignedTo?: string;
+  assignedTo?: string; // User ID for updates
   status?: TaskStatus;
 }
 
@@ -66,4 +74,5 @@ export interface TasksResponse {
     hasPrev: boolean;
   };
   filters: Partial<TaskFilters>;
-} 
+}
+

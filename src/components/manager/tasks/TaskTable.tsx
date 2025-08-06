@@ -19,22 +19,22 @@ const taskTableMetadata: ITableMetadata[] = [
         columnName: "title",
         headerLabel: "Title",
         sortable: true,
-        columnClass: "w-full md:w-[25%] lg:w-[20%] text-left text-muted-foreground md:pl-4",
-        cellClass: "w-full md:w-[25%] lg:w-[20%] text-left md:pl-2",
+        columnClass: "w-full md:w-[22%] lg:w-[18%] text-left text-muted-foreground md:pl-4",
+        cellClass: "w-full md:w-[22%] lg:w-[18%] text-left md:pl-2",
     },
     {
         columnName: "description",
         headerLabel: "Description",
         sortable: true,
-        columnClass: "w-full md:w-[20%] lg:w-[20%] text-left text-muted-foreground",
-        cellClass: "w-full md:w-[20%] lg:w-[20%]",
+        columnClass: "w-full md:w-[18%] lg:w-[18%] text-left text-muted-foreground",
+        cellClass: "w-full md:w-[18%] lg:w-[18%]",
     },
     {
         columnName: "status",
         headerLabel: "Status",
         sortable: true,
-        columnClass: "w-full md:w-[15%] lg:w-[15%] text-muted-foreground",
-        cellClass: "w-full md:w-[15%] lg:w-[15%] md:px-0 md:text-center",
+        columnClass: "w-full md:w-[14%] lg:w-[14%] text-muted-foreground",
+        cellClass: "w-full md:w-[14%] lg:w-[14%] md:px-0 md:text-center",
         type: "widget",
         widgetName: "updateTaskStatusWidget",
     },
@@ -42,22 +42,24 @@ const taskTableMetadata: ITableMetadata[] = [
         columnName: "priority",
         headerLabel: "Priority",
         sortable: true,
-        columnClass: "w-full md:w-[10%] lg:w-[10%] text-left text-muted-foreground",
-        cellClass: "w-full md:w-[10%] lg:w-[10%]",
+        columnClass: "w-full md:w-[12%] lg:w-[12%] text-left text-muted-foreground ",
+        cellClass: "w-full md:w-[12%] lg:w-[12%] ",
+        type: "widget",
+        widgetName: "updateTaskPriorityWidget",
     },
     {
         columnName: "dueDate",
         headerLabel: "Due Date",
         sortable: true,
-        columnClass: "w-full md:w-[15%] lg:w-[15%] text-left text-muted-foreground",
-        cellClass: "w-full md:w-[15%] lg:w-[15%]",
+        columnClass: "w-full md:w-[14%] lg:w-[14%] text-left text-muted-foreground ",
+        cellClass: "w-full md:w-[14%] lg:w-[14%]",
     },
     {
         columnName: "assignedTo",
         headerLabel: "Assigned To",
         sortable: true,
-        columnClass: "w-full md:w-[15%] lg:w-[15%] text-left text-muted-foreground",
-        cellClass: "w-full md:w-[15%] lg:w-[15%]",
+        columnClass: "w-full md:w-[14%] lg:w-[14%] text-left text-muted-foreground",
+        cellClass: "w-full md:w-[14%] lg:w-[14%]",
         type: "widget",
         widgetName: "reassignTaskWidget",
     },
@@ -65,8 +67,8 @@ const taskTableMetadata: ITableMetadata[] = [
         columnName: "actions",
         headerLabel: "Actions",
         sortable: false,
-        columnClass: "w-full md:w-[10%] lg:w-[10%] text-left text-muted-foreground",
-        cellClass: "w-full md:w-[10%] lg:w-[10%]",
+        columnClass: "w-full md:w-[6%] lg:w-[10%] text-left text-muted-foreground",
+        cellClass: "w-full md:w-[6%] lg:w-[10%]",
         type: "widget",
         widgetName: "taskUpdateWidget",
     },
@@ -76,19 +78,18 @@ export default function TaskTable(props: TaskTableProps) {
     return (
         <div
             className={cn(
-                "w-full flex flex-col gap-4 md:gap-0 md:overflow-auto",
+                "w-full flex flex-col gap-4 md:gap-0 md:overflow-auto rounded-b-xl",
                 props.className,
             )}
         >
             <TableHeader
                 metadata={taskTableMetadata}
-                className="border-none rounded-none md:px-0 md:py-1.5 md:gap-0 text-foreground"
+                className="border-none rounded-none md:px-0 md:py-1.5 md:gap-0 text-foreground rounded-t-xl"
             />
             {props.tasks?.length ? (
                 props.tasks.map((task: Task) => {
                     const taskData = {
-                        ...task,
-                        status: task, // Pass the full task object for the widget
+                        ...task, // Pass the full task object for the widget
                         priority: task.priority === TaskPriority.LOW ? "Low" : 
                                 task.priority === TaskPriority.MEDIUM ? "Medium" : 
                                 task.priority === TaskPriority.HIGH ? "High" : "Urgent",
@@ -96,7 +97,7 @@ export default function TaskTable(props: TaskTableProps) {
                     }
                     return (
                         <TableRow
-                            key={task.id}
+                            key={task._id}
                             data={taskData}
                             metadata={taskTableMetadata}
                             className="w-full border-x-0 border-b-0 px-4 py-2 md:py-1 md:px-0"

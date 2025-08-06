@@ -11,7 +11,7 @@ interface TablePaginationProps {
 }
 
 export default function TablePagination({ total, className = "" }: TablePaginationProps) {
-  console.log("total", total);
+
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();

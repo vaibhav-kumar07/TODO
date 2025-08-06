@@ -6,7 +6,7 @@ import { getAllUsers } from '@/lib/user-api';
 
 export async function GET(request: NextRequest) {
   try {
-    console.log('request', request.url);
+  
     // Check authentication
     const token = await getCookieValue(ICookieKeys.TOKEN);
     const userRole = await getCookieValue(ICookieKeys.USER_ROLE);
@@ -38,7 +38,7 @@ export async function GET(request: NextRequest) {
 
     // Fetch users
     const response = await getAllUsers(params);
-    console.log('response', response);
+    
 
     if (response.success) {
       return NextResponse.json(response);

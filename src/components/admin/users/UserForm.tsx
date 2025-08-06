@@ -56,7 +56,7 @@ export default function UserForm({
     email: '',
     firstName: '',
     lastName: '',
-    role: user?.role.toUpperCase()===UserRole.MEMBER ? UserRole.MEMBER : user?.role.toUpperCase() ===UserRole.MANAGER ? UserRole.MANAGER : UserRole.ADMIN,
+    role: UserRole.MEMBER,
     isActive: true,
     
   });

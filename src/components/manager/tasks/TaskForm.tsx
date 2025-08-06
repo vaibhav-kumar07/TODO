@@ -17,6 +17,7 @@ import { errorToast } from '@/components/hooks/use-toast';
 import { z } from 'zod';
 import CommonButton from '@/components/common/Button';
 import { formatDate } from '@/lib/common/date-utils';
+import TaskTable from './TaskTable';
 
 // Zod schemas for validation
 const createTaskSchema = z.object({
@@ -63,27 +64,14 @@ export default function TaskForm({
   isLoading = false 
 }: TaskFormProps) {
   const [formData, setFormData] = useState<TaskFormData>({
-    title: '',
-    description: '',
-    priority: TaskPriority.MEDIUM,
-    dueDate: new Date(),
-    assignedTo: '',
-    status: TaskStatus.TODO,
+    title: task?.title || '',
+    description: task?.description || '',
+    priority: task?.priority.toUpperCase() as TaskPriority || TaskPriority.MEDIUM,
+    dueDate: task?.dueDate ? new Date(task.dueDate) : new Date(),
+    assignedTo: task?.assignedTo._id || '',
+    status: task?.status ||TaskStatus.TODO,
   });
 
-  // Initialize form data when task is provided (update mode)
-  useEffect(() => {
-    if (task && mode === 'update') {
-      setFormData({
-        title: task.title,
-        description: task.description,
-        priority: task.priority,
-        dueDate: new Date(task.dueDate),
-        assignedTo: task.assignedTo,
-        status: task.status,
-      });
-    }
-  }, [task, mode]);
 
   const handleInputChange = (field: keyof TaskFormData, value: string | Date | TaskPriority | TaskStatus) => {
     setFormData(prev => ({
@@ -156,7 +144,11 @@ export default function TaskForm({
           disabled={isLoading}
         >
           <SelectTrigger>
-            <SelectValue placeholder="Select priority" />
+            <SelectValue placeholder="Select priority">
+              {formData.priority && (
+                <span className="capitalize">{formData.priority.toLowerCase()}</span>
+              )}
+            </SelectValue>
           </SelectTrigger>
           <SelectContent>
             <SelectItem value={TaskPriority.LOW}>Low</SelectItem>
@@ -181,7 +173,7 @@ export default function TaskForm({
               disabled={isLoading}
             >
               <CalendarIcon className="mr-2 h-4 w-4" />
-              {formData.dueDate ? formatDate(formData.dueDate, "PPP"): <span>Pick a date</span>}
+              {formData.dueDate ? formatDate(formData.dueDate, "MMM DD, YYYY"): <span>Pick a date</span>}
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0">
@@ -204,7 +196,23 @@ export default function TaskForm({
           disabled={isLoading}
         >
           <SelectTrigger>
-            <SelectValue placeholder="Select assignee" />
+            <SelectValue placeholder="Select assignee">
+              {formData.assignedTo && (
+                (() => {
+                  // First try to find in availableUsers
+                  const selectedUser = availableUsers.find(user => user.id === formData.assignedTo);
+                  if (selectedUser) {
+                    return `${selectedUser.firstName} ${selectedUser.lastName} (${selectedUser.email})`;
+                  }
+                  // If not found in availableUsers, use task data if in update mode
+                  if (task && mode === 'update' && task.assignedTo) {
+                    return `${task.assignedTo.firstName} ${task.assignedTo.lastName} (${task.assignedTo.email})`;
+                  }
+                  // Fallback to just showing the ID
+                  return formData.assignedTo;
+                })()
+              )}
+            </SelectValue>
           </SelectTrigger>
           <SelectContent>
             {availableUsers.map((user) => (
@@ -226,7 +234,11 @@ export default function TaskForm({
             disabled={isLoading}
           >
             <SelectTrigger>
-              <SelectValue placeholder="Select status" />
+              <SelectValue placeholder="Select status">
+                {formData.status && (
+                  <span>{formData.status.replace('_', ' ')}</span>
+                )}
+              </SelectValue>
             </SelectTrigger>
             <SelectContent>
               <SelectItem value={TaskStatus.TODO}>To Do</SelectItem>

@@ -30,17 +30,17 @@ const fetchRequest = async (
     body,
     requestOption
   );
-  console.log(`Request ${method} to ${url}`, "debug", body, requestInput);
+  
 
   const response = await fetch(url, requestInput);
-  console.log("response :",response)
+  
   // Handle 401 Unauthorized - try to refresh token
   if (response.status ==401 && requestOption.isWithToken) {
-    console.log("Received 401, attempting token refresh...");
+    
     
     const refreshSuccess = await refreshToken();
     if (refreshSuccess) {
-      console.log("Token refreshed successfully, retrying original request...");
+      
       
      setTimeout(async () => {
       // Retry the original request with new token
@@ -51,7 +51,7 @@ const fetchRequest = async (
      }, 2000);
     } else {
       
-      console.log("Token refresh failed, clearing cookies and redirecting to login");
+      
       
       // Clear all auth cookies on refresh failure
       await deleteCookieValue(ICookieKeys.TOKEN);

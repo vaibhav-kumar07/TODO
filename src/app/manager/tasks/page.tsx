@@ -4,8 +4,7 @@ import { redirect } from 'next/navigation';
 import TaskManagementHeader from '@/components/manager/tasks/TaskManagementHeader';
 import TaskTable from '@/components/manager/tasks/TaskTable';
 import FilterContainer from '@/components/manager/tasks/filters/FilterContainer';
-import { getAllTasks } from '@/lib/task-api';
-import { getAllUsers } from '@/lib/user-api';
+import { getAllTasks } from '@/lib/task-api';;
 import { paginationLimit } from '@/types/common';
 import { UserRole } from '@/types/auth';
 import { TaskFilters } from '@/types/task';
@@ -38,7 +37,7 @@ export default async function TaskManagementPage({ searchParams }: TaskManagemen
   };
 
   const tasksResponse = await getAllTasks(filterParams);
-  console.log('tasksResponse', tasksResponse);
+
   const tasks = tasksResponse.success ? tasksResponse.data?.tasks || [] : [];
 
   return (

@@ -5,7 +5,7 @@ import { Task } from '@/types/task';
 import { User } from '@/lib/user-api';
 import { createTaskAction, updateTaskAction } from '@/actions/task';
 import { errorToast, successToast } from '@/components/hooks/use-toast';
-import { Plus, Edit, ClipboardList, Pencil } from 'lucide-react';
+import { Plus,  ClipboardList, Pencil } from 'lucide-react';
 import TaskForm, { TaskFormData } from './TaskForm';
 import CommonButton from '@/components/common/Button';
 import { UserRole } from '@/types/auth';
@@ -21,7 +21,6 @@ export default function TaskManagementDialog({
   mode, 
   task, 
   children,
-  availableUsers = []
 }: TaskManagementDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -31,11 +30,12 @@ export default function TaskManagementDialog({
     const fetchUsers = async () => {
       try {
         const response = await fetch(`/manager/users/api?role=${UserRole.MEMBER}`);
-       
+      
         if (response.ok) {
           const data = await response.json();
-          console.log('data', data);
+  
           if (data.success) {
+            console.log("response :",data.data?.users)
             setUsers(data.data?.users || []);
           } else {
             console.error('Failed to fetch users:', data.message);
@@ -49,14 +49,13 @@ export default function TaskManagementDialog({
     };
 
     fetchUsers();
-  }, []);
+  }, [isOpen]);
 
   const handleSubmit = async (formData: TaskFormData) => {
     setIsLoading(true);
 
     try {
       let result;
-
       if (mode === 'create') {
         result = await createTaskAction({
           title: formData.title,
@@ -66,12 +65,12 @@ export default function TaskManagementDialog({
           assignedTo: formData.assignedTo,
         });
       } else {
-        if (!task?.id) {
+        if (!task?._id) {
           errorToast('Task ID is required for update');
           return;
         }
 
-        result = await updateTaskAction(task.id, {
+        result = await updateTaskAction(task._id, {
           title: formData.title,
           description: formData.description,
           priority: formData.priority,
@@ -84,7 +83,7 @@ export default function TaskManagementDialog({
       if (result.success) {
         successToast(result.message || 'Operation completed successfully');
         setIsOpen(false);
-        window.location.reload();
+       
       } else {
         errorToast(result.message || 'Operation failed');
       }

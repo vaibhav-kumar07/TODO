@@ -20,7 +20,7 @@ export default async function FilterContainer() {
   }
 
   return (
-    <div className="flex items-center  border-t-lg rounded-t-lg border-border px-2 py-1">
+    <div className="flex items-center  border-border px-2 py-1">
      <div className='flex items-center gap-2'>
          <AllFilter />
          <RoleFilter userRole={finalUserRole} />

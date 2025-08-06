@@ -6,7 +6,7 @@ import { redirect } from 'next/navigation';
 import { ResponseHandlerResult } from '@/types/common';
 import { ICookieKeys } from '@/types/common';
 import { AuthApiService } from '@/lib/auth-api';
-import { getCookieValueAction, setCookieValue } from './cookie-action';
+import { deleteMultipleCookies, getCookieValueAction, setCookieValue } from './cookie-action';
 
 export async function AdminLoginAction(credentials: LoginCredentials): Promise<ResponseHandlerResult<{ accessToken:string, refreshToken:string, user:any }>> {
     const response = await AuthApiService.login(credentials);
@@ -15,20 +15,14 @@ export async function AdminLoginAction(credentials: LoginCredentials): Promise<R
 
 export async function logoutAction(): Promise<ResponseHandlerResult<{ message: string }>> {
   try {
-    await deleteCookie(ICookieKeys.TOKEN);
-    await deleteCookie(ICookieKeys.REFRESH_TOKEN);
-    await deleteCookie(ICookieKeys.USER_ROLE);
-
+    await deleteMultipleCookies([ICookieKeys.TOKEN, ICookieKeys.REFRESH_TOKEN, ICookieKeys.USER_ROLE]);
     return {
       success: true,
       data: { message: 'Logout successful' },
       message: 'Logout completed successfully'
     };
   } catch (error) {
-    console.error('Logout action error:', error);
-    await deleteCookie(ICookieKeys.TOKEN);
-    await deleteCookie(ICookieKeys.REFRESH_TOKEN);
-    await deleteCookie(ICookieKeys.USER_ROLE);
+    await deleteMultipleCookies([ICookieKeys.TOKEN, ICookieKeys.REFRESH_TOKEN, ICookieKeys.USER_ROLE]);
     return {
       success: true,
       data: { message: 'Logout completed' },
@@ -66,7 +60,7 @@ export async function updateProfileAction(profileData: any): Promise<ResponseHan
 export async function refreshTokenAction(): Promise<ResponseHandlerResult<{ accessToken: string; refreshToken: string }>> {
     const refreshTokenResult = await getCookieValueAction(ICookieKeys.REFRESH_TOKEN);
     const refreshToken = refreshTokenResult.value;
-    console.log("refresh token action", refreshToken);
+
     if (!refreshToken) {
      redirect('/login');
     }
@@ -78,7 +72,7 @@ export async function refreshTokenAction(): Promise<ResponseHandlerResult<{ acce
       },
       body: JSON.stringify({ refreshToken }),
     });
-    console.log("refresh token response", response);
+    
     if (response.ok) {
       const data = await response.json();
      

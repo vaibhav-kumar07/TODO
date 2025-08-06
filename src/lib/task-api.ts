@@ -44,15 +44,13 @@ export async function createTask(taskData: CreateTaskData) {
   const response = await FetchUtils.post(`${API_BASE_URL}/tasks`, taskData, {
     isWithToken: true,
   });
-  console.log('Create task response:', response);
   return response;
 }
 
 export async function updateTask(taskId: string, taskData: UpdateTaskData) {
-  const response = await FetchUtils.put(`${API_BASE_URL}/tasks/${taskId}`, taskData, {
+  const response = await FetchUtils.patch(`${API_BASE_URL}/tasks/${taskId}`, taskData, {
     isWithToken: true,
   });
-  console.log('Update task response:', response);
   return response;
 }
 
@@ -65,17 +63,18 @@ export async function deleteTask(taskId: string) {
 }
 
 export async function updateTaskStatus(taskId: string, status: string) {
-  const response = await FetchUtils.patch(`${API_BASE_URL}/tasks/${taskId}/status`, {
+  const response = await FetchUtils.patch(`${API_BASE_URL}/tasks/${taskId}`, {
     status
   }, {
     isWithToken: true,
   });
-  
   return response;
 }
 
 export async function reassignTask(taskId: string, assignedTo: string) {
-  const response = await FetchUtils.patch(`${API_BASE_URL}/tasks/${taskId}/reassign`, {
+  console.log("taskId :",taskId)
+  console.log("assignedTo :",assignedTo)
+  const response = await FetchUtils.patch(`${API_BASE_URL}/tasks/${taskId}`, {
     assignedTo
   }, {
     isWithToken: true,

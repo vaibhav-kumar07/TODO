@@ -1,21 +1,19 @@
 import RoleThemeProvider from "@/components/provider/RoleThemeProvider";
 import { UserRole } from "@/types/auth";
 import RoleLayout from "@/components/layout/RoleLayout";
-import "@/app/globals.css"
 
-export default function AdminLayout({
+export default function MemberLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <RoleThemeProvider role={UserRole.ADMIN}>
-      <RoleLayout allowedRoles={[UserRole.ADMIN]}>
+  return (  
+    <RoleThemeProvider role={UserRole.MEMBER}>
+      <RoleLayout allowedRoles={[UserRole.MEMBER]}>
         <div className="w-full overflow-y-auto">
           {children}
         </div>
       </RoleLayout>
     </RoleThemeProvider>
   );
-}
-
+} 

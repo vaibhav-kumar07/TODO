@@ -1,6 +1,5 @@
-import { RoleThemeProvider } from "@/components/provider/theme-provider";
+import RoleThemeProvider from "@/components/provider/RoleThemeProvider";
 import { UserRole } from "@/types/auth";
-import Sidebar from "@/components/layout/Sidebar";
 import RoleLayout from "@/components/layout/RoleLayout";
 
 export default function ManagerLayout({
@@ -9,12 +8,12 @@ export default function ManagerLayout({
   children: React.ReactNode;
 }>) {
   return (  
-    <RoleLayout allowedRoles={[UserRole.MANAGER]}>
-    <RoleThemeProvider defaultRole={UserRole.MANAGER}>
-        <div className="w-full">
+    <RoleThemeProvider role={UserRole.MANAGER}>
+      <RoleLayout allowedRoles={[UserRole.MANAGER]}>
+        <div className="w-full overflow-y-auto">
           {children}
         </div>
+      </RoleLayout>
     </RoleThemeProvider>
-    </RoleLayout>
   );
 }

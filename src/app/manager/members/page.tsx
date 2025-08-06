@@ -38,11 +38,14 @@ export default async function UserManagementPage({ searchParams }: UserManagemen
   const usersResponse = await getAllUsers(filterParams);
   const users = usersResponse.success ? usersResponse.data?.users || [] : [];
   return (
-    <div className="space-y-6 py-8 px-4">
-      <UserManagementHeader />
-      <div className="border rounded-lg">
+    <div className="space-y-4 px-4">
+      <UserManagementHeader 
+        title="User Management"
+        description="Create and manage users for your team members"
+      />
+      <div className="border rounded-xl">
         <FilterContainer  />
-        <UserTable users={users} className='rounded-lg  border-none'/>
+        <UserTable users={users} className='rounded-y-xl'/>
       </div>
     </div>
   );

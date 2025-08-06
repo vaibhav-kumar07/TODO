@@ -16,10 +16,10 @@ export default function AllFilter() {
         router.push(pathname);
     };
 
-    // Only show the All button when there are active filters
-    if (!hasActiveFilters()) {
-        return null;
-    }
+    // // Only show the All button when there are active filters
+    // if (!hasActiveFilters()) {
+    //     return null;
+    // }
 
     return (
         <CommonButton 

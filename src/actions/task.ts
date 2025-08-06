@@ -9,7 +9,7 @@ import { revalidatePath } from 'next/cache';
 // Create new task
 export async function createTaskAction(taskData: CreateTaskData) {
   try {
-    console.log('Create task data:', taskData);
+  
     const result = await createTask(taskData);
     revalidatePath('/manager/tasks');
     return result;
@@ -58,6 +58,7 @@ export async function deleteTaskAction(taskId: string) {
 // Update task status
 export async function updateTaskStatusAction(taskId: string, status: string) {
   try {
+    console.log('Update task status:', taskId, status);
     const result = await updateTaskStatus(taskId, status);
     revalidatePath('/manager/tasks');
     return result;

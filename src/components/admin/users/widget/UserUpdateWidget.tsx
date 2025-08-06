@@ -1,9 +1,9 @@
-import React from 'react'
-import UserManagementDialog from '../UserManagementDialog'
-import { User } from '@/lib/user-api-client'
+import React from 'react';
+import { User } from '@/lib/user-api';
+import UserManagementDialog from '../UserManagementDialog';
 
 export default function UserUpdateWidget({ user }: { user: User }) {
-    console.log('user', user);
+  
   return (
  <UserManagementDialog
     mode='update'

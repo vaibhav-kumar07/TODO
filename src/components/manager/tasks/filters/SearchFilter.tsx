@@ -38,7 +38,7 @@ export default function SearchFilter() {
         placeholder="Search tasks..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-        className="pl-8 w-64"
+        className="pl-8 w-64 rounded-full"
       />
     </div>
   );

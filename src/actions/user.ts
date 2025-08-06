@@ -13,7 +13,7 @@ export async function inviteUserAction(userData: {
   role: UserRole;
 }) {
   try {
-    console.log('Invite user data:', userData);
+  
     const result = await createUser(userData);
     revalidatePath('/admin/users');
 

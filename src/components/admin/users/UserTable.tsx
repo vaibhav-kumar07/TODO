@@ -1,8 +1,9 @@
+import React from 'react';
+import TableHeader from '@/components/common/table/TableHeader';
+import TableRow from '@/components/common/table/TableRow';
+import { User } from '@/lib/user-api';
+import { ITableMetadata } from '@/components/common/table/Table';
 import { Label } from "@/components/common/Label";
-import { ITableMetadata } from "@/components/common/table/Table";
-import TableHeader from "@/components/common/table/TableHeader";
-import TableRow from "@/components/common/table/TableRow";
-import { User } from "@/lib/user-api-client";
 import { cn } from "@/lib/utils";
 import { formatDate } from "@/lib/common/date-utils";
 import { UserRole } from "@/types/auth";
@@ -69,13 +70,13 @@ export default function UserTable(props: UserTableProps) {
     return (
         <div
             className={cn(
-                "w-full flex flex-col gap-4 md:gap-0 md:overflow-auto",
+                "w-full flex flex-col gap-4 md:gap-0 md:overflow-auto rounded-b-xl",
                 props.className,
             )}
         >
             <TableHeader
                 metadata={userTableMetadata}
-                className="border-none rounded-none md:px-0 md:py-1.5 md:gap-0 text-foreground"
+                className="border-none rounded-none md:px-0 md:py-1.5 md:gap-0 text-foreground rounded-t-xl"
             />
             {props.users?.length ? (
                 props.users.map((user: User) => {
