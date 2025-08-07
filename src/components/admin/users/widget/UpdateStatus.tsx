@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { Switch } from '@/components/ui/switch';
 import { User } from '@/lib/user-api';
-import { toggleUserStatusAction } from '@/actions/user';
+import {  updateUserAction } from '@/actions/user';
 import { errorToast, successToast } from '@/components/hooks/use-toast';
 import { Label } from '@/components/common/Label';
 
@@ -19,7 +19,9 @@ export default function UpdateStatus({ user, onStatusChange }: UpdateStatusProps
   const handleStatusToggle = async (checked: boolean) => {
     
     try {
-      const result = await toggleUserStatusAction(user.id, checked);
+      const result = await updateUserAction(user.id, {
+        isActive: checked
+      });
 
       if (result.success) {
         setIsActive(checked);

@@ -154,7 +154,7 @@ export default function TaskForm({
             <SelectItem value={TaskPriority.LOW}>Low</SelectItem>
             <SelectItem value={TaskPriority.MEDIUM}>Medium</SelectItem>
             <SelectItem value={TaskPriority.HIGH}>High</SelectItem>
-            <SelectItem value={TaskPriority.URGENT}>Urgent</SelectItem>
+           
           </SelectContent>
         </Select>
       </div>

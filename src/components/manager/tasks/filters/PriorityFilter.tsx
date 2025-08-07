@@ -65,7 +65,6 @@ export default function PriorityFilter({ className }: PriorityFilterProps) {
     { value: TaskPriority.LOW, label: 'Low' },
     { value: TaskPriority.MEDIUM, label: 'Medium' },
     { value: TaskPriority.HIGH, label: 'High' },
-    { value: TaskPriority.URGENT, label: 'Urgent' }
   ];
 
   return (
