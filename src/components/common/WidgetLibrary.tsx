@@ -1,5 +1,4 @@
 
-import React from 'react';
 import { User } from '@/lib/user-api';
 import { Task } from '@/types/task';
 import TaskUpdateWidget from '@/components/manager/tasks/widget/TaskUpdateWidget';
@@ -9,6 +8,7 @@ import ReassignTask from '@/components/manager/tasks/widget/ReassignTask';
 import UserUpdateWidget from '@/components/users/widget/UserUpdateWidget';
 import UserStatusWidget from '@/components/users/widget/UserStatusWidget';
 import UpdateStatus from '@/components/users/widget/UpdateStatus';
+import DeleteTaskWidget from '@/components/manager/tasks/widget/DeleteTaskWidget';
 
 const widgets: any = {
   userUpdateWidget: (value: string, rowData: User) => {
@@ -37,6 +37,9 @@ const widgets: any = {
 
   updateTaskPriorityWidget: (value: string, rowData: Task) => {
     return <UpdateTaskPriority task={rowData} />;
+  },
+  deleteTaskWidget: (value: string, rowData: Task) => {
+    return <DeleteTaskWidget taskId={rowData._id} taskTitle={rowData.title} />;
   },
 };
 

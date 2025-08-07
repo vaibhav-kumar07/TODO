@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { Search } from 'lucide-react';
 
-export default function SearchFilter() {
+export default function SearchFilter({className}:{className?:string}) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -21,9 +21,6 @@ export default function SearchFilter() {
         params.delete('search');
       }
       
-      // Reset to page 1 when searching
-      params.set('page', '1');
-      
       router.push(`${pathname}?${params.toString()}`);
     }, 500);
 
@@ -31,14 +28,14 @@ export default function SearchFilter() {
   }, [searchTerm, router, pathname, searchParams]);
 
   return (
-    <div className="relative">
-      <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+    <div className={`relative ${className} `}>
+      <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
       <Input
         type="text"
         placeholder="Search tasks..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-        className="pl-8 w-64 rounded-full"
+        className="pl-12 w-64 rounded-full h-7"
       />
     </div>
   );

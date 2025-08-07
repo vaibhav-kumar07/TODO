@@ -25,7 +25,7 @@ export default async function TaskManagementPage({ searchParams }: TaskManagemen
   const token = await getCookieValue(ICookieKeys.TOKEN);
   const userRole = await getCookieValue(ICookieKeys.USER_ROLE);
   
-  if (!token || !userRole || userRole.toLowerCase() !== UserRole.MANAGER.toString().toLowerCase()) {
+  if (!token || !userRole || userRole.toLowerCase() !== UserRole.MEMBER.toString().toLowerCase()) {
     redirect('/login');
   }
 
@@ -42,7 +42,7 @@ export default async function TaskManagementPage({ searchParams }: TaskManagemen
   const tasksResponse = await getAllTasks(filterParams);
   const tasks = tasksResponse.success ? tasksResponse.data?.tasks || [] : [];
   const taskTableMetadata = getTaskTableMetadataForSSR(userRole);
-  
+
   return (
     <div className="space-y-4 px-4">
       <TaskManagementHeader />

@@ -1,11 +1,13 @@
 
 import React from 'react';
 import RoleFilter from './RoleFilter';
-import StatusFilter from './StatusFilter';
-import SearchFilter from './SearchFilter';
-import AllFilter from './AllFilter';
+import StatusFilter from '../../common/filters/StatusFilter';
+import SearchFilter from '../../common/filters/SearchFilter';
+import AllFilter from '../../common/filters/AllFilter';
 import { ICookieKeys } from '@/types/common';
 import { getCookieValue } from '@/lib/common/cookie-utils';
+import RoleBasedWrapper from '@/components/common/RoleBasedWrapper';
+import { UserRole } from '@/types/auth';
 
 
 export default async function FilterContainer() {
@@ -21,12 +23,14 @@ export default async function FilterContainer() {
 
   return (
     <div className="flex items-center  border-border px-2 py-1">
-     <div className='flex items-center gap-2'>
-         <AllFilter />
-         <RoleFilter userRole={finalUserRole} />
-         <StatusFilter  />
-     </div>
-     <SearchFilter className='ml-auto' />
+      <div className='flex items-center gap-2'>
+        <AllFilter />
+        <RoleFilter userRole={finalUserRole} />
+        <RoleBasedWrapper allowedRoles={[UserRole.MANAGER]}>
+          <StatusFilter />
+        </RoleBasedWrapper>
+      </div>
+      <SearchFilter className='ml-auto' />
     </div>
   );
 } 

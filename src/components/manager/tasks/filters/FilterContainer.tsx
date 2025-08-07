@@ -1,11 +1,11 @@
 'use client';
 
 import React from 'react';
-import SearchFilter from '@/components/admin/users/filters/SearchFilter';
-import StatusFilter from './StatusFilter';
+import SearchFilter from '@/components/common/filters/SearchFilter'; 
+import StatusFilter from '../../../common/filters/StatusFilter';
 import PriorityFilter from './PriorityFilter';
 import DueDateFilter from './DueDateFilter';
-import AllFilter from './AllFilter';
+import AllFilter from '../../../common/filters/AllFilter';
 
 export default function FilterContainer() {
   return (
@@ -13,7 +13,7 @@ export default function FilterContainer() {
       <AllFilter />    
       <StatusFilter />
       <PriorityFilter />
-      <SearchFilter className="ml-auto" />
+      <SearchFilter className='ml-auto' />
       <DueDateFilter />
     </div>
   );

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -53,26 +53,13 @@ export default function UserForm({
   isLoading = false 
 }: UserFormProps) {
   const [formData, setFormData] = useState<UserFormData>({
-    email: '',
-    firstName: '',
-    lastName: '',
-    role: UserRole.MEMBER,
-    isActive: true,
+    email: user?.email || '',
+    firstName: user?.firstName || '',
+    lastName: user?.lastName ||  '',
+    role: user?.role.toUpperCase()==UserRole.MEMBER ? UserRole.MEMBER : user?.role.toUpperCase() ===UserRole.MANAGER ? UserRole.MANAGER : UserRole.ADMIN,
+    isActive: user?.isActive || true,
     
   });
-
-  // Initialize form data when user is provided (update mode)
-  useEffect(() => {
-    if (user && mode === 'update') {
-      setFormData({
-        email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        role: user.role.toUpperCase()===UserRole.MEMBER ? UserRole.MEMBER : user.role.toUpperCase() ===UserRole.MANAGER ? UserRole.MANAGER : UserRole.ADMIN,
-        isActive: user.isActive,
-      });
-    }
-  }, [user, mode]);
 
   const handleInputChange = (field: keyof UserFormData, value: string | boolean) => {
     setFormData(prev => ({
