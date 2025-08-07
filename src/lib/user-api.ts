@@ -19,13 +19,21 @@ export interface User {
 
 export interface IUserParams {
   role?: UserRole;
-  isActive?: boolean;
+  isActive?: boolean | string | undefined;
   search?: string;
   invitedBy?: string;
   page?: number;
   limit?: number;
   sortBy?: string;
   sortOrder?: SortOrder;
+}
+
+export enum IUserFilterKey {
+  ROLE = "role",
+  IS_ACTIVE = "isActive",
+  SEARCH = "search",
+  INVITED_BY = "invitedBy",
+  PAGE = "page",
 }
 
 export interface UsersResponse {
