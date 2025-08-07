@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Switch } from '@/components/ui/switch';
 import { User } from '@/lib/user-api';
 import {  updateUserAction } from '@/actions/user';
@@ -40,6 +40,11 @@ export default function UpdateStatus({ user, onStatusChange }: UpdateStatusProps
       setIsLoading(false);
     }
   };
+
+
+  useEffect(() => {
+    setIsActive(user.isActive);
+  }, [user]);
 
   return (
     <div className="flex items-center gap-2">

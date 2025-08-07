@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Task, TaskPriority } from '@/types/task';
@@ -34,10 +34,15 @@ const PRIORITY_CONFIG = {
 } as const;
 
 export default function UpdateTaskPriority({ task }: UpdateTaskPriorityProps) {
-  // Convert priority to uppercase to match enum values
-  const normalizedPriority = task.priority?.toUpperCase() as TaskPriority || TaskPriority.MEDIUM;
-  const [currentPriority, setCurrentPriority] = useState<TaskPriority>(normalizedPriority);
+  const [currentPriority, setCurrentPriority] = useState<TaskPriority>(TaskPriority.MEDIUM);
   const [isLoading, setIsLoading] = useState(false);
+
+
+  useEffect(() => {
+  const normalizedPriority = task.priority?.toUpperCase() as TaskPriority
+    setCurrentPriority(normalizedPriority);
+  }, [task]);
+
 
   const handlePriorityChange = async (newPriority: TaskPriority) => {
     if (newPriority === currentPriority) return;

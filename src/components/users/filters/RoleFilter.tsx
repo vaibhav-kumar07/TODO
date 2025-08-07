@@ -16,23 +16,23 @@ export default function RoleFilter({ userRole }: RoleFilterProps) {
   const searchParams = useSearchParams();
   const [selectedRole, setSelectedRole] = useState<string | null>(null);
 
-  // Get the actual user role from cookies for security validation
-  const getActualUserRole = (): UserRole | null => {
-    try {
-      const cookieRole = userRole;
-      if (cookieRole && Object.values(UserRole).includes(cookieRole as UserRole)) {
-        return cookieRole as UserRole;
-      }
-      return null;
-    } catch (error) {
-      console.error('Error getting user role from cookie:', error);
-      return null;
-    }
-  };
+  // // Get the actual user role from cookies for security validation
+  // const getActualUserRole = (): UserRole | null => {
+  //   try {
+  //     const cookieRole = userRole;
+  //     if (cookieRole && Object.values(UserRole).includes(cookieRole as UserRole)) {
+  //       return cookieRole as UserRole;
+  //     }
+  //     return null;
+  //   } catch (error) {
+  //     console.error('Error getting user role from cookie:', error);
+  //     return null;
+  //   }
+  // };
 
   // Validate if a role is accessible to the current user
   const isRoleAccessible = (role: string): boolean => {
-    const actualUserRole = getActualUserRole();
+    const actualUserRole = userRole as UserRole ;
     if (!actualUserRole) return false;
 
     // Get allowed roles for the actual user
@@ -94,7 +94,7 @@ export default function RoleFilter({ userRole }: RoleFilterProps) {
 
   return (
     <div className='flex items-center gap-2'>
-      {roleOptions.map((option) => (
+      { roleOptions.length > 0 && roleOptions.map((option) => (
         <CommonButton 
           key={option.value} 
           variant='outline' 

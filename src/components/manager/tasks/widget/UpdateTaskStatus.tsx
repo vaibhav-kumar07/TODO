@@ -1,12 +1,11 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Task, TaskStatus } from '@/types/task';
 import { updateTaskStatusAction } from '@/actions/task';
 import { errorToast, successToast } from '@/components/hooks/use-toast';
 import { Badge } from '@/components/ui/badge';
-import { Label } from '@/components/common/Label';
 import { Circle, RefreshCw, Eye, CheckCircle, XCircle } from 'lucide-react';
 
 interface UpdateTaskStatusProps {
@@ -51,6 +50,11 @@ const TASK_STATUS_CONFIG = {
 export default function UpdateTaskStatus({ task, onStatusChange }: UpdateTaskStatusProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [currentStatus, setCurrentStatus] = useState(task.status);
+
+  useEffect(() => {
+    setCurrentStatus(task.status);
+  }, [task.status]);
+
 
   const getStatusBadge = (status: TaskStatus) => {
     const config = TASK_STATUS_CONFIG[status];

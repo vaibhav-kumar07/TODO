@@ -47,8 +47,7 @@ export default function ReassignTask({ task }: ReassignTaskProps) {
   }, [task.assignedTo]);
 
   const handleReassign = async (newAssigneeId: string) => {
-    if (newAssigneeId === task.assignedTo?._id) return;
-
+    if (newAssigneeId === task.assignedTo?._id) return
     setIsLoading(true);
     try {
       const result = await reassignTaskAction(task._id , newAssigneeId);

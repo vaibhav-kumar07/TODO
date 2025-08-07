@@ -7,74 +7,19 @@ import TableRow from "@/components/common/table/TableRow";
 import { Task } from "@/types/task";
 import { cn } from "@/lib/utils";
 import { formatDate } from "@/lib/common/date-utils";
-import { TaskStatus, TaskPriority } from "@/types/task";
+import { TaskPriority } from "@/types/task";
 
 interface TaskTableProps {
     tasks: Task[];
+    metadata: ITableMetadata[];
     className?: string;
 }
 
-const taskTableMetadata: ITableMetadata[] = [
-    {
-        columnName: "title",
-        headerLabel: "Title",
-        sortable: true,
-        columnClass: "w-full md:w-[22%] lg:w-[18%] text-left text-muted-foreground md:pl-4",
-        cellClass: "w-full md:w-[22%] lg:w-[18%] text-left md:pl-2",
-    },
-    {
-        columnName: "description",
-        headerLabel: "Description",
-        sortable: true,
-        columnClass: "w-full md:w-[18%] lg:w-[18%] text-left text-muted-foreground",
-        cellClass: "w-full md:w-[18%] lg:w-[18%]",
-    },
-    {
-        columnName: "status",
-        headerLabel: "Status",
-        sortable: true,
-        columnClass: "w-full md:w-[14%] lg:w-[14%] text-muted-foreground",
-        cellClass: "w-full md:w-[14%] lg:w-[14%] md:px-0 md:text-center",
-        type: "widget",
-        widgetName: "updateTaskStatusWidget",
-    },
-    {
-        columnName: "priority",
-        headerLabel: "Priority",
-        sortable: true,
-        columnClass: "w-full md:w-[12%] lg:w-[12%] text-left text-muted-foreground ",
-        cellClass: "w-full md:w-[12%] lg:w-[12%] ",
-        type: "widget",
-        widgetName: "updateTaskPriorityWidget",
-    },
-    {
-        columnName: "dueDate",
-        headerLabel: "Due Date",
-        sortable: true,
-        columnClass: "w-full md:w-[14%] lg:w-[14%] text-left text-muted-foreground ",
-        cellClass: "w-full md:w-[14%] lg:w-[14%]",
-    },
-    {
-        columnName: "assignedTo",
-        headerLabel: "Assigned To",
-        sortable: true,
-        columnClass: "w-full md:w-[14%] lg:w-[14%] text-left text-muted-foreground",
-        cellClass: "w-full md:w-[14%] lg:w-[14%]",
-        type: "widget",
-        widgetName: "reassignTaskWidget",
-    },
-    {
-        columnName: "actions",
-        headerLabel: "Actions",
-        sortable: false,
-        columnClass: "w-full md:w-[6%] lg:w-[10%] text-left text-muted-foreground",
-        cellClass: "w-full md:w-[6%] lg:w-[10%]",
-        type: "widget",
-        widgetName: "taskUpdateWidget",
-    },
-];
 
 export default function TaskTable(props: TaskTableProps) {
+    // Use provided metadata or fall back to default
+    const metadata = props.metadata as ITableMetadata[] 
+
     return (
         <div
             className={cn(
@@ -83,7 +28,7 @@ export default function TaskTable(props: TaskTableProps) {
             )}
         >
             <TableHeader
-                metadata={taskTableMetadata}
+                metadata={metadata}
                 className="border-none rounded-none md:px-0 md:py-1.5 md:gap-0 text-foreground rounded-t-xl"
             />
             {props.tasks?.length ? (
@@ -94,12 +39,13 @@ export default function TaskTable(props: TaskTableProps) {
                                 task.priority === TaskPriority.MEDIUM ? "Medium" : 
                                 task.priority === TaskPriority.HIGH ? "High" : "Urgent",
                         dueDate: formatDate(task.dueDate, "MMM DD, YYYY"),
+                        assignedBy: task.assignedBy?.firstName + " " + task.assignedBy?.lastName,
                     }
                     return (
                         <TableRow
                             key={task._id}
                             data={taskData}
-                            metadata={taskTableMetadata}
+                            metadata={metadata}
                             className="w-full border-x-0 border-b-0 px-4 py-2 md:py-1 md:px-0"
                         />
                     );

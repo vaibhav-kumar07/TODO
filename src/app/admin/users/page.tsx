@@ -1,9 +1,9 @@
 import { getCookieValue } from '@/lib/common/cookie-utils';
 import { ICookieKeys } from '@/types/common';
 import { redirect } from 'next/navigation';
-import UserManagementHeader from '@/components/admin/users/UserManagementHeader';
-import UserTable from '@/components/admin/users/UserTable';
-import FilterContainer from '@/components/admin/users/filters/FilterContainer';
+import UserManagementHeader from '@/components/users/UserManagementHeader'; 
+import UserTable from '@/components/users/UserTable';
+import FilterContainer from '@/components/users/filters/FilterContainer';
 import { getAllUsers } from '@/lib/user-api';
 import { paginationLimit } from '@/types/common';
 import { UserRole } from '@/types/auth';
