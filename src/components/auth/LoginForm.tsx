@@ -4,8 +4,6 @@ import { useState } from "react";
 import { AdminLoginAction } from "@/actions/auth";
 import { LoginCredentials, UserRole } from "@/types/auth";
 import { useRouter } from "next/navigation";
-import { setCookieValue } from "@/actions/cookie-action";
-import { ICookieKeys } from "@/types/common";
 import { errorToast, successToast } from "../hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -105,14 +103,6 @@ export default function LoginForm({ userRole }: LoginFormProps) {
 
       if (result.success) {
         successToast("Login successful");
-        // Set cookies
-        setCookieValue(ICookieKeys.TOKEN, result.data?.accessToken || "");
-        setCookieValue(
-          ICookieKeys.REFRESH_TOKEN,
-          result.data?.refreshToken || ""
-        );
-        setCookieValue(ICookieKeys.USER_ROLE, result.data?.user?.role);
-
         // Redirect based on user role
         const redirectPath = getRedirectPath(result.data?.user?.role);
         setTimeout(() => {
