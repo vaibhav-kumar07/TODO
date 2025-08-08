@@ -1,9 +1,9 @@
 "use client";
 import TaskStatsOverview from "./TaskStatsOverview";
-import TaskActivity from "./TaskActivity";
 import { SocketProvider } from "@/components/provider/socketProvider";
 import PageHeaderWithButton from "@/components/common/PageHeaderWithButton";
 import { ManagerStats, ManagerActivityData } from "@/types/dashboard";
+import WebsocketConnectionStatus from "../../provider/WebsocketConnectionStatus";
 
 interface ManagerDashboardProps {
   token: string;
@@ -13,22 +13,19 @@ interface ManagerDashboardProps {
 
 function ManagerDashboardContent({
   initialStats,
-  initialActivity,
 }: {
   initialStats?: ManagerStats;
   initialActivity?: ManagerActivityData;
 }) {
   const displayStats = initialStats;
-  const displayActivity = initialActivity;
-
   return (
     <div className="space-y-4 px-3 py-2">
       <PageHeaderWithButton
         title="Manager Dashboard"
         description="Monitor task activities and team performance"
+        action={<WebsocketConnectionStatus />}
       />
       <TaskStatsOverview stats={displayStats as ManagerStats} />
-      <TaskActivity data={displayActivity as ManagerActivityData} />
     </div>
   );
 }

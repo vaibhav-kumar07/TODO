@@ -105,7 +105,7 @@ export default function QuickStatsOverview({ stats }: QuickStatsOverviewProps) {
     },
     {
       title: "Managers",
-      value: dashboardStats?.managersCount ?? 0,
+      value: dashboardStats?.totalManagers ?? 0,
       icon: Target,
       color: "chart-4",
     },

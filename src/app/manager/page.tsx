@@ -19,7 +19,7 @@ export default async function ManagerPage() {
     getManagerActivity(),
   ]);
   // console.log("initialStats", initialStats);
-  console.log("initialActivity", initialActivity);
+  console.log("initialActivity manager", initialActivity);
   return (
     <div className="p-4">
       <ManagerDashboard

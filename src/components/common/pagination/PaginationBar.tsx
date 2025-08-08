@@ -37,13 +37,13 @@ export default function PaginationBar(props: PaginationBarProps) {
         props.className
       )}
     >
-      <div className="flex gap-1 align-middle items-center justify-center">
+      {/* <div className="flex gap-1 align-middle items-center justify-center">
         <Label size={"sm"}>Rows per page</Label>
         <RowCountSelector
           onValueChange={props.onRowsPerPageChange}
           value={props.rowsPerPage.toString()}
         />
-      </div>
+      </div> */}
       <div>
         <Label size={"sm"}>
           {startRecord}-{endRecord} of {props.recordCount}

@@ -1,14 +1,14 @@
-
-import { User } from '@/lib/user-api';
-import { Task } from '@/types/task';
-import TaskUpdateWidget from '@/components/manager/tasks/widget/TaskUpdateWidget';
-import UpdateTaskStatus from '@/components/manager/tasks/widget/UpdateTaskStatus';
-import UpdateTaskPriority from '@/components/manager/tasks/widget/UpdateTaskPriority';
-import ReassignTask from '@/components/manager/tasks/widget/ReassignTask';
-import UserUpdateWidget from '@/components/users/widget/UserUpdateWidget';
-import UserStatusWidget from '@/components/users/widget/UserStatusWidget';
-import UpdateStatus from '@/components/users/widget/UpdateStatus';
-import DeleteTaskWidget from '@/components/manager/tasks/widget/DeleteTaskWidget';
+import { User } from "@/lib/user-api";
+import { Task } from "@/types/task";
+import TaskUpdateWidget from "@/components/manager/tasks/widget/TaskUpdateWidget";
+import UpdateTaskStatus from "@/components/manager/tasks/widget/UpdateTaskStatus";
+import UpdateTaskPriority from "@/components/manager/tasks/widget/UpdateTaskPriority";
+import ReassignTask from "@/components/manager/tasks/widget/ReassignTask";
+import UserUpdateWidget from "@/components/users/widget/UserUpdateWidget";
+import UserStatusWidget from "@/components/users/widget/UserStatusWidget";
+import UpdateStatus from "@/components/users/widget/UpdateStatus";
+import ChangePasswordWidget from "@/components/users/widget/ChangePasswordWidget";
+import DeleteTaskWidget from "@/components/manager/tasks/widget/DeleteTaskWidget";
 
 const widgets: any = {
   userUpdateWidget: (value: string, rowData: User) => {
@@ -21,6 +21,10 @@ const widgets: any = {
 
   userStatusWidget: (value: string, rowData: User) => {
     return <UserStatusWidget user={rowData} />;
+  },
+
+  changePasswordWidget: (value: string, rowData: User) => {
+    return <ChangePasswordWidget user={rowData} />;
   },
 
   taskUpdateWidget: (value: string, rowData: Task) => {

@@ -4,6 +4,7 @@ import QuickStatsOverview from "./QuickStatsOverview";
 import { SocketProvider } from "@/components/provider/socketProvider";
 import PageHeaderWithButton from "@/components/common/PageHeaderWithButton";
 import { DashboardStats, UserActivityData } from "@/types/dashboard";
+import WebsocketConnectionStatus from "../../provider/WebsocketConnectionStatus";
 
 interface AdminDashboardProps {
   token: string;
@@ -26,6 +27,7 @@ function DashboardContent({
       <PageHeaderWithButton
         title="Admin Dashboard"
         description="Monitor system activity and user statistics"
+        action={<WebsocketConnectionStatus />}
       />
       <QuickStatsOverview stats={displayStats as DashboardStats} />
       <UserActivity data={displayActivity as UserActivityData} />

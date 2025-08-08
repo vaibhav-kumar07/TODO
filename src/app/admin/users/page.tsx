@@ -7,12 +7,14 @@ import FilterContainer from "@/components/users/filters/FilterContainer";
 import { getAllUsers } from "@/lib/user-api";
 import { paginationLimit } from "@/types/common";
 import { UserRole } from "@/types/auth";
+import Pagination from "@/components/common/pagination/Pagination";
 
 interface UserManagementPageProps {
   searchParams: Promise<{
     role?: string;
     isActive?: string;
     search?: string;
+    page?: string;
   }>;
 }
 
@@ -30,13 +32,13 @@ export default async function UserManagementPage({
     redirect("/login");
   }
 
-  const { role, isActive, search } = await searchParams;
+  const { role, isActive, search, page } = await searchParams;
   const filterParams = {
     role: role as any,
     isActive:
       isActive === "true" ? true : isActive === "false" ? false : undefined,
     search: search || undefined,
-    page: 1,
+    page: parseInt(page || "1"),
     limit: paginationLimit.LIMIT_10,
   };
 
@@ -44,15 +46,23 @@ export default async function UserManagementPage({
   const users = usersResponse.success ? usersResponse.data?.users || [] : [];
 
   return (
-    <div className="space-y-4  px-4">
+    <div className="  px-4">
       <UserManagementHeader
         title="User Management"
         description="Create and manage users for your team "
       />
-      <div className="border rounded-lg">
+      <div className="border rounded-lg  sm:p-0 ">
         <FilterContainer />
-        <UserTable users={users} className="rounded-lg  border-none" />
+        <UserTable
+          users={users}
+          className="rounded-lg  border-none p-4 sm:p-0 "
+          rowClassName="p-2"
+        />
       </div>
+      <Pagination
+        recordCount={usersResponse.data?.pagination?.total || 0}
+        className="p-4"
+      />
     </div>
   );
 }

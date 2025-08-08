@@ -6,12 +6,14 @@ import UserTable from "@/components/users/UserTable";
 import FilterContainer from "@/components/users/filters/FilterContainer";
 import { getAllUsers } from "@/lib/user-api";
 import { UserRole } from "@/types/auth";
+import Pagination from "@/components/common/pagination/Pagination";
 
 interface UserManagementPageProps {
   searchParams: Promise<{
     role?: UserRole.MEMBER | UserRole.MANAGER;
     isActive?: string;
     search?: string;
+    page?: string;
   }>;
 }
 
@@ -28,7 +30,7 @@ export default async function UserManagementPage({
   )
     redirect("/login");
 
-  const { role, isActive, search } = await searchParams;
+  const { role, isActive, search, page } = await searchParams;
   const finalRole =
     role === UserRole.MEMBER
       ? UserRole.MEMBER
@@ -41,14 +43,14 @@ export default async function UserManagementPage({
     role: finalRole as any,
     isActive,
     search: finalSearch,
-    page: 1,
+    page: parseInt(page || "1"),
     limit: paginationLimit.LIMIT_10,
   };
 
   const usersResponse = await getAllUsers(filterParams);
   const users = usersResponse.success ? usersResponse.data?.users || [] : [];
   return (
-    <div className="space-y-4 px-4">
+    <div className=" px-4">
       <UserManagementHeader
         title="User Management"
         description="Create and manage users for your team members"
@@ -57,6 +59,10 @@ export default async function UserManagementPage({
         <FilterContainer />
         <UserTable users={users} className="rounded-y-xl" />
       </div>
+      <Pagination
+        recordCount={usersResponse.data?.pagination?.total || 0}
+        className="p-4"
+      />
     </div>
   );
 }

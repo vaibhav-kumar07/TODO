@@ -1,14 +1,15 @@
-import { getCookieValue } from '@/lib/common/cookie-utils';
-import { ICookieKeys } from '@/types/common';
-import { redirect } from 'next/navigation';
-import TaskManagementHeader from '@/components/manager/tasks/TaskManagementHeader';
-import TaskTable from '@/components/manager/tasks/TaskTable';
-import FilterContainer from '@/components/manager/tasks/filters/FilterContainer';
-import { getAllTasks } from '@/lib/task-api';
-import { paginationLimit } from '@/types/common';
-import { UserRole } from '@/types/auth';
-import { TaskFilters } from '@/types/task';
-import { getTaskTableMetadataForSSR } from '@/lib/table-metadata';
+import { getCookieValue } from "@/lib/common/cookie-utils";
+import { ICookieKeys } from "@/types/common";
+import { redirect } from "next/navigation";
+import TaskManagementHeader from "@/components/manager/tasks/TaskManagementHeader";
+import TaskTable from "@/components/manager/tasks/TaskTable";
+import FilterContainer from "@/components/manager/tasks/filters/FilterContainer";
+import { getAllTasks } from "@/lib/task-api";
+import { paginationLimit } from "@/types/common";
+import { UserRole } from "@/types/auth";
+import { TaskFilters } from "@/types/task";
+import { getTaskTableMetadataForSSR } from "@/lib/table-metadata";
+import Pagination from "@/components/common/pagination/Pagination";
 
 interface TaskManagementPageProps {
   searchParams: Promise<{
@@ -21,12 +22,18 @@ interface TaskManagementPageProps {
   }>;
 }
 
-export default async function TaskManagementPage({ searchParams }: TaskManagementPageProps) {
+export default async function TaskManagementPage({
+  searchParams,
+}: TaskManagementPageProps) {
   const token = await getCookieValue(ICookieKeys.TOKEN);
   const userRole = await getCookieValue(ICookieKeys.USER_ROLE);
-  
-  if (!token || !userRole || userRole.toLowerCase() !== UserRole.MEMBER.toString().toLowerCase()) {
-    redirect('/login');
+
+  if (
+    !token ||
+    !userRole ||
+    userRole.toLowerCase() !== UserRole.MEMBER.toString().toLowerCase()
+  ) {
+    redirect("/login");
   }
 
   const { status, priority, search, dueDate, page, limit } = await searchParams;
@@ -35,8 +42,8 @@ export default async function TaskManagementPage({ searchParams }: TaskManagemen
     priority: priority as any,
     search: search || undefined,
     dueDate: dueDate || undefined,
-    page: parseInt(page || '1'),
-    limit: parseInt(limit || paginationLimit.LIMIT_10.toString())
+    page: parseInt(page || "1"),
+    limit: parseInt(limit || paginationLimit.LIMIT_10.toString()),
   };
 
   const tasksResponse = await getAllTasks(filterParams);
@@ -44,16 +51,20 @@ export default async function TaskManagementPage({ searchParams }: TaskManagemen
   const taskTableMetadata = getTaskTableMetadataForSSR(userRole);
 
   return (
-    <div className="space-y-4 px-4">
+    <div className=" px-4">
       <TaskManagementHeader />
       <div className="border rounded-xl ">
         <FilterContainer />
-        <TaskTable 
-          tasks={tasks} 
-          className='rounded-y-xl'
+        <TaskTable
+          tasks={tasks}
+          className="rounded-y-xl"
           metadata={taskTableMetadata}
         />
       </div>
+      <Pagination
+        recordCount={tasksResponse.data?.pagination?.total || 0}
+        className="px-4 py-2"
+      />
     </div>
   );
-} 
+}
