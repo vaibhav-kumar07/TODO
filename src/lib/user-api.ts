@@ -98,6 +98,14 @@ export async function updateUser(userId: string, userData: Partial<User>) {
   
 }
 
+export async function changeUserPassword(userId: string, newPassword: string) {
+  return await FetchUtils.put(`${API_BASE_URL}/auth/admin/users/${userId}/password`, {
+    newPassword
+  }, {
+    isWithToken: true,
+  });
+}
+
 export async function deleteUser(userId: string) {
   return await FetchUtils.deleteData(`${API_BASE_URL}/auth/users/${userId}`, {
     isWithToken: true,

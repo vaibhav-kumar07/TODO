@@ -11,8 +11,12 @@ export default function UserManagementHeader({
   description: string;
 }) {
   return (
-    <div className="flex items-center justify-between px-2 py-1">
-      <PageHeaderWithButton title={title} description={description} />
+    <div className="flex items-center justify-between px-2 py-1 ">
+      <PageHeaderWithButton
+        title={title}
+        description={description}
+        className="mb-4 flex items-center "
+      />
       <RoleBasedWrapper allowedRoles={[UserRole.ADMIN]}>
         <UserManagementDialog mode="create" />
       </RoleBasedWrapper>

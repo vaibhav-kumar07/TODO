@@ -11,7 +11,7 @@ import {
 import { ResponseHandlerResult } from '@/types/common';
 
 export const AUTH_ENDPOINTS = {
-  LOGIN: 'auth/login',
+  LOGIN: '/auth/login',
   LOGOUT: '/auth/logout',
   REFRESH: '/auth/refresh',
   PROFILE: '/auth/profile',
@@ -49,7 +49,7 @@ export async function updateProfile(profileData: UpdateProfileData): Promise<any
 export class AuthApiService {
   static async login(credentials: LoginCredentials): Promise<ResponseHandlerResult<any>> {
     return await post(
-      `${API_BASE_URL}/${AUTH_ENDPOINTS.LOGIN}`,
+      `${API_BASE_URL}${AUTH_ENDPOINTS.LOGIN}`,
       credentials,
       { isWithToken: false }
     );

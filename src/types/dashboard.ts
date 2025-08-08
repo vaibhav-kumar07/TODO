@@ -110,7 +110,7 @@ export interface RecentUserEvent {
   userRole: string;
   action: string;
   timestamp: string;
-  details: { ipAddress: string };
+  details: { ipAddress: string; loginTime: string };
 }
 
 export interface UserActivityData {

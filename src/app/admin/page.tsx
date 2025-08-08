@@ -24,7 +24,6 @@ export default async function DashboardPage() {
   }
 
   const token = await getCookieValue(ICookieKeys.TOKEN);
-
   return (
     <AdminDashboard
       token={token}

@@ -1,6 +1,6 @@
 'use server';
 import { UserRole } from '@/types/auth';
-import { createUser, updateUser, deleteUser } from '@/lib/user-api';
+import { createUser, updateUser, deleteUser, changeUserPassword } from '@/lib/user-api';
 import { revalidatePath } from 'next/cache';
 
 // Invite new user
@@ -59,6 +59,22 @@ export async function deleteUserAction(userId: string) {
     return {
       success: false,
       message: 'Failed to delete user',
+      error: { code: 'NETWORK_ERROR', description: 'Network error occurred' }
+    };
+  }
+}
+
+// Change user password (Admin only)
+export async function changeUserPasswordAction(userId: string, newPassword: string) {
+  try {
+    const result = await changeUserPassword(userId, newPassword);
+    revalidatePath('/admin/users');
+    return result;
+  } catch (error) {
+    console.error('Change password failed:', error);
+    return {
+      success: false,
+      message: 'Failed to change user password',
       error: { code: 'NETWORK_ERROR', description: 'Network error occurred' }
     };
   }
