@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -14,7 +14,6 @@ import { Label } from "@/components/ui/label";
 import { User } from "@/lib/user-api";
 import { changeUserPasswordAction } from "@/actions/user";
 import { errorToast, successToast } from "@/components/hooks/use-toast";
-import { Key } from "lucide-react";
 import CommonButton from "@/components/common/Button";
 
 interface ChangePasswordWidgetProps {
@@ -26,27 +25,30 @@ export default function ChangePasswordWidget({
 }: ChangePasswordWidgetProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [newPassword, setNewPassword] = useState("");
+  const newPasswordRef = useRef("");
 
   const handlePasswordChange = async () => {
-    if (!newPassword.trim()) {
+    if (!newPasswordRef.current.trim()) {
       errorToast("Please enter a new password");
       return;
     }
 
-    if (newPassword.length < 6) {
+    if (newPasswordRef.current.length < 6) {
       errorToast("Password must be at least 6 characters long");
       return;
     }
 
     setIsLoading(true);
     try {
-      const result = await changeUserPasswordAction(user.id, newPassword);
+      const result = await changeUserPasswordAction(
+        user.id,
+        newPasswordRef.current
+      );
 
       if (result.success) {
         successToast("Password changed successfully");
         setIsOpen(false);
-        setNewPassword("");
+        newPasswordRef.current = "";
       } else {
         errorToast(result.message || "Failed to change password");
       }
@@ -58,13 +60,20 @@ export default function ChangePasswordWidget({
     }
   };
 
+  const handleDialogChange = (open: boolean) => {
+    setIsOpen(open);
+    if (!open) {
+      newPasswordRef.current = "";
+    }
+  };
+
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={isOpen} onOpenChange={handleDialogChange}>
       <DialogTrigger asChild>
         <Button
           variant="outline"
           size="sm"
-          className="h-6 px-2 text-xs w-fit "
+          className="h-6 px-2 text-xs w-fit"
           disabled={isLoading}
         >
           Set New
@@ -83,8 +92,8 @@ export default function ChangePasswordWidget({
               id="newPassword"
               type="password"
               placeholder="Enter new password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
+              value={newPasswordRef.current}
+              onChange={(e) => (newPasswordRef.current = e.target.value)}
               disabled={isLoading}
             />
           </div>
@@ -98,7 +107,7 @@ export default function ChangePasswordWidget({
             </Button>
             <CommonButton
               onClick={handlePasswordChange}
-              disabled={isLoading || !newPassword.trim()}
+              disabled={isLoading || !newPasswordRef.current.trim()}
               loading={isLoading}
               className="h-9 px-5"
             >

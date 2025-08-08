@@ -7,6 +7,42 @@ import { ICookieKeys } from '@/types/common';
 import { AuthApiService } from '@/lib/auth-api';
 import { deleteMultipleCookies, getCookieValueAction, setCookieValue } from './cookie-action';
 
+interface SignupData {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+}
+
+export async function signup(data: SignupData): Promise<ResponseHandlerResult<any>> {
+  try {
+    const result = await AuthApiService.signup(data);
+    console.log('Signup result:', result);
+    return result;
+  } catch (error) {
+    console.error('Signup action error:', error);
+    return {
+      success: false,
+      message: 'Failed to create admin account',
+      error: { code: 'NETWORK_ERROR', description: 'Network error occurred' }
+    };
+  }
+}
+
+export async function forgotPassword(email: string): Promise<ResponseHandlerResult<any>> {
+  try {
+    const result = await AuthApiService.forgotPassword(email);
+    return result;
+  } catch (error) {
+    console.error('Forgot password action error:', error);
+    return {
+      success: false,
+      message: 'Failed to send password reset email',
+      error: { code: 'NETWORK_ERROR', description: 'Network error occurred' }
+    };
+  }
+}
+
 export async function AdminLoginAction(credentials: LoginCredentials): Promise<ResponseHandlerResult<{ accessToken:string, refreshToken:string, user:any }>> {
     const response = await AuthApiService.login(credentials);
     return response;

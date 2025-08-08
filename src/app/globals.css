@@ -29,6 +29,35 @@
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
+
+    /* Dashboard Color Variables */
+    --admin-primary: 0 84% 60%;
+    --admin-secondary: 0 84% 95%;
+    --admin-border: 0 84% 85%;
+    --admin-text: 0 84% 30%;
+    
+    --manager-primary: 214 95% 53%;
+    --manager-secondary: 214 95% 95%;
+    --manager-border: 214 95% 85%;
+    --manager-text: 214 95% 30%;
+    
+    --member-primary: 142 76% 36%;
+    --member-secondary: 142 76% 95%;
+    --member-border: 142 76% 85%;
+    --member-text: 142 76% 30%;
+    
+    --stats-blue: 214 95% 53%;
+    --stats-green: 142 76% 36%;
+    --stats-purple: 262 83% 58%;
+    --stats-orange: 25 95% 53%;
+    --stats-indigo: 238 83% 77%;
+    
+    --text-primary: 222 84% 5%;
+    --text-secondary: 215 16% 47%;
+    --text-muted: 215 16% 47%;
+    --bg-primary: 0 0% 100%;
+    --bg-secondary: 0 0% 98%;
+    --bg-muted: 0 0% 96%;
   }
 
   .dark {
@@ -56,6 +85,35 @@
     --border: 0 0% 14.9%;
     --input: 0 0% 14.9%;
     --ring: 0 0% 83.1%;
+
+    /* Dashboard Color Variables - Dark Mode */
+    --admin-primary: 0 84% 60%;
+    --admin-secondary: 0 84% 20%;
+    --admin-border: 0 84% 30%;
+    --admin-text: 0 84% 80%;
+    
+    --manager-primary: 214 95% 53%;
+    --manager-secondary: 214 95% 20%;
+    --manager-border: 214 95% 30%;
+    --manager-text: 214 95% 80%;
+    
+    --member-primary: 142 76% 36%;
+    --member-secondary: 142 76% 20%;
+    --member-border: 142 76% 30%;
+    --member-text: 142 76% 80%;
+    
+    --stats-blue: 214 95% 53%;
+    --stats-green: 142 76% 36%;
+    --stats-purple: 262 83% 58%;
+    --stats-orange: 25 95% 53%;
+    --stats-indigo: 238 83% 77%;
+    
+    --text-primary: 0 0% 98%;
+    --text-secondary: 0 0% 64%;
+    --text-muted: 0 0% 64%;
+    --bg-primary: 0 0% 4%;
+    --bg-secondary: 0 0% 15%;
+    --bg-muted: 0 0% 15%;
   }
 
   /* Admin Role Theme - Indigo (Modern & Professional) */
