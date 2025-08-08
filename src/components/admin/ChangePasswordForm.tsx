@@ -61,6 +61,7 @@ export default function ChangePasswordForm({
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
+    e.stopPropagation();
     e.preventDefault();
     if (!validateForm()) return;
 
@@ -114,6 +115,7 @@ export default function ChangePasswordForm({
             disabled={isLoading}
             placeholder="Enter current password"
             className="pr-10"
+            autoComplete="current-password"
           />
           <button
             type="button"

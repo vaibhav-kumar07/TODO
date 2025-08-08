@@ -151,7 +151,6 @@ export default function LoginForm({ onSuccess, userRole }: LoginFormProps) {
             <form
               onSubmit={handleSubmit}
               className="space-y-4"
-              autoComplete="off"
             >
               {error && (
                 <Alert variant="destructive">
@@ -168,11 +167,6 @@ export default function LoginForm({ onSuccess, userRole }: LoginFormProps) {
                   placeholder="Enter your email"
                   value={credentials.email}
                   onChange={handleInputChange}
-                  autoComplete="username"
-                  autoCorrect="off"
-                  autoCapitalize="off"
-                  spellCheck="false"
-                  required
                 />
               </div>
 

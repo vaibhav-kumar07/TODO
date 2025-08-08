@@ -117,7 +117,7 @@ export default function ForgotPasswordDialog() {
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4" autoComplete="off">
+        <form onSubmit={handleSubmit} className="space-y-4">
           {error && (
             <Alert variant="destructive">
               <AlertDescription>{error}</AlertDescription>
@@ -134,20 +134,20 @@ export default function ForgotPasswordDialog() {
             <Label htmlFor="reset-email">Email Address</Label>
             <div className="relative">
               <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                id="reset-email"
-                name="reset-email"
-                type="email"
-                placeholder="Enter your email"
-                value={formData.email}
-                onChange={handleInputChange}
-                className="pl-10"
-                autoComplete="email"
-                autoCorrect="off"
-                autoCapitalize="off"
-                spellCheck="false"
-                required
-              />
+                             <Input
+                 id="reset-email"
+                 name="email"
+                 type="email"
+                 placeholder="Enter your email"
+                 value={formData.email}
+                 onChange={handleInputChange}
+                 className="pl-10"
+                 autoComplete="email"
+                 autoCorrect="off"
+                 autoCapitalize="off"
+                 spellCheck="false"
+                 required
+               />
             </div>
           </div>
 

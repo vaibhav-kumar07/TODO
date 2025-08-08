@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -25,15 +25,18 @@ export default function ChangePasswordWidget({
 }: ChangePasswordWidgetProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const newPasswordRef = useRef("");
+  const [newPassword, setNewPassword] = useState("");
 
-  const handlePasswordChange = async () => {
-    if (!newPasswordRef.current.trim()) {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (!newPassword.trim()) {
       errorToast("Please enter a new password");
       return;
     }
 
-    if (newPasswordRef.current.length < 6) {
+    if (newPassword.length < 6) {
       errorToast("Password must be at least 6 characters long");
       return;
     }
@@ -42,13 +45,13 @@ export default function ChangePasswordWidget({
     try {
       const result = await changeUserPasswordAction(
         user.id,
-        newPasswordRef.current
+        newPassword
       );
 
       if (result.success) {
         successToast("Password changed successfully");
         setIsOpen(false);
-        newPasswordRef.current = "";
+        setNewPassword("");
       } else {
         errorToast(result.message || "Failed to change password");
       }
@@ -63,7 +66,7 @@ export default function ChangePasswordWidget({
   const handleDialogChange = (open: boolean) => {
     setIsOpen(open);
     if (!open) {
-      newPasswordRef.current = "";
+      setNewPassword("");
     }
   };
 
@@ -85,20 +88,23 @@ export default function ChangePasswordWidget({
             Change Password for {user.firstName} {user.lastName}
           </DialogTitle>
         </DialogHeader>
-        <div className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="newPassword">New Password</Label>
             <Input
               id="newPassword"
+              name="newPassword"
               type="password"
               placeholder="Enter new password"
-              value={newPasswordRef.current}
-              onChange={(e) => (newPasswordRef.current = e.target.value)}
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
               disabled={isLoading}
+              required
             />
           </div>
           <div className="flex justify-end space-x-2">
             <Button
+              type="button"
               variant="outline"
               onClick={() => setIsOpen(false)}
               disabled={isLoading}
@@ -106,15 +112,15 @@ export default function ChangePasswordWidget({
               Cancel
             </Button>
             <CommonButton
-              onClick={handlePasswordChange}
-              disabled={isLoading || !newPasswordRef.current.trim()}
+              type="submit"
+              disabled={isLoading || !newPassword.trim()}
               loading={isLoading}
               className="h-9 px-5"
             >
               Set New
             </CommonButton>
           </div>
-        </div>
+        </form>
       </DialogContent>
     </Dialog>
   );
