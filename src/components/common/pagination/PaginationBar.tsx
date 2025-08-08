@@ -37,13 +37,7 @@ export default function PaginationBar(props: PaginationBarProps) {
         props.className
       )}
     >
-      {/* <div className="flex gap-1 align-middle items-center justify-center">
-        <Label size={"sm"}>Rows per page</Label>
-        <RowCountSelector
-          onValueChange={props.onRowsPerPageChange}
-          value={props.rowsPerPage.toString()}
-        />
-      </div> */}
+
       <div>
         <Label size={"sm"}>
           {startRecord}-{endRecord} of {props.recordCount}
@@ -87,26 +81,4 @@ const PageArrows = ({
   );
 };
 
-const rowCountOptions = ["10", "25", "50"];
-const RowCountSelector = ({
-  onValueChange,
-  value,
-}: {
-  onValueChange: (value: string) => void;
-  value: string;
-}) => {
-  return (
-    <Select onValueChange={onValueChange} defaultValue={value}>
-      <SelectTrigger className="w-[50px] h-6 border-none outline-none active:outline-none focus:outline-none focus-visible:ring-0 focus:border-none bg-transparent active:border-none">
-        <SelectValue placeholder="10" />
-      </SelectTrigger>
-      <SelectContent>
-        {rowCountOptions.map((option) => (
-          <SelectItem value={option} key={option}>
-            <Label size={"sm"}>{option}</Label>
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
-  );
-};
+

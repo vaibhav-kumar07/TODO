@@ -64,7 +64,7 @@ export default function UpdateTaskPriority({ task }: UpdateTaskPriorityProps) {
       } else {
         errorToast(result.error || "Failed to update task priority.");
       }
-    } catch (error) {
+    } catch {
       errorToast("An unexpected error occurred.");
     } finally {
       setIsLoading(false);

@@ -8,9 +8,9 @@ export function useURLParams() {
     const pathname = usePathname();
     const router = useRouter();
 
-    const updateQueryParams = (params: URLSearchParams) => {
+    const updateQueryParams = useCallback((params: URLSearchParams) => {
         router.push(`${pathname}?${params.toString()}`, { scroll: false });
-    };
+    }, [router, pathname]);
 
     const createQueryString = useCallback(
         (name: string, value: string) => {
@@ -18,7 +18,7 @@ export function useURLParams() {
             params.set(name, value);
             updateQueryParams(params);
         },
-        [searchParams, pathname, router, updateQueryParams],
+        [searchParams, updateQueryParams],
     );
 
     const removeQueryString = useCallback(
@@ -27,7 +27,7 @@ export function useURLParams() {
             params.delete(name);
             updateQueryParams(params);
         },
-        [searchParams, pathname, router, updateQueryParams],
+        [searchParams, updateQueryParams],
     );
 
     const createQueryStringMany = useCallback(
@@ -36,7 +36,7 @@ export function useURLParams() {
             inputParams.forEach((param) => params.set(param.name, param.value));
             updateQueryParams(params);
         },
-        [searchParams, pathname, router, updateQueryParams],
+        [searchParams, updateQueryParams],
     );
 
     const appendSearchParams = (paramKey: string, paramValue: string) => {

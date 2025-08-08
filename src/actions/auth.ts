@@ -56,7 +56,7 @@ export async function logoutAction(): Promise<ResponseHandlerResult<{ message: s
       data: { message: 'Logout successful' },
       message: 'Logout completed successfully'
     };
-  } catch (error) {
+  } catch {
     await deleteMultipleCookies([ICookieKeys.TOKEN, ICookieKeys.REFRESH_TOKEN, ICookieKeys.USER_ROLE]);
     return {
       success: true,

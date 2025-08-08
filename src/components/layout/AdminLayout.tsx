@@ -3,7 +3,7 @@ import { ICookieKeys } from '@/types/common';
 import { UserRole } from '@/types/auth';
 import { redirect } from 'next/navigation';
 import { navigationItems } from '@/lib/sidebar';
-import Sidebar from './Sidebar';
+
 import MobileHeader from './MobileHeader';
 
 interface AdminLayoutProps {
