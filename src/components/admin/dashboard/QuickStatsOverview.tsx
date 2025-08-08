@@ -82,7 +82,7 @@ export default function QuickStatsOverview({ stats }: QuickStatsOverviewProps) {
         });
       });
     }
-  }, [socket]);
+  }, [socket, connected]);
 
   const quickStatsData: QuickStatItem[] = [
     {

@@ -38,17 +38,21 @@ export default function UserStatusFilter({ className }: UserStatusFilterProps) {
   useEffect(() => {
     const statusParam =
       searchParams.get(IUserFilterKey.IS_ACTIVE) == "true" ? true : false;
-
-    // Check if the status value is valid
-    if (isValidStatus(statusParam)) {
-      setStatus(statusParam as UserStatus);
-    } else {
-      // Remove invalid status from URL
-      const params = new URLSearchParams(searchParams.toString());
-      params.delete(IUserFilterKey.IS_ACTIVE);
-      router.replace(`?${params.toString()}`);
-      setStatus(null);
-      console.warn("Invalid user status value removed from URL:", statusParam);
+    if (searchParams.get(IUserFilterKey.IS_ACTIVE) !== null) {
+      // Check if the status value is valid
+      if (isValidStatus(statusParam)) {
+        setStatus(statusParam as UserStatus);
+      } else {
+        // Remove invalid status from URL
+        const params = new URLSearchParams(searchParams.toString());
+        params.delete(IUserFilterKey.IS_ACTIVE);
+        router.replace(`?${params.toString()}`);
+        setStatus(null);
+        console.warn(
+          "Invalid user status value removed from URL:",
+          statusParam
+        );
+      }
     }
   }, [searchParams, router]);
 

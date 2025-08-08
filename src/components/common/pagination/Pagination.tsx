@@ -6,7 +6,6 @@ import {
   useGetSearchParamValue,
 } from "@/components/hooks/request";
 import { cn } from "@/lib/utils";
-import { useRouter } from "next/navigation";
 
 export const STARTPAGE = 1;
 
@@ -17,7 +16,6 @@ export default function Pagination({
   recordCount: number;
   className?: string;
 }) {
-  const router = useRouter();
   const { appendSearchParams } = useURLParams();
 
   // Get the page number from the query string

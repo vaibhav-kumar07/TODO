@@ -20,8 +20,6 @@ export default function RoleFilter({ userRole }: RoleFilterProps) {
   const searchParams = useSearchParams();
   const [selectedRole, setSelectedRole] = useState<string | null>(null);
 
- 
-
   // Validate if a role is accessible to the current user
   const isRoleAccessible = (role: string): boolean => {
     const actualUserRole = userRole as UserRole;
@@ -50,7 +48,7 @@ export default function RoleFilter({ userRole }: RoleFilterProps) {
     } else {
       setSelectedRole(null);
     }
-  }, [searchParams, router]);
+  }, [searchParams, router, isRoleAccessible]);
 
   // Handle role change with security validation
   const handleRoleChange = (value: string) => {

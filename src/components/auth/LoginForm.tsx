@@ -1,13 +1,12 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { AdminLoginAction } from '@/actions/auth';
-import { LoginCredentials, UserRole } from '@/types/auth';
-import { useRouter } from 'next/navigation';
-import { setCookieValue } from '@/actions/cookie-action';
-import { ICookieKeys } from '@/types/common';
-import { errorToast, successToast } from '../hooks/use-toast';
-
+import { useState } from "react";
+import { AdminLoginAction } from "@/actions/auth";
+import { LoginCredentials, UserRole } from "@/types/auth";
+import { useRouter } from "next/navigation";
+import { setCookieValue } from "@/actions/cookie-action";
+import { ICookieKeys } from "@/types/common";
+import { errorToast, successToast } from "../hooks/use-toast";
 
 interface LoginFormProps {
   onSuccess?: () => void;
@@ -16,8 +15,8 @@ interface LoginFormProps {
 
 export default function LoginForm({ onSuccess, userRole }: LoginFormProps) {
   const [credentials, setCredentials] = useState<LoginCredentials>({
-    email: '',
-    password: ''
+    email: "",
+    password: "",
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -26,9 +25,9 @@ export default function LoginForm({ onSuccess, userRole }: LoginFormProps) {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setCredentials(prev => ({
+    setCredentials((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
     // Clear error when user starts typing
     if (error) setError(null);
@@ -36,15 +35,15 @@ export default function LoginForm({ onSuccess, userRole }: LoginFormProps) {
 
   const validateForm = (): boolean => {
     if (!credentials.email.trim()) {
-      setError('Email is required');
+      setError("Email is required");
       return false;
     }
     if (!credentials.password.trim()) {
-      setError('Password is required');
+      setError("Password is required");
       return false;
     }
-    if (!credentials.email.includes('@')) {
-      setError('Please enter a valid email address');
+    if (!credentials.email.includes("@")) {
+      setError("Please enter a valid email address");
       return false;
     }
     return true;
@@ -53,28 +52,30 @@ export default function LoginForm({ onSuccess, userRole }: LoginFormProps) {
   const getRedirectPath = (role: UserRole): string => {
     switch (role) {
       case UserRole.ADMIN:
-        return '/admin';
+        return "/admin";
       case UserRole.MANAGER:
-        return '/manager';
+        return "/manager";
       case UserRole.MEMBER:
-        return '/member';
+        return "/member";
       default:
-        return '/';
+        return "/";
     }
   };
 
   const getFormTitle = (): string => {
     if (userRole) {
-      return `${userRole.charAt(0).toUpperCase() + userRole.slice(1).toLowerCase()} Login`;
+      return `${
+        userRole.charAt(0).toUpperCase() + userRole.slice(1).toLowerCase()
+      } Login`;
     }
-    return 'Login';
+    return "Login";
   };
 
   const getFormSubtitle = (): string => {
     if (userRole) {
       return `Sign in to access the ${userRole.toLowerCase()} dashboard`;
     }
-    return 'Sign in to access your dashboard';
+    return "Sign in to access your dashboard";
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -86,25 +87,28 @@ export default function LoginForm({ onSuccess, userRole }: LoginFormProps) {
     try {
       const result = await AdminLoginAction(credentials);
 
-      
       if (result.success) {
-        successToast('Login successful');
+        successToast("Login successful");
         // Set cookies
-        setCookieValue(ICookieKeys.TOKEN, result.data?.accessToken || '');
-        setCookieValue(ICookieKeys.REFRESH_TOKEN, result.data?.refreshToken || '');
+        setCookieValue(ICookieKeys.TOKEN, result.data?.accessToken || "");
+        setCookieValue(
+          ICookieKeys.REFRESH_TOKEN,
+          result.data?.refreshToken || ""
+        );
         setCookieValue(ICookieKeys.USER_ROLE, result.data?.user?.role);
-        
+
         // Redirect based on user role
         const redirectPath = getRedirectPath(result.data?.user?.role);
         setTimeout(() => {
           router.push(redirectPath);
         }, 2000);
       } else {
-        errorToast(result.message || 'Login failed');
-        setError(result.message || 'Login failed');
+        errorToast(result.message || "Login failed");
+        setError(result.message || "Login failed");
       }
     } catch (error) {
-      setError('An unexpected error occurred. Please try again.');
+      console.error("Error logging in:", error);
+      setError("An unexpected error occurred. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -137,7 +141,7 @@ export default function LoginForm({ onSuccess, userRole }: LoginFormProps) {
             {getFormSubtitle()}
           </p>
         </div>
-        
+
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
@@ -164,7 +168,7 @@ export default function LoginForm({ onSuccess, userRole }: LoginFormProps) {
               <input
                 id="password"
                 name="password"
-                type={showPassword ? 'text' : 'password'}
+                type={showPassword ? "text" : "password"}
                 autoComplete="current-password"
                 required
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-border placeholder-muted-foreground text-foreground rounded-b-md focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring focus:z-10 sm:text-sm bg-background"
@@ -180,13 +184,38 @@ export default function LoginForm({ onSuccess, userRole }: LoginFormProps) {
                 disabled={isLoading}
               >
                 {showPassword ? (
-                  <svg className="h-5 w-5 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21" />
+                  <svg
+                    className="h-5 w-5 text-muted-foreground"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"
+                    />
                   </svg>
                 ) : (
-                  <svg className="h-5 w-5 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                  <svg
+                    className="h-5 w-5 text-muted-foreground"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                    />
                   </svg>
                 )}
               </button>
@@ -197,8 +226,16 @@ export default function LoginForm({ onSuccess, userRole }: LoginFormProps) {
             <div className="rounded-md bg-destructive/10 p-4">
               <div className="flex">
                 <div className="flex-shrink-0">
-                  <svg className="h-5 w-5 text-destructive" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                  <svg
+                    className="h-5 w-5 text-destructive"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                      clipRule="evenodd"
+                    />
                   </svg>
                 </div>
                 <div className="ml-3">
@@ -217,26 +254,54 @@ export default function LoginForm({ onSuccess, userRole }: LoginFormProps) {
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-primary-foreground bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ring disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? (
-                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-primary-foreground" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                <svg
+                  className="animate-spin -ml-1 mr-3 h-5 w-5 text-primary-foreground"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
                 </svg>
               ) : (
-                <svg className="h-5 w-5 text-primary-foreground group-hover:text-primary-foreground/90" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                  <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+                <svg
+                  className="h-5 w-5 text-primary-foreground group-hover:text-primary-foreground/90"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                    clipRule="evenodd"
+                  />
                 </svg>
               )}
-              {isLoading ? 'Signing in...' : 'Sign in'}
+              {isLoading ? "Signing in..." : "Sign in"}
             </button>
           </div>
 
           <div className="text-center">
             <p className="text-xs text-muted-foreground">
-              {userRole ? `This login is for ${userRole.toLowerCase()} users only` : 'Enter your credentials to sign in'}
+              {userRole
+                ? `This login is for ${userRole.toLowerCase()} users only`
+                : "Enter your credentials to sign in"}
             </p>
           </div>
         </form>
       </div>
     </div>
   );
-} 
+}

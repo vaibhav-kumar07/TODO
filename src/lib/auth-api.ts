@@ -1,13 +1,11 @@
 import { 
   post, 
   get, 
-  deleteData,
   put
 } from '@/lib/common/fetch-utils';
 import { 
   LoginCredentials, 
-  AuthData, 
-    User,
+  User,
   UpdateProfileData
 } from '../types/auth';
 import { ResponseHandlerResult } from '@/types/common';

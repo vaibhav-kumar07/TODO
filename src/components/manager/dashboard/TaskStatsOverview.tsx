@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  ClipboardList,
-  CheckCircle,
-  Clock,
-  AlertTriangle,
-  Users,
-  TrendingUp,
-} from "lucide-react";
+import { ClipboardList, Clock, AlertTriangle, Users } from "lucide-react";
 import TaskStatsCard from "./TaskStatsCard";
 import { ManagerStats, EventType } from "@/types/dashboard";
 import { useSocket } from "@/components/provider/socketProvider";
