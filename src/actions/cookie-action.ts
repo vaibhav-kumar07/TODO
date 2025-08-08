@@ -1,5 +1,4 @@
 'use server'
-
 import { getCookieValue, setCookie, hasCookie, deleteCookie } from '@/lib/common/cookie-utils'
 import { ICookieKeys } from '@/types/common'
 
@@ -51,10 +50,10 @@ export async function deleteCookieValue(key: string) {
 // Delete multiple cookies by array of keys
 export async function deleteMultipleCookies(keys: string[]) {
   try {
-    const results = await Promise.all(
+    await Promise.all(
       keys.map(key => deleteCookie(key))
     )
-
+    
     return { success: true, deletedKeys: keys }
   } catch (error) {
     console.error('Error deleting multiple cookies:', error)

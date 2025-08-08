@@ -1,12 +1,18 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { Trash2 } from 'lucide-react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { deleteTaskAction } from '@/actions/task';
-import { errorToast, successToast } from '@/components/hooks/use-toast';
-import CommonButton from '@/components/common/Button';
+import React, { useState } from "react";
+import { Trash2 } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { deleteTaskAction } from "@/actions/task";
+import { errorToast, successToast } from "@/components/hooks/use-toast";
+import CommonButton from "@/components/common/Button";
 
 interface DeleteTaskWidgetProps {
   taskId: string;
@@ -14,7 +20,11 @@ interface DeleteTaskWidgetProps {
   onDelete?: () => void;
 }
 
-export default function DeleteTaskWidget({ taskId, taskTitle, onDelete }: DeleteTaskWidgetProps) {
+export default function DeleteTaskWidget({
+  taskId,
+  taskTitle,
+  onDelete,
+}: DeleteTaskWidgetProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -22,17 +32,17 @@ export default function DeleteTaskWidget({ taskId, taskTitle, onDelete }: Delete
     setIsLoading(true);
     try {
       const result = await deleteTaskAction(taskId);
-      
+
       if (result.success) {
-        successToast('Task deleted successfully');
+        successToast("Task deleted successfully");
         setIsOpen(false);
         onDelete?.(); // Callback to refresh the table
       } else {
-        errorToast(result.message || 'Failed to delete task');
+        errorToast(result.message || "Failed to delete task");
       }
     } catch (error) {
-      console.error('Error deleting task:', error);
-      errorToast('Failed to delete task');
+      console.error("Error deleting task:", error);
+      errorToast("Failed to delete task");
     } finally {
       setIsLoading(false);
     }
@@ -58,7 +68,8 @@ export default function DeleteTaskWidget({ taskId, taskTitle, onDelete }: Delete
         </DialogHeader>
         <div className="space-y-4">
           <p className="text-sm text-muted-foreground">
-            Are you sure you want to delete the task "{taskTitle}"? This action cannot be undone.
+            Are you sure you want to delete the task &quot;{taskTitle}&quot;?
+            This action cannot be undone.
           </p>
           <div className="flex justify-end space-x-2">
             <Button
@@ -73,11 +84,11 @@ export default function DeleteTaskWidget({ taskId, taskTitle, onDelete }: Delete
               onClick={handleDelete}
               disabled={isLoading}
             >
-              {isLoading ? 'Deleting...' : 'Delete Task'}
+              {isLoading ? "Deleting..." : "Delete Task"}
             </Button>
           </div>
         </div>
       </DialogContent>
     </Dialog>
   );
-} 
+}

@@ -1,18 +1,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import {
-  Activity,
-  Clock,
-  User,
-  Monitor,
-  Globe,
-  TrendingUp,
-} from "lucide-react";
+import { Activity, Clock, Monitor } from "lucide-react";
 import { UserRole } from "@/types/auth";
-import ActivitySummaryCard from "./ActivitySummaryCard";
 import { useSocket } from "@/components/provider/socketProvider";
-import { useForceUpdate } from "framer-motion";
 import { useEffect, useState } from "react";
 import { EventType } from "@/types/dashboard";
 
@@ -135,7 +126,8 @@ export default function UserActivity({ data }: UserActivityProps) {
       {/* Recent Logins */}
       <ActivityCard title="Recent Logins">
         <div className="space-y-3">
-          {data.recentLogins.slice(0, 5).map((login, index) => (
+          {/* eslint-disable-next-line @typescript-eslint/no-unused-vars */}
+          {activityData.recentLogins.slice(0, 5).map((login, index) => (
             <div
               key={index}
               className="flex items-center gap-3 p-3 rounded-lg bg-muted/30 border border-border/50"

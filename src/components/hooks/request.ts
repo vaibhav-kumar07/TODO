@@ -18,7 +18,7 @@ export function useURLParams() {
             params.set(name, value);
             updateQueryParams(params);
         },
-        [searchParams, pathname, router],
+        [searchParams, pathname, router, updateQueryParams],
     );
 
     const removeQueryString = useCallback(
@@ -27,7 +27,7 @@ export function useURLParams() {
             params.delete(name);
             updateQueryParams(params);
         },
-        [searchParams, pathname, router],
+        [searchParams, pathname, router, updateQueryParams],
     );
 
     const createQueryStringMany = useCallback(
@@ -36,7 +36,7 @@ export function useURLParams() {
             inputParams.forEach((param) => params.set(param.name, param.value));
             updateQueryParams(params);
         },
-        [searchParams, pathname, router],
+        [searchParams, pathname, router, updateQueryParams],
     );
 
     const appendSearchParams = (paramKey: string, paramValue: string) => {

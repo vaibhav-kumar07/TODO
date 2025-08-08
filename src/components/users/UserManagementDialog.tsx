@@ -1,28 +1,34 @@
-'use client';
-import { useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { User } from '@/lib/user-api';
-import { UserRole } from '@/types/auth';
-import { inviteUserAction, updateUserAction } from '@/actions/user';
-import { errorToast, successToast } from '@/components/hooks/use-toast';
-import { Plus, User as UserIcon, Pencil } from 'lucide-react';
-import UserForm, { UserFormData } from './UserForm';
-import CommonButton from '@/components/common/Button';
+"use client";
+import { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { User } from "@/lib/user-api";
+import { UserRole } from "@/types/auth";
+import { inviteUserAction, updateUserAction } from "@/actions/user";
+import { errorToast, successToast } from "@/components/hooks/use-toast";
+import { Plus, User as UserIcon, Pencil } from "lucide-react";
+import UserForm, { UserFormData } from "./UserForm";
+import CommonButton from "@/components/common/Button";
 
 interface UserManagementDialogProps {
-  mode: 'create' | 'update';
+  mode: "create" | "update";
   user?: User;
   currentUserRole?: UserRole;
   children?: React.ReactNode;
   onSuccess?: () => void;
 }
 
-export default function UserManagementDialog({ 
-  mode, 
-  user, 
+export default function UserManagementDialog({
+  mode,
+  user,
   currentUserRole,
-  children, 
-  onSuccess 
+  children,
+  onSuccess,
 }: UserManagementDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -33,7 +39,7 @@ export default function UserManagementDialog({
     try {
       let result;
 
-      if (mode === 'create') {
+      if (mode === "create") {
         result = await inviteUserAction({
           email: formData.email,
           firstName: formData.firstName,
@@ -42,7 +48,7 @@ export default function UserManagementDialog({
         });
       } else {
         if (!user?.id) {
-          errorToast('User ID is required for update');
+          errorToast("User ID is required for update");
           return;
         }
 
@@ -55,14 +61,16 @@ export default function UserManagementDialog({
       }
 
       if (result.success) {
-        successToast(result.message || 'Operation completed successfully');
+        successToast(result.message || "Operation completed successfully");
         setIsOpen(false);
         onSuccess?.();
       } else {
-        errorToast(result.message || 'Operation failed');
+        console.error(result.message);
+        errorToast(result.message || "Operation failed");
       }
     } catch (error) {
-      errorToast('An unexpected error occurred');
+      console.error(error);
+      errorToast("An unexpected error occurred");
     } finally {
       setIsLoading(false);
     }
@@ -73,28 +81,25 @@ export default function UserManagementDialog({
   };
 
   const getDialogTitle = () => {
-    return mode === 'create' ? 'Invite New User' : 'Update User';
+    return mode === "create" ? "Invite New User" : "Update User";
   };
 
   const getTriggerButton = () => {
     if (children) return children;
-    
-    return mode === 'create' ? (
-      <CommonButton  className=" h-10 bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 rounded-md text-sm font-medium flex items-center space-x-2">
+
+    return mode === "create" ? (
+      <CommonButton className=" h-10 bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 rounded-md text-sm font-medium flex items-center space-x-2">
         <Plus className="h-4 w-4" />
         <span>Add User</span>
-      </CommonButton >
+      </CommonButton>
     ) : (
-        <Pencil className="h-4 w-4 cursor-pointer" />
-      
+      <Pencil className="h-4 w-4 cursor-pointer" />
     );
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        {getTriggerButton()}
-      </DialogTrigger>
+      <DialogTrigger asChild>{getTriggerButton()}</DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center space-x-2">
@@ -113,4 +118,4 @@ export default function UserManagementDialog({
       </DialogContent>
     </Dialog>
   );
-} 
+}

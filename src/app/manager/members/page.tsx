@@ -28,19 +28,19 @@ export default async function UserManagementPage({
   )
     redirect("/login");
 
-  let { role, isActive, search } = await searchParams;
-  role =
+  const { role, isActive, search } = await searchParams;
+  const finalRole =
     role === UserRole.MEMBER
       ? UserRole.MEMBER
       : role === UserRole.MANAGER
       ? UserRole.MANAGER
       : undefined;
-  search = search || undefined;
+  const finalSearch = search || undefined;
 
   const filterParams = {
-    role: role as any,
+    role: finalRole as any,
     isActive,
-    search: search || undefined,
+    search: finalSearch,
     page: 1,
     limit: paginationLimit.LIMIT_10,
   };

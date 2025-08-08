@@ -32,8 +32,6 @@ export default function SortableHeaderCell({
   className,
   iconClass,
 }: ISortableHeaderProps) {
-  const router = useRouter();
-  const { appendSearchParams } = useURLParams();
   const _defaultSortColumn = defaultSortColumn ? columnName : "";
   const sortOrder = useGetSearchParamValue(
     _paramKeys.sortOrder,
@@ -46,6 +44,7 @@ export default function SortableHeaderCell({
 
   const handleSort = (column: string) => {
     if (column === sortColumn) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const order =
         sortOrder === _sortOrder.asc ? _sortOrder.desc : _sortOrder.asc;
 

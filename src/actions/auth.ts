@@ -1,7 +1,6 @@
 'use server';
 
 import { LoginCredentials } from '@/types/auth';
-import { deleteCookie } from '@/lib/common/cookie-utils';
 import { redirect } from 'next/navigation';
 import { ResponseHandlerResult } from '@/types/common';
 import { ICookieKeys } from '@/types/common';

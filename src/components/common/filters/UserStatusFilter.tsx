@@ -41,10 +41,8 @@ export default function UserStatusFilter({ className }: UserStatusFilterProps) {
     if (searchParams.get(IUserFilterKey.IS_ACTIVE) !== null) {
       // Check if the status value is valid
       if (isValidStatus(statusParam)) {
-        console.log("statusParam", statusParam);
         setStatus(statusParam as UserStatus);
       } else {
-        console.log("statusParam", statusParam);
         // Remove invalid status from URL
         const params = new URLSearchParams(searchParams.toString());
         params.delete(IUserFilterKey.IS_ACTIVE);

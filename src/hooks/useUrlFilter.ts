@@ -40,7 +40,7 @@ export function useUrlFilter({
     } else {
       setValue(defaultValue);
     }
-  }, [searchParams, router, paramName, validValues, defaultValue]);
+  }, [searchParams, router, paramName, validValues, defaultValue, isValidValue]);
 
   // Handle value change
   const handleValueChange = (newValue: string) => {

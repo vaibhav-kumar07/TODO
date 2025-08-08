@@ -1,6 +1,6 @@
 import * as FetchUtils from "./common/fetch-utils";
 import qs from "query-string";
-import { Task, CreateTaskData, UpdateTaskData, TaskFilters, TasksResponse } from '@/types/task';
+import { CreateTaskData, UpdateTaskData, TaskFilters } from '@/types/task';
 import { QueryParameters } from '@/types/common';
 
 

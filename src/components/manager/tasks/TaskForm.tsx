@@ -1,39 +1,47 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { Calendar } from '@/components/ui/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { CalendarIcon } from 'lucide-react';
-import moment from 'moment';
-import { cn } from '@/lib/utils';
-import { Task, TaskStatus, TaskPriority, CreateTaskData, UpdateTaskData } from '@/types/task';
-import { User } from '@/lib/user-api';
-import { errorToast } from '@/components/hooks/use-toast';
-import { z } from 'zod';
-import CommonButton from '@/components/common/Button';
-import { formatDate } from '@/lib/common/date-utils';
-import TaskTable from './TaskTable';
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { CalendarIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Task, TaskStatus, TaskPriority } from "@/types/task";
+import { User } from "@/lib/user-api";
+import { errorToast } from "@/components/hooks/use-toast";
+import { z } from "zod";
+import CommonButton from "@/components/common/Button";
+import { formatDate } from "@/lib/common/date-utils";
 
 // Zod schemas for validation
 const createTaskSchema = z.object({
-  title: z.string().min(1, 'Title is required'),
-  description: z.string().min(1, 'Description is required'),
+  title: z.string().min(1, "Title is required"),
+  description: z.string().min(1, "Description is required"),
   priority: z.nativeEnum(TaskPriority),
   dueDate: z.date(),
-  assignedTo: z.string().min(1, 'Assignee is required'),
+  assignedTo: z.string().min(1, "Assignee is required"),
 });
 
 const updateTaskSchema = z.object({
-  title: z.string().min(1, 'Title is required'),
-  description: z.string().min(1, 'Description is required'),
+  title: z.string().min(1, "Title is required"),
+  description: z.string().min(1, "Description is required"),
   priority: z.nativeEnum(TaskPriority),
   dueDate: z.date(),
-  assignedTo: z.string().min(1, 'Assignee is required'),
+  assignedTo: z.string().min(1, "Assignee is required"),
   status: z.nativeEnum(TaskStatus),
 });
 
@@ -47,7 +55,7 @@ export interface TaskFormData {
 }
 
 interface TaskFormProps {
-  mode: 'create' | 'update';
+  mode: "create" | "update";
   task?: Task;
   availableUsers?: User[];
   onSubmit: (data: TaskFormData) => Promise<void>;
@@ -55,34 +63,37 @@ interface TaskFormProps {
   isLoading?: boolean;
 }
 
-export default function TaskForm({ 
-  mode, 
-  task, 
+export default function TaskForm({
+  mode,
+  task,
   availableUsers = [],
-  onSubmit, 
-  onCancel, 
-  isLoading = false 
+  onSubmit,
+  onCancel,
+  isLoading = false,
 }: TaskFormProps) {
   const [formData, setFormData] = useState<TaskFormData>({
-    title: task?.title || '',
-    description: task?.description || '',
-    priority: task?.priority.toUpperCase() as TaskPriority || TaskPriority.MEDIUM,
+    title: task?.title || "",
+    description: task?.description || "",
+    priority:
+      (task?.priority.toUpperCase() as TaskPriority) || TaskPriority.MEDIUM,
     dueDate: task?.dueDate ? new Date(task.dueDate) : new Date(),
-    assignedTo: task?.assignedTo._id || '',
-    status: task?.status ||TaskStatus.TODO,
+    assignedTo: task?.assignedTo._id || "",
+    status: task?.status || TaskStatus.TODO,
   });
 
-
-  const handleInputChange = (field: keyof TaskFormData, value: string | Date | TaskPriority | TaskStatus) => {
-    setFormData(prev => ({
+  const handleInputChange = (
+    field: keyof TaskFormData,
+    value: string | Date | TaskPriority | TaskStatus
+  ) => {
+    setFormData((prev) => ({
       ...prev,
-      [field]: value
+      [field]: value,
     }));
   };
 
   const validateForm = (): boolean => {
     try {
-      if (mode === 'create') {
+      if (mode === "create") {
         createTaskSchema.parse(formData);
       } else {
         updateTaskSchema.parse(formData);
@@ -93,7 +104,7 @@ export default function TaskForm({
         const firstError = error.issues[0];
         errorToast(firstError.message);
       } else {
-        errorToast('Validation failed');
+        errorToast("Validation failed");
       }
       return false;
     }
@@ -101,7 +112,7 @@ export default function TaskForm({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) return;
 
     await onSubmit(formData);
@@ -116,7 +127,7 @@ export default function TaskForm({
           id="title"
           type="text"
           value={formData.title}
-          onChange={(e) => handleInputChange('title', e.target.value)}
+          onChange={(e) => handleInputChange("title", e.target.value)}
           disabled={isLoading}
           placeholder="Enter task title"
         />
@@ -128,7 +139,7 @@ export default function TaskForm({
         <Textarea
           id="description"
           value={formData.description}
-          onChange={(e) => handleInputChange('description', e.target.value)}
+          onChange={(e) => handleInputChange("description", e.target.value)}
           disabled={isLoading}
           placeholder="Enter task description"
           rows={3}
@@ -140,13 +151,17 @@ export default function TaskForm({
         <Label htmlFor="priority">Priority</Label>
         <Select
           value={formData.priority}
-          onValueChange={(value) => handleInputChange('priority', value as TaskPriority)}
+          onValueChange={(value) =>
+            handleInputChange("priority", value as TaskPriority)
+          }
           disabled={isLoading}
         >
           <SelectTrigger>
             <SelectValue placeholder="Select priority">
               {formData.priority && (
-                <span className="capitalize">{formData.priority.toLowerCase()}</span>
+                <span className="capitalize">
+                  {formData.priority.toLowerCase()}
+                </span>
               )}
             </SelectValue>
           </SelectTrigger>
@@ -154,7 +169,6 @@ export default function TaskForm({
             <SelectItem value={TaskPriority.LOW}>Low</SelectItem>
             <SelectItem value={TaskPriority.MEDIUM}>Medium</SelectItem>
             <SelectItem value={TaskPriority.HIGH}>High</SelectItem>
-           
           </SelectContent>
         </Select>
       </div>
@@ -173,14 +187,18 @@ export default function TaskForm({
               disabled={isLoading}
             >
               <CalendarIcon className="mr-2 h-4 w-4" />
-              {formData.dueDate ? formatDate(formData.dueDate, "MMM DD, YYYY"): <span>Pick a date</span>}
+              {formData.dueDate ? (
+                formatDate(formData.dueDate, "MMM DD, YYYY")
+              ) : (
+                <span>Pick a date</span>
+              )}
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0">
             <Calendar
               mode="single"
               selected={formData.dueDate}
-              onSelect={(date) => date && handleInputChange('dueDate', date)}
+              onSelect={(date) => date && handleInputChange("dueDate", date)}
               initialFocus
             />
           </PopoverContent>
@@ -192,26 +210,27 @@ export default function TaskForm({
         <Label htmlFor="assignedTo">Assign To</Label>
         <Select
           value={formData.assignedTo}
-          onValueChange={(value) => handleInputChange('assignedTo', value)}
+          onValueChange={(value) => handleInputChange("assignedTo", value)}
           disabled={isLoading}
         >
           <SelectTrigger>
             <SelectValue placeholder="Select assignee">
-              {formData.assignedTo && (
+              {formData.assignedTo &&
                 (() => {
                   // First try to find in availableUsers
-                  const selectedUser = availableUsers.find(user => user.id === formData.assignedTo);
+                  const selectedUser = availableUsers.find(
+                    (user) => user.id === formData.assignedTo
+                  );
                   if (selectedUser) {
                     return `${selectedUser.firstName} ${selectedUser.lastName} (${selectedUser.email})`;
                   }
                   // If not found in availableUsers, use task data if in update mode
-                  if (task && mode === 'update' && task.assignedTo) {
+                  if (task && mode === "update" && task.assignedTo) {
                     return `${task.assignedTo.firstName} ${task.assignedTo.lastName} (${task.assignedTo.email})`;
                   }
                   // Fallback to just showing the ID
                   return formData.assignedTo;
-                })()
-              )}
+                })()}
             </SelectValue>
           </SelectTrigger>
           <SelectContent>
@@ -225,24 +244,28 @@ export default function TaskForm({
       </div>
 
       {/* Status - only for update mode */}
-      {mode === 'update' && (
+      {mode === "update" && (
         <div>
           <Label htmlFor="status">Status</Label>
           <Select
             value={formData.status}
-            onValueChange={(value) => handleInputChange('status', value as TaskStatus)}
+            onValueChange={(value) =>
+              handleInputChange("status", value as TaskStatus)
+            }
             disabled={isLoading}
           >
             <SelectTrigger>
               <SelectValue placeholder="Select status">
                 {formData.status && (
-                  <span>{formData.status.replace('_', ' ')}</span>
+                  <span>{formData.status.replace("_", " ")}</span>
                 )}
               </SelectValue>
             </SelectTrigger>
             <SelectContent>
               <SelectItem value={TaskStatus.TODO}>To Do</SelectItem>
-              <SelectItem value={TaskStatus.IN_PROGRESS}>In Progress</SelectItem>
+              <SelectItem value={TaskStatus.IN_PROGRESS}>
+                In Progress
+              </SelectItem>
               <SelectItem value={TaskStatus.REVIEW}>Review</SelectItem>
               <SelectItem value={TaskStatus.COMPLETED}>Completed</SelectItem>
               <SelectItem value={TaskStatus.CANCELLED}>Cancelled</SelectItem>
@@ -265,11 +288,11 @@ export default function TaskForm({
           type="submit"
           loading={isLoading}
           disabled={isLoading}
-          className='h-10 px-4'
+          className="h-10 px-4"
         >
-          { mode === 'create' ? 'Create Task' : 'Update Task'}
+          {mode === "create" ? "Create Task" : "Update Task"}
         </CommonButton>
       </div>
     </form>
   );
-} 
+}
