@@ -45,6 +45,14 @@ export async function forgotPassword(email: string): Promise<ResponseHandlerResu
 
 export async function AdminLoginAction(credentials: LoginCredentials): Promise<ResponseHandlerResult<{ accessToken:string, refreshToken:string, user:any }>> {
     const response = await AuthApiService.login(credentials);
+    
+    // If login is successful, set cookies on the server side
+    if (response.success && response.data) {
+        await setCookieValue(ICookieKeys.TOKEN, response.data.accessToken || "");
+        await setCookieValue(ICookieKeys.REFRESH_TOKEN, response.data.refreshToken || "");
+        await setCookieValue(ICookieKeys.USER_ROLE, response.data.user?.role);
+    }
+    
     return response;
 }
 
