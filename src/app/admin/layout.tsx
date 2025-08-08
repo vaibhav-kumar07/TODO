@@ -11,7 +11,7 @@ export default function AdminLayout({
   return (
     <RoleThemeProvider role={UserRole.ADMIN}>
       <RoleLayout allowedRoles={[UserRole.ADMIN]}>
-        <div className="w-full overflow-y-auto">
+        <div className="w-full overflow-y-auto p-2">
           {children}
         </div>
       </RoleLayout>

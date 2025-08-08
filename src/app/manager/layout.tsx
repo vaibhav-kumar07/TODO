@@ -10,7 +10,7 @@ export default function ManagerLayout({
   return (  
     <RoleThemeProvider role={UserRole.MANAGER}>
       <RoleLayout allowedRoles={[UserRole.MANAGER]}>
-        <div className="w-full overflow-y-auto">
+        <div className="w-full overflow-y-auto p-2">
           {children}
         </div>
       </RoleLayout>
