@@ -70,7 +70,7 @@ export default function StatusFilter({}: StatusFilterProps) {
   ];
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="w-fit flex items-center gap-2 flex-wrap">
       {statusOptions.map((option) => (
         <CommonButton
           key={option.value}

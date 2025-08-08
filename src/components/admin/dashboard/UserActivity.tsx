@@ -184,7 +184,7 @@ const ActivityCard = ({
   title: string;
   children: React.ReactNode;
 }) => (
-  <Card className="border-0 shadow-lg bg-gradient-to-br from-card to-card/80 backdrop-blur-sm">
+  <Card className="border-0 shadow-lg bg-gradient-to-br from-card to-card/80 backdrop-blur-sm rounded-lg">
     <CardHeader className="pb-3">
       <CardTitle className="text-lg font-semibold text-foreground flex items-center gap-2">
         <Activity className="w-5 h-5 text-primary" />
@@ -279,10 +279,10 @@ export default function UserActivity({ data }: UserActivityProps) {
   }, [socket]);
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-1 gap-6">
+    <div className="grid grid-cols-1 lg:grid-cols-1 gap-6 rounded-lg ">
       {/* Recent User Events */}
-      <ActivityCard title="Recent User Events">
-        <div className="space-y-3">
+      <ActivityCard title="Recent User Events ">
+        <div className="space-y-3 rounded-lg">
           {activityData.recentUserEvents.slice(0, 5).map((event, index) => (
             <div
               key={index}

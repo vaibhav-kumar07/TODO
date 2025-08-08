@@ -46,12 +46,13 @@ export default async function UserManagementPage({
   const users = usersResponse.success ? usersResponse.data?.users || [] : [];
 
   return (
-    <div className="  px-4">
+    <div className="p-0  md:px-4 md:py-6">
       <UserManagementHeader
         title="User Management"
         description="Create and manage users for your team "
+        
       />
-      <div className="border rounded-lg  sm:p-0 ">
+      <div className="md:border rounded-lg  sm:p-0 pt-2 ">
         <FilterContainer />
         <UserTable
           users={users}

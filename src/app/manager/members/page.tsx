@@ -50,14 +50,19 @@ export default async function UserManagementPage({
   const usersResponse = await getAllUsers(filterParams);
   const users = usersResponse.success ? usersResponse.data?.users || [] : [];
   return (
-    <div className=" px-4">
+    <div className="p-0  md:px-4 md:py-4">
       <UserManagementHeader
         title="User Management"
-        description="Create and manage users for your team members"
+        description="Create and manage users for your team "
+        
       />
-      <div className="border rounded-xl">
+      <div className="md:border rounded-lg  sm:p-0 pt-2 ">
         <FilterContainer />
-        <UserTable users={users} className="rounded-y-xl" />
+        <UserTable
+          users={users}
+          className="rounded-lg  border-none p-4 sm:p-0 "
+          rowClassName="p-2"
+        />
       </div>
       <Pagination
         recordCount={usersResponse.data?.pagination?.total || 0}

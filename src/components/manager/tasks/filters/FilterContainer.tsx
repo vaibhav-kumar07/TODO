@@ -9,11 +9,11 @@ import AllFilter from '../../../common/filters/AllFilter';
 
 export default function FilterContainer() {
   return (
-    <div className="flex flex-wrap items-center gap-2 px-2 py-1 ">
-      <AllFilter />    
+    <div className="w-fit flex flex-wrap items-center gap-2 px-2 py-1 ">
+      <AllFilter  className='w-fit'/>    
       <StatusFilter />
       <PriorityFilter />
-      <SearchFilter className='ml-auto' />
+      <SearchFilter className='w-full sm:w-fit sm:ml-auto' />
       <DueDateFilter />
     </div>
   );

@@ -29,8 +29,8 @@ const userTableMetadata: ITableMetadata[] = [
     columnName: "email",
     headerLabel: "Email",
     sortable: true,
-    columnClass: "w-full md:w-[25%] lg:w-[25%] text-left text-muted-foreground",
-    cellClass: "w-full md:w-[25%] lg:w-[25%]",
+    columnClass: "w-full md:w-[25%] lg:w-[25%] text-left text-muted-foreground truncate",
+    cellClass: "w-full md:w-[25%] lg:w-[25%] truncate",
   },
   {
     columnName: "role",

@@ -9,6 +9,7 @@ import { paginationLimit } from "@/types/common";
 import { UserRole } from "@/types/auth";
 import { TaskFilters } from "@/types/task";
 import { getTaskTableMetadataForSSR } from "@/lib/table-metadata";
+import Pagination from "@/components/common/pagination/Pagination";
 
 interface TaskManagementPageProps {
   searchParams: Promise<{
@@ -50,16 +51,20 @@ export default async function TaskManagementPage({
   const taskTableMetadata = getTaskTableMetadataForSSR(userRole);
 
   return (
-    <div className="space-y-4 px-4">
-      <TaskManagementHeader />
-      <div className="border rounded-xl ">
-        <FilterContainer />
-        <TaskTable
-          tasks={tasks}
-          className="rounded-y-xl"
-          metadata={taskTableMetadata}
-        />
-      </div>
+    <div className="p-0  md:px-4 md:py-4">
+    <TaskManagementHeader />
+    <div className="md:border rounded-lg  sm:p-0 pt-2 ">
+      <FilterContainer />
+      <TaskTable
+        tasks={tasks}
+        className="rounded-lg  border-none p-4 sm:p-0 "
+        metadata={taskTableMetadata}
+      />
     </div>
+    <Pagination
+      recordCount={tasksResponse.data?.pagination?.total || 0}
+      className="p-4"
+    />
+  </div>
   );
 }
