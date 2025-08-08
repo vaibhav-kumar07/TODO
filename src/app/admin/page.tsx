@@ -25,10 +25,12 @@ export default async function DashboardPage() {
 
   const token = await getCookieValue(ICookieKeys.TOKEN);
   return (
+    <div className="p-0  md:px-4 md:py-6">
     <AdminDashboard
       token={token}
       initialStats={initialStats}
       initialActivity={initialActivity}
     />
+    </div>
   );
 }

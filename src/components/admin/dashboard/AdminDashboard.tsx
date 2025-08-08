@@ -23,11 +23,12 @@ function DashboardContent({
   const displayActivity = initialActivity;
 
   return (
-    <div className="space-y-4 px-3 py-2">
+    <div className="w-full space-y-4 px-3 py-2">
       <PageHeaderWithButton
         title="Admin Dashboard"
         description="Monitor system activity and user statistics"
         action={<WebsocketConnectionStatus />}
+        titleClassName="hidden sm:block"
       />
       <QuickStatsOverview stats={displayStats as DashboardStats} />
       <UserActivity data={displayActivity as UserActivityData} />

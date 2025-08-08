@@ -112,7 +112,7 @@ export default function QuickStatsOverview({ stats }: QuickStatsOverviewProps) {
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 rounded-lg">
       {quickStatsData.map((item, index) => (
         <QuickStatsCard
           key={index}

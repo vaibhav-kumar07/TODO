@@ -31,7 +31,7 @@ export default function ChangePasswordDialog({ children }: ChangePasswordDialogP
           </Button>
         )}
       </DialogTrigger>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md w-[95%] rounded-lg">
         <DialogHeader>
           <DialogTitle>Change Password</DialogTitle>
         </DialogHeader>

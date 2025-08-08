@@ -114,7 +114,7 @@ export default function TaskManagementDialog({
     if (children) return children;
 
     return mode === "create" ? (
-      <CommonButton className="h-10 bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 rounded-md text-sm font-medium flex items-center space-x-2">
+      <CommonButton className="w-full sm:w-fit  h-10 bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 rounded-md text-sm font-medium flex items-center space-x-2">
         <Plus className="h-4 w-4" />
         <span>Create Task</span>
       </CommonButton>

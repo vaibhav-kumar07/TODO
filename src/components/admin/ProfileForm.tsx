@@ -70,9 +70,9 @@ export default function ProfileForm({ profile, onSuccess }: ProfileFormProps) {
   };
 
   return (
-    <div className="bg-card border border-border rounded-lg p-6">
+    <div className="bg-card border border-border rounded-lg p-3 md:p-6">
       <div className="mb-6">
-        <h2 className="text-xl font-semibold text-foreground">
+        <h2 className="text-lg md:text-xl font-semibold text-foreground">
           Profile Information
         </h2>
       </div>
@@ -116,7 +116,7 @@ export default function ProfileForm({ profile, onSuccess }: ProfileFormProps) {
               value={formData.firstName}
               onChange={handleInputChange}
               disabled={isLoading}
-              className="w-full px-3 py-2 border border-border rounded-md bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring disabled:opacity-50"
+              className=" h-8 md:h-10 w-full px-3 py-2 border border-border rounded-md bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring disabled:opacity-50"
               placeholder="Enter first name"
             />
           </div>

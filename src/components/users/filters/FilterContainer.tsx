@@ -18,13 +18,13 @@ export default async function FilterContainer() {
   }
 
   return (
-    <div className="flex items-center  border-border px-2 py-1">
-      <div className="flex items-center gap-2">
+    <div className="flex items-center  border-border px-2 py-1 gap-2 sm:gap-0 flex-wrap">
+      <div className="flex items-center gap-2 flex-wrap">
         <AllFilter />
         <RoleFilter userRole={finalUserRole} />
         <UserStatusFilter />
       </div>
-      <SearchFilter className="ml-auto" />
+      <SearchFilter className="w-full sm:w-fit sm:ml-auto" />
     </div>
   );
 }

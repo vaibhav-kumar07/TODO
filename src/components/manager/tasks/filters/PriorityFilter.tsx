@@ -68,7 +68,7 @@ export default function PriorityFilter({}: PriorityFilterProps) {
   ];
 
   return (
-    <div className="flex items-center gap-2">
+    <div className=" sm:flex items-center gap-2">
       {priorityOptions.map((option) => (
         <CommonButton
           key={option.value}
