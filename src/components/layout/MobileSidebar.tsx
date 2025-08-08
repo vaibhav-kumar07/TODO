@@ -10,8 +10,7 @@ import {
   Building2, 
   Settings, 
   CheckSquare,
-  Menu,
-  X
+  Menu
 } from 'lucide-react';
 import LogoutButton from '@/components/auth/LogoutButton';
 import { cn } from '@/lib/utils';

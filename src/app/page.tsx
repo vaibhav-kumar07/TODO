@@ -109,7 +109,7 @@ export default async function HomePage() {
               Platform Overview
             </h2>
             <p className="text-lg max-w-2xl mx-auto text-muted-foreground">
-              Key metrics and statistics that showcase our platform's
+              Key metrics and statistics that showcase our platform&apos;s
               capabilities
             </p>
           </div>

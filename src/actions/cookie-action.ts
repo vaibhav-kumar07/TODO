@@ -103,7 +103,7 @@ export async function getMultipleCookies(keys: string[]) {
 // Set multiple cookies from object
 export async function setMultipleCookies(cookieData: Record<string, string>) {
   try {
-    const results = await Promise.all(
+    await Promise.all(
       Object.entries(cookieData).map(([key, value]) => 
         setCookie(key, value)
       )

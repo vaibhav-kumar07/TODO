@@ -1,6 +1,6 @@
 "use client";
 import CommonButton from "@/components/common/Button";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function AllFilter() {
   const router = useRouter();

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 interface UseUrlFilterOptions {
@@ -17,9 +17,9 @@ export function useUrlFilter({
   const [value, setValue] = useState<string | null>(defaultValue);
 
   // Validate if the value is valid
-  const isValidValue = (val: string): boolean => {
+  const isValidValue = useCallback((val: string): boolean => {
     return validValues.includes(val);
-  };
+  }, [validValues]);
 
   // Initialize from URL params with validation
   useEffect(() => {

@@ -39,7 +39,7 @@ export default function SignupForm() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>("");
-  const [success, setSuccess] = useState<string>("");
+
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -113,10 +113,9 @@ export default function SignupForm() {
           router.push("/login");
         }, 2000);
       } else {
-        errorToast;
         setError(result.error?.description || "Failed to create admin account");
       }
-    } catch (err) {
+    } catch {
       setError("An unexpected error occurred. Please try again.");
     } finally {
       setIsLoading(false);
@@ -146,11 +145,7 @@ export default function SignupForm() {
             </Alert>
           )}
 
-          {success && (
-            <Alert>
-              <AlertDescription>{success}</AlertDescription>
-            </Alert>
-          )}
+
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">

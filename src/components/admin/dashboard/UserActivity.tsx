@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+
 import {
   Activity,
   Clock,
@@ -11,7 +11,6 @@ import {
   UserMinus,
   UserCheck,
   UserX,
-  Shield,
   AlertTriangle,
   Key,
   Mail,
@@ -75,14 +74,7 @@ const getRoleColor = (role: string) => {
   }
 };
 
-const getInitials = (name: string) => {
-  return name
-    .split(" ")
-    .map((word) => word[0])
-    .join("")
-    .toUpperCase()
-    .slice(0, 2);
-};
+
 
 const getEventIcon = (action: string) => {
   switch (action) {
@@ -276,7 +268,7 @@ export default function UserActivity({ data }: UserActivityProps) {
         }));
       });
     }
-  }, [socket]);
+  }, [socket, connected]);
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-1 gap-6 rounded-lg ">

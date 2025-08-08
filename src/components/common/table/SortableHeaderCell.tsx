@@ -1,12 +1,8 @@
 "use client";
 
 import { Label } from "@/components/common/Label";
-import {
-  useURLParams,
-  useGetSearchParamValue,
-} from "@/components/hooks/request";
+import { useGetSearchParamValue } from "@/components/hooks/request";
 import { cn } from "@/lib/utils";
-import { useRouter } from "next/navigation";
 
 const _paramKeys = {
   sortColumn: "sortColumn",
@@ -44,7 +40,6 @@ export default function SortableHeaderCell({
 
   const handleSort = (column: string) => {
     if (column === sortColumn) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const order =
         sortOrder === _sortOrder.asc ? _sortOrder.desc : _sortOrder.asc;
 

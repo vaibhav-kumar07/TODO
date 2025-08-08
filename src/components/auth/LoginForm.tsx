@@ -18,7 +18,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Loader2, Eye, EyeOff, LogIn, ArrowLeft } from "lucide-react";
+import { Eye, EyeOff, LogIn, ArrowLeft } from "lucide-react";
 import ForgotPasswordDialog from "./ForgotPasswordDialog";
 import Link from "next/link";
 import CommonButton from "../common/Button";
@@ -28,7 +28,7 @@ interface LoginFormProps {
   userRole?: UserRole;
 }
 
-export default function LoginForm({ onSuccess, userRole }: LoginFormProps) {
+export default function LoginForm({ userRole }: LoginFormProps) {
   const [credentials, setCredentials] = useState<LoginCredentials>({
     email: "",
     password: "",

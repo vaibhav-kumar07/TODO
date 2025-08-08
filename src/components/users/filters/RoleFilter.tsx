@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import CommonButton from "@/components/common/Button";
 import { UserRole } from "@/types/auth";
@@ -21,14 +21,14 @@ export default function RoleFilter({ userRole }: RoleFilterProps) {
   const [selectedRole, setSelectedRole] = useState<string | null>(null);
 
   // Validate if a role is accessible to the current user
-  const isRoleAccessible = (role: string): boolean => {
+  const isRoleAccessible = useCallback((role: string): boolean => {
     const actualUserRole = userRole as UserRole;
     if (!actualUserRole) return false;
 
     // Get allowed roles for the actual user
     const allowedRoles = getRoleOptions(actualUserRole);
     return allowedRoles.some((option) => option.value === role);
-  };
+  }, [userRole]);
 
   // Initialize from URL params with security validation
   useEffect(() => {
