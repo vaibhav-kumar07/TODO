@@ -2,12 +2,12 @@
 
 import { TrendingUp, Users, Activity, Target } from "lucide-react";
 import QuickStatsCard from "./QuickStatsCard";
-import { DashboardStats, EventType } from "@/types/dashboard";
+import { AdminDashboardStats, EventAction, SocketEvent, UserEventPayload } from "@/types/dashboard";
 import { useSocket } from "@/components/provider/socketProvider";
 import { useEffect, useState } from "react";
 
 interface QuickStatsOverviewProps {
-  stats: DashboardStats;
+  stats: AdminDashboardStats;
 }
 
 interface QuickStatItem {
@@ -18,70 +18,58 @@ interface QuickStatItem {
 }
 
 export default function QuickStatsOverview({ stats }: QuickStatsOverviewProps) {
-  const [dashboardStats, setDashboardStats] = useState<DashboardStats | null>(
+  const [dashboardStats, setDashboardStats] = useState<AdminDashboardStats | null>(
     stats || null
   );
   const { socket, connected } = useSocket();
 
   useEffect(() => {
-    if (socket && connected) {
-      socket.on(EventType.LOGIN, (data: any) => {
-        console.log("LOGIN event received:", data);
-        setDashboardStats((prevStats) => {
-          if (!prevStats) return prevStats;
+    if (!socket || !connected) return;
 
-          return {
-            ...prevStats,
-            totalLogins: prevStats.totalLogins + 1,
-            loginsToday: prevStats.loginsToday + 1,
-          };
-        });
-      });
-      socket.on(EventType.USER_CREATED, (data: any) => {
-        console.log("USER_CREATED event received:", data);
-        setDashboardStats((prevStats) => {
-          if (!prevStats) return prevStats;
+      const userEventHandlers: Partial<Record<EventAction, (prev: AdminDashboardStats, evt: UserEventPayload) => AdminDashboardStats>> = {
+      [EventAction.LOGIN]: (prev, evt) => ({
+        ...prev,
+        totalLogins: Math.max(0, prev.totalLogins + (evt.isIncrement ? 1 : -1)),
+      }),
+      [EventAction.USER_CREATED]: (prev, evt) => ({
+        ...prev,
+        totalUsers: Math.max(0, prev.totalUsers + (evt.isIncrement ? 1 : -1)),
+      }),
+      [EventAction.MANAGER_ADDED]: (prev, evt) => ({
+        ...prev,
+        totalManagers: Math.max(0, prev.totalManagers + (evt.isIncrement ? 1 : -1)),
+      }),
+      [EventAction.MANAGER_REMOVED]: (prev, evt) => ({
+        ...prev,
+        totalManagers: Math.max(0, prev.totalManagers + (evt.isIncrement ? 1 : -1)),
+      }),
+      [EventAction.MEMBER_ADDED]: (prev, evt) => ({
+        ...prev,
+        totalMembers: Math.max(0, prev.totalMembers + (evt.isIncrement ? 1 : -1)),
+      }),
+      [EventAction.MEMBER_REMOVED]: (prev, evt) => ({
+        ...prev,
+        totalMembers: Math.max(0, prev.totalMembers + (evt.isIncrement ? 1 : -1)),
+      }),
+      [EventAction.BECOME_MANAGER]: (prev) => ({
+        ...prev,
+        totalManagers: Math.max(0, prev.totalManagers + 1),
+        totalMembers: Math.max(0, prev.totalMembers - 1),
+      }),
+    };
 
-          return {
-            ...prevStats,
-            totalUsers: prevStats.totalUsers + 1,
-          };
-        });
+    const handleUserEvent = (evt: UserEventPayload) => {
+      setDashboardStats((prev) => {
+        if (!prev) return prev;
+        const handler = userEventHandlers[evt.action];
+        return handler ? handler(prev, evt) : prev;
       });
-      socket.on(EventType.USER_ACTIVATED, (data: any) => {
-        console.log("USER_ACTIVATED event received:", data);
-        setDashboardStats((prevStats) => {
-          if (!prevStats) return prevStats;
+    };
 
-          return {
-            ...prevStats,
-            activeMembers: prevStats.activeMembers + 1,
-          };
-        });
-      });
-      socket.on(EventType.MEMBER_ADDED, (data: any) => {
-        console.log("MEMBER_ADDED event received:", data);
-        setDashboardStats((prevStats) => {
-          if (!prevStats) return prevStats;
-
-          return {
-            ...prevStats,
-            activeMembers: prevStats.activeMembers + 1,
-          };
-        });
-      });
-      socket.on(EventType.MEMBER_REMOVED, (data: any) => {
-        console.log("MEMBER_REMOVED event received:", data);
-        setDashboardStats((prevStats) => {
-          if (!prevStats) return prevStats;
-
-          return {
-            ...prevStats,
-            activeMembers: prevStats.activeMembers - 1,
-          };
-        });
-      });
-    }
+    socket.on(SocketEvent.USER_EVENT, handleUserEvent);
+    return () => {
+      socket.off(SocketEvent.USER_EVENT, handleUserEvent);
+    };
   }, [socket, connected]);
 
   const quickStatsData: QuickStatItem[] = [
@@ -92,8 +80,8 @@ export default function QuickStatsOverview({ stats }: QuickStatsOverviewProps) {
       color: "chart-4",
     },
     {
-      title: "Active Users",
-      value: dashboardStats?.activeMembers ?? 0,
+      title: "Total Members",
+      value: dashboardStats?.totalMembers ?? 0,
       icon: TrendingUp,
       color: "chart-4",
     },

@@ -2,19 +2,19 @@
 import TaskStatsOverview from "./TaskStatsOverview";
 import { SocketProvider } from "@/components/provider/socketProvider";
 import PageHeaderWithButton from "@/components/common/PageHeaderWithButton";
-import { ManagerStats, ManagerActivityData } from "@/types/dashboard";
+import { ManagerDashboardStats, ManagerActivityData } from "@/types/dashboard";
 import WebsocketConnectionStatus from "../../provider/WebsocketConnectionStatus";
 
 interface ManagerDashboardProps {
   token: string;
-  initialStats?: ManagerStats;
+  initialStats?: ManagerDashboardStats;
   initialActivity?: ManagerActivityData;
 }
 
 function ManagerDashboardContent({
   initialStats,
 }: {
-  initialStats?: ManagerStats;
+  initialStats?: ManagerDashboardStats;
   initialActivity?: ManagerActivityData;
 }) {
   const displayStats = initialStats;
@@ -25,7 +25,7 @@ function ManagerDashboardContent({
         description="Monitor task activities and team performance"
         action={<WebsocketConnectionStatus />}
       />
-      <TaskStatsOverview stats={displayStats as ManagerStats} />
+      <TaskStatsOverview stats={displayStats as ManagerDashboardStats} />
     </div>
   );
 }
@@ -36,7 +36,7 @@ export default function ManagerDashboard({
   initialActivity,
 }: ManagerDashboardProps) {
   return (
-    <SocketProvider token={token}>
+    <SocketProvider token={token}  >
       <ManagerDashboardContent
         initialStats={initialStats}
         initialActivity={initialActivity}

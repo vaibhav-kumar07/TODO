@@ -1,89 +1,83 @@
-// Dashboard Statistics Types - Exact API Format
-export interface DashboardStats {
-  // 👥 User Statistics (12 fields)
+export interface AdminDashboardStats {
+   
   totalUsers: number;
   totalManagers: number;
   totalMembers: number;
-  activeManagers: number;
-  inactiveManagers: number;
-  activeMembers: number;
-  inactiveMembers: number;
-  newUsersToday: number;
-  newUsersThisWeek: number;
-  newUsersThisMonth: number;
-  newManagersToday: number;
-  newMembersToday: number;
-  
-  // Legacy fields for backward compatibility
-  managersCount: number;
-  membersCount: number;
-  activeUsers: number;
-  inactiveUsers: number;
-  totalTeams: number;
-  activeTeams: number;
-  
-  // 🔐 Authentication Statistics (8 fields)
   totalLogins: number;
-  loginsToday: number;
-  loginsThisWeek: number;
-  loginsThisMonth: number;
-  failedLoginsToday: number;
-  failedLoginsThisWeek: number;
-  passwordResetsToday: number;
-  forgotPasswordRequests: number;
-  
-  // 📋 Task Statistics (7 fields)
-  totalTasks: number;
-  completedTasks: number;
-  pendingTasks: number;
-  overdueTasks: number;
-  tasksCreatedToday: number;
-  tasksCompletedToday: number;
-  tasksUpdatedToday: number;
-  
-  // 📈 Activity Summary (4 fields)
-  totalActivities: number;
-  activitiesToday: number;
-  activitiesThisWeek: number;
-  activitiesThisMonth: number;
 }
 
-// Event Types
-export enum EventType {
-  // Authentication Events
+export interface ManagerDashboardStats {
+  totalTasks: number;
+  completedTasks: number;
+  overdueTasks: number;
+  inProgressTasks: number;
+  info:{
+      managerId: string;
+  }
+}
+
+
+export enum EventAction {
+  //USER EVENTS
   LOGIN = 'LOGIN',
   LOGOUT = 'LOGOUT',
-  LOGIN_FAILED = 'LOGIN_FAILED',
-  PASSWORD_RESET = 'PASSWORD_RESET',
-  FORGOT_PASSWORD = 'FORGOT_PASSWORD',
-  
-  // User Management Events
-  PROFILE_UPDATE = 'PROFILE_UPDATE',
   USER_CREATED = 'USER_CREATED',
-  USER_DELETED = 'USER_DELETED',
-  USER_INVITED = 'USER_INVITED',
-  USER_ACTIVATED = 'USER_ACTIVATED',
-  USER_DEACTIVATED = 'USER_DEACTIVATED',
-
-  //USER ROLE EVENTS
   MANAGER_ADDED = 'MANAGER_ADDED',
   MANAGER_REMOVED = 'MANAGER_REMOVED',
   MEMBER_ADDED = 'MEMBER_ADDED',
   MEMBER_REMOVED = 'MEMBER_REMOVED',
-  
-  // Task Management Events
+  BECOME_MANAGER = 'BECOME_MANAGER',
+
+  //TASK EVENTS
   TASK_CREATED = 'TASK_CREATED',
-  TASK_UPDATED = 'TASK_UPDATED',
-  TASK_DELETED = 'TASK_DELETED',
-  TASK_ASSIGNED = 'TASK_ASSIGNED',
+  TASK_HIGH_PRIORITY = 'TASK_HIGH_PRIORITY',
+  TASK_DUE_DATE = 'TASK_DUE_DATE',
   TASK_COMPLETED = 'TASK_COMPLETED',
-  TASK_STATUS_CHANGED = 'TASK_STATUS_CHANGED',
-  TASK_PRIORITY_CHANGED = 'TASK_PRIORITY_CHANGED',
-  TASK_DUE_DATE_CHANGED = 'TASK_DUE_DATE_CHANGED',
+  TASK_IN_PROGRESS = 'TASK_IN_PROGRESS',
+
+
+      
+
+
+  //event log
+  USER_REGISTER = 'USER_REGISTER',
+  PASSWORD_RESET = 'PASSWORD_RESET',
+  PROFILE_UPDATE = 'PROFILE_UPDATE',
+  USER_DELETED = 'USER_DELETED',
+  USER_INVITED = 'USER_INVITED',
+  USER_ACTIVATED = 'USER_ACTIVATED',
+  USER_DEACTIVATED = 'USER_DEACTIVATED',
+  USER_INVITATION_SUCCESS = 'USER_INVITATION_SUCCESS',
+  USER_INVITATION_FAILED = 'USER_INVITATION_FAILED',
+  USER_INVITATION_EXPIRED = 'USER_INVITATION_EXPIRED',
+  PASSWORD_RESET_SUCCESS = 'PASSWORD_RESET_SUCCESS',
+  PASSWORD_RESET_FAILED = 'PASSWORD_RESET_FAILED',
+  SYSTEM_ALERT = 'SYSTEM_ALERT',
+  DASHBOARD_ACCESS = 'DASHBOARD_ACCESS',
   
-  // Team Management Events
-  ROLE_CHANGED = 'ROLE_CHANGED',
+
 }
+
+
+
+export enum SocketEvent {
+  USER_EVENT = 'USER_EVENT',
+  TASK_EVENT = 'TASK_EVENT',
+}
+
+// Socket room control events
+export enum SocketRoomEvent {
+  JOIN_MANAGER_ROOM = 'JOIN_MANAGER_ROOM',
+  LEAVE_MANAGER_ROOM = 'LEAVE_MANAGER_ROOM',
+}
+
+export interface UserEventPayload {
+  action: EventAction;
+  isIncrement: boolean;
+  timestamp: number;
+};
+
+export interface TaskEventPayload extends UserEventPayload {}
 
 // User Activity Types - Exact API Format
 export interface RecentLogin {
@@ -127,35 +121,7 @@ export interface LoginEventPayload {
   ipAddress?: string;
 }
 
-// Manager Dashboard Types
-export interface ManagerStats {
-  // Task Statistics
-  totalTasks: number;
-  tasksCreatedToday: number;
-  pendingTasks: number;
-  completedTasks: number;
-  overdueTasks: number;
-  highPriorityTasks: number;
-  dueTodayTasks: number;
-  
-  // Member Statistics
-  totalMembers: number;
-  membersAddedToday: number;
-  membersWithTasks: number;
-  membersWithoutTasks: number;
-  
-  // Today's Activity Summary
-  todaysSummary: {
-    tasksCreated: number;
-    tasksCompleted: number;
-    tasksAssigned: number;
-    tasksUpdated: number;
-    tasksDeleted: number;
-    statusChanges: number;
-    priorityChanges: number;
-    dueDateChanges: number;
-  };
-}
+
 
 export interface TaskEventAssignee {
   userId: string;
@@ -170,14 +136,7 @@ export interface TaskEventPerformer {
 }
 
 export enum TaskEventType {
-  TASK_CREATED = 'TASK_CREATED',
-  TASK_UPDATED = 'TASK_UPDATED',
-  TASK_DELETED = 'TASK_DELETED',
-  TASK_ASSIGNED = 'TASK_ASSIGNED',
-  TASK_COMPLETED = 'TASK_COMPLETED',
-  TASK_STATUS_CHANGED = 'TASK_STATUS_CHANGED',
-  TASK_PRIORITY_CHANGED = 'TASK_PRIORITY_CHANGED',
-  TASK_DUE_DATE_CHANGED = 'TASK_DUE_DATE_CHANGED',
+ 
 }
 
 export interface TaskEvent {
@@ -223,7 +182,7 @@ export interface ManagerActivityData {
 }
 
 export interface DashboardEventPayload {
-  type: EventType;
+  type: EventAction;  
   payload: LoginEventPayload | any; // Can be extended for other event types
   timestamp: string;
 }
