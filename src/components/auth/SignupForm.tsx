@@ -16,7 +16,7 @@ import {
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, Eye, EyeOff, Shield, ArrowLeft } from "lucide-react";
 import { signup } from "@/actions/auth";
-import { errorToast, successToast } from "../hooks/use-toast";
+import { successToast } from "../hooks/use-toast";
 
 interface SignupFormData {
   email: string;

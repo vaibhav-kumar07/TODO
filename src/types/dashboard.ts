@@ -77,7 +77,7 @@ export interface UserEventPayload {
   timestamp: number;
 };
 
-export interface TaskEventPayload extends UserEventPayload {}
+export type TaskEventPayload = UserEventPayload;
 
 // User Activity Types - Exact API Format
 export interface RecentLogin {

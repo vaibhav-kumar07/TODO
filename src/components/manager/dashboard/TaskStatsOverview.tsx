@@ -75,7 +75,7 @@ export default function TaskStatsOverview({ stats }: TaskStatsOverviewProps) {
     return () => {
       socket.off(SocketEvent.TASK_EVENT, handleTaskEvent);
     };
-  }, [socket, connected]);
+  }, [socket, connected, stats?.info?.managerId]);
 
   const taskStatsData: TaskStatItem[] = [
     {
