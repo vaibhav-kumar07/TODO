@@ -27,7 +27,7 @@ export default async function RoleLayout({ children, allowedRoles }: RoleLayoutP
   const items = navigationItems[userRole as UserRole];
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-background text-foreground ">
       {/* Mobile Header with Sheet */}
       <MobileHeader items={items} userRole={userRole} />
       

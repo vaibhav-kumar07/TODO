@@ -1,14 +1,14 @@
 import { User } from "@/lib/user-api";
 import { Task } from "@/types/task";
-import TaskUpdateWidget from "@/components/manager/tasks/widget/TaskUpdateWidget";
-import UpdateTaskStatus from "@/components/manager/tasks/widget/UpdateTaskStatus";
-import UpdateTaskPriority from "@/components/manager/tasks/widget/UpdateTaskPriority";
-import ReassignTask from "@/components/manager/tasks/widget/ReassignTask";
+import TaskUpdateWidget from "@/components/tasks/widget/TaskUpdateWidget";
+import UpdateTaskStatus from "@/components/tasks/widget/UpdateTaskStatus";
+import UpdateTaskPriority from "@/components/tasks/widget/UpdateTaskPriority";
+import ReassignTask from "@/components/tasks/widget/ReassignTask";
 import UserUpdateWidget from "@/components/users/widget/UserUpdateWidget";
 import UserStatusWidget from "@/components/users/widget/UserStatusWidget";
 import UpdateStatus from "@/components/users/widget/UpdateStatus";
 import ChangePasswordWidget from "@/components/users/widget/ChangePasswordWidget";
-import DeleteTaskWidget from "@/components/manager/tasks/widget/DeleteTaskWidget";
+import DeleteTaskWidget from "@/components/tasks/widget/DeleteTaskWidget";
 import DeleteUserWidget from "@/components/users/widget/DeleteUserWidget";
 
 const widgets: any = {

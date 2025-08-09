@@ -89,10 +89,10 @@ export default function TaskManagementDialog({
       }
 
       if (result.success) {
-        successToast(result.message || "Operation completed successfully");
+        successToast( mode === "create" ? "Task created successfully" : "Task updated successfully");
         setIsOpen(false);
       } else {
-        errorToast(result.message || "Operation failed");
+        errorToast( mode === "create" ? "Failed to create task" : "Failed to update task");
       }
     } catch (error) {
       console.error("An unexpected error occurred:", error);

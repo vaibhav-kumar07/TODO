@@ -93,9 +93,11 @@ export default function MobileHeader({ items, userRole }: MobileHeaderProps) {
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="w-80 p-0">
-              <SheetHeader className="px-6 py-4 border-b border-border">
-                <SheetTitle className="text-left">
+              <SheetHeader className="px-6 py-4 border-b border-border ">
+                <SheetTitle className="text-center">
+                <Link href="/" className="flex items-center gap-2">
                   {userRole.charAt(0).toUpperCase() + userRole.slice(1).toLowerCase()} Panel
+                </Link>
                 </SheetTitle>
               </SheetHeader>
               
@@ -146,10 +148,11 @@ export default function MobileHeader({ items, userRole }: MobileHeaderProps) {
         <div className="flex flex-col h-full">
           {/* Header */}
           <div className="flex items-center justify-between h-16 px-6 border-b border-border">
-            <div className="flex items-center">
-              <h1 className="text-lg font-semibold text-card-foreground">
+            <div className="flex items-center justify-center">
+              <Link href="/" className="w-full flex items-center gap-2 justify-center ">
+              <h1 className=" w-full text-lg font-semibold text-card-foreground flex items-center justify-center">
                 {userRole.charAt(0).toUpperCase() + userRole.slice(1).toLowerCase()} Panel
-              </h1>
+              </h1></Link>
             </div>
           </div>
 

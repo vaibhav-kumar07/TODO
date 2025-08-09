@@ -26,6 +26,7 @@ import { errorToast } from "@/components/hooks/use-toast";
 import { z } from "zod";
 import CommonButton from "@/components/common/Button";
 import { formatDate } from "@/lib/common/date-utils";
+import { getTaskPriorityLabel, getTaskStatusLabel } from "./taskStyle";
 
 // Zod schemas for validation
 const createTaskSchema = z.object({
@@ -166,9 +167,9 @@ export default function TaskForm({
             </SelectValue>
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value={TaskPriority.LOW}>Low</SelectItem>
-            <SelectItem value={TaskPriority.MEDIUM}>Medium</SelectItem>
-            <SelectItem value={TaskPriority.HIGH}>High</SelectItem>
+            <SelectItem value={TaskPriority.LOW}>{getTaskPriorityLabel(TaskPriority.LOW)}</SelectItem>
+            <SelectItem value={TaskPriority.MEDIUM}>{getTaskPriorityLabel(TaskPriority.MEDIUM)}</SelectItem>
+            <SelectItem value={TaskPriority.HIGH}>{getTaskPriorityLabel(TaskPriority.HIGH)}</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -262,13 +263,11 @@ export default function TaskForm({
               </SelectValue>
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value={TaskStatus.TODO}>To Do</SelectItem>
-              <SelectItem value={TaskStatus.IN_PROGRESS}>
-                In Progress
-              </SelectItem>
-              <SelectItem value={TaskStatus.REVIEW}>Review</SelectItem>
-              <SelectItem value={TaskStatus.COMPLETED}>Completed</SelectItem>
-              <SelectItem value={TaskStatus.CANCELLED}>Cancelled</SelectItem>
+              <SelectItem value={TaskStatus.TODO}>{getTaskStatusLabel(TaskStatus.TODO)}</SelectItem>
+              <SelectItem value={TaskStatus.IN_PROGRESS}>{getTaskStatusLabel(TaskStatus.IN_PROGRESS)}</SelectItem>
+              <SelectItem value={TaskStatus.REVIEW}>{getTaskStatusLabel(TaskStatus.REVIEW)}</SelectItem>
+              <SelectItem value={TaskStatus.COMPLETED}>{getTaskStatusLabel(TaskStatus.COMPLETED)}</SelectItem>
+              <SelectItem value={TaskStatus.CANCELLED}>{getTaskStatusLabel(TaskStatus.CANCELLED)}</SelectItem>
             </SelectContent>
           </Select>
         </div>
