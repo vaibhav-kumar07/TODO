@@ -21,7 +21,12 @@ export default function PageHeaderWithButton({
   descriptionLabelClassName,
 }: PageHeaderProps) {
   return (
-    <div className={cn("flex justify-between items-center ", className)}>
+    <div
+      className={cn(
+        "flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between",
+        className
+      )}
+    >
       <div className={cn("flex flex-col gap-1", titleClassName)}>
         <Label
           className={cn(
@@ -38,7 +43,7 @@ export default function PageHeaderWithButton({
           {description}
         </Label>
       </div>
-      {action}
+      {action && <div className="mt-2 w-full sm:mt-0 sm:w-auto">{action}</div>}
     </div>
   );
 }

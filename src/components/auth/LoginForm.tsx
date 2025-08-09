@@ -105,9 +105,7 @@ export default function LoginForm({ userRole }: LoginFormProps) {
         successToast("Login successful");
         // Redirect based on user role
         const redirectPath = getRedirectPath(result.data?.user?.role);
-        setTimeout(() => {
-          router.push(redirectPath);
-        }, 2000);
+        router.push(redirectPath);
       } else {
         errorToast(result.message || "Login failed");
         setError(result.message || "Login failed");

@@ -111,3 +111,12 @@ export async function deleteUser(userId: string) {
     isWithToken: true,
   });
 }
+
+// Admin-specific delete endpoint (POST)
+export async function adminDeleteUser(userId: string) {
+  return await FetchUtils.post(
+    `${API_BASE_URL}/auth/admin/users/${userId}/delete`,
+    {},
+    { isWithToken: true }
+  );
+}

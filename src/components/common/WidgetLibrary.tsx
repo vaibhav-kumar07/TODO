@@ -9,6 +9,7 @@ import UserStatusWidget from "@/components/users/widget/UserStatusWidget";
 import UpdateStatus from "@/components/users/widget/UpdateStatus";
 import ChangePasswordWidget from "@/components/users/widget/ChangePasswordWidget";
 import DeleteTaskWidget from "@/components/manager/tasks/widget/DeleteTaskWidget";
+import DeleteUserWidget from "@/components/users/widget/DeleteUserWidget";
 
 const widgets: any = {
   userUpdateWidget: (value: string, rowData: User) => {
@@ -25,6 +26,10 @@ const widgets: any = {
 
   changePasswordWidget: (value: string, rowData: User) => {
     return <ChangePasswordWidget user={rowData} />;
+  },
+
+  deleteUserWidget: (value: string, rowData: User) => {
+    return <DeleteUserWidget user={rowData} />;
   },
 
   taskUpdateWidget: (value: string, rowData: Task) => {

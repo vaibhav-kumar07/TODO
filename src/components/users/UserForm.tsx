@@ -56,7 +56,7 @@ export default function UserForm({
     email: user?.email || '',
     firstName: user?.firstName || '',
     lastName: user?.lastName ||  '',
-    role: user?.role.toUpperCase()==UserRole.MEMBER ? UserRole.MEMBER : user?.role.toUpperCase() ===UserRole.MANAGER ? UserRole.MANAGER : UserRole.ADMIN,
+    role: user?.role.toUpperCase()==UserRole.MEMBER ? UserRole.MEMBER : user?.role.toUpperCase() ===UserRole.MANAGER ? UserRole.MANAGER : UserRole.MEMBER,
     isActive: user?.isActive || true,
     
   });

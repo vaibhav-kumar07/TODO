@@ -6,6 +6,7 @@ import { User } from "@/lib/user-api";
 import { updateUserAction } from "@/actions/user";
 import { errorToast, successToast } from "@/components/hooks/use-toast";
 import { Label } from "@/components/common/Label";
+import { UserRole } from "@/types/auth";
 
 interface UpdateStatusProps {
   user: User;
@@ -50,9 +51,17 @@ export default function UpdateStatus({
     setIsActive(user.isActive);
   }, [user]);
 
+  console.log("isActive", user);
   return (
     <div className="flex items-center gap-2">
-      <Switch
+     {user.role.toLowerCase() === UserRole.ADMIN.toLowerCase() ?   <Label
+        className={`text-sm font-medium ${
+          isActive ? "text-green-500" : "text-red-500"
+        }`}
+      >
+        {" "}
+        {isActive ? "Active" : "Inactive"}
+      </Label> : <>  <Switch
         checked={isActive}
         onCheckedChange={handleStatusToggle}
         disabled={isLoading}
@@ -66,6 +75,7 @@ export default function UpdateStatus({
         {" "}
         {isActive ? "Active" : "Inactive"}
       </Label>
+        </>}
     </div>
   );
 }

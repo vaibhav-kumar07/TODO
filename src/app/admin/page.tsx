@@ -20,6 +20,9 @@ export default async function DashboardPage() {
       initialActivity = activityResponse.data;
     }
   } catch (error) {
+    initialActivity = {
+      recentUserEvents: [],
+    };
     console.error("Error fetching initial dashboard data:", error);
   }
 
