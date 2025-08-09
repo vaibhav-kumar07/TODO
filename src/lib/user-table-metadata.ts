@@ -52,6 +52,7 @@ const adminUserTableMetadata: ITableMetadata[] = [
     type: "widget",
     widgetName: "userUpdateWidget",
   },
+ 
   {
     columnName: "password",
     headerLabel: " Set Password",
@@ -60,6 +61,15 @@ const adminUserTableMetadata: ITableMetadata[] = [
     cellClass: "w-full md:w-[15%] lg:w-[15%]",
     type: "widget",
     widgetName: "changePasswordWidget",
+  },
+  {
+    columnName: "delete",
+    headerLabel: "Delete",
+    sortable: false,
+    columnClass: "w-full md:w-[10%] lg:w-[10%] text-left text-muted-foreground",
+    cellClass: "w-full md:w-[10%] lg:w-[10%]",
+    type: "widget",
+    widgetName: "deleteUserWidget",
   },
 ];
 

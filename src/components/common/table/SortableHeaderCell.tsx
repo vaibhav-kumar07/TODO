@@ -9,7 +9,6 @@ const _paramKeys = {
   sortOrder: "sortOrder",
 };
 
-const _sortOrder = { asc: "asc", desc: "desc" };
 interface ISortableHeaderProps {
   columnName: string;
   label: string;

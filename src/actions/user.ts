@@ -1,6 +1,6 @@
 'use server';
 import { UserRole } from '@/types/auth';
-import { createUser, updateUser, deleteUser, changeUserPassword } from '@/lib/user-api';
+import { createUser, updateUser, deleteUser, changeUserPassword, adminDeleteUser } from '@/lib/user-api';
 import { revalidatePath } from 'next/cache';
 
 // Invite new user
@@ -52,8 +52,17 @@ export async function updateUserAction(userId: string, userData: {
 // Delete user
 export async function deleteUserAction(userId: string) {
   try {
-    const result = await deleteUser(userId);
-    return result;
+    // Prefer admin POST endpoint if available
+    const result = await adminDeleteUser(userId);
+    if (result?.success) {
+      revalidatePath('/admin/users');
+      return result;
+    }
+    const fallback = await deleteUser(userId);
+    if (fallback?.success) {
+      revalidatePath('/admin/users');
+    }
+    return fallback;
   } catch (error) {
     console.error('Delete user failed:', error);
     return {

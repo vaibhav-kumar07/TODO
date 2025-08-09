@@ -1,3 +1,5 @@
+import { UserRole } from "./auth";
+
 export interface AdminDashboardStats {
    
   totalUsers: number;
@@ -29,11 +31,17 @@ export enum EventAction {
   BECOME_MANAGER = 'BECOME_MANAGER',
 
   //TASK EVENTS
-  TASK_CREATED = 'TASK_CREATED',
-  TASK_HIGH_PRIORITY = 'TASK_HIGH_PRIORITY',
-  TASK_DUE_DATE = 'TASK_DUE_DATE',
-  TASK_COMPLETED = 'TASK_COMPLETED',
-  TASK_IN_PROGRESS = 'TASK_IN_PROGRESS',
+      TASK_CREATED = 'TASK_CREATED',
+      TASK_HIGH_PRIORITY = 'TASK_HIGH_PRIORITY',
+      TASK_DUE_DATE = 'TASK_DUE_DATE',
+      TASK_UPDATED = 'TASK_UPDATED',
+      TASK_DELETED = 'TASK_DELETED',
+      TASK_COMPLETED = 'TASK_COMPLETED',
+      TASK_ASSIGNED = 'TASK_ASSIGNED',
+      TASK_IN_PROGRESS = 'TASK_IN_PROGRESS',
+      TASK_STATUS_CHANGED = 'TASK_STATUS_CHANGED',
+      TASK_PRIORITY_CHANGED = 'TASK_PRIORITY_CHANGED',
+      TASK_DUE_DATE_CHANGED = 'TASK_DUE_DATE_CHANGED',
 
 
       
@@ -63,6 +71,7 @@ export enum EventAction {
 export enum SocketEvent {
   USER_EVENT = 'USER_EVENT',
   TASK_EVENT = 'TASK_EVENT',
+  ACTIVITY_EVENT = 'ACTIVITY_EVENT',
 }
 
 // Socket room control events
@@ -79,39 +88,43 @@ export interface UserEventPayload {
 
 export type TaskEventPayload = UserEventPayload;
 
-// User Activity Types - Exact API Format
-export interface RecentLogin {
-  userId: string;
-  userEmail: string;
-  userName: string;
-  userRole: string;
-  timestamp: string;
-  ipAddress: string;
-  userAgent: string;
+// Activity event user details payload
+export interface ActivityUser {
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  role: string; // aligns with server string (e.g., 'ADMIN' | 'MANAGER' | 'MEMBER')
+  teamId?: string;
+  isActive: boolean;
+  isEmailVerified: boolean;
+  createdAt: string;
+  updatedAt: string;
 }
 
-export interface ActivitySummary {
-  totalActivities: number;
-  activitiesToday: number;
-  activitiesThisWeek: number;
-  activitiesThisMonth: number;
+// Broadcasted on ACTIVITY_EVENT
+export interface ActivityEventPayload {
+  action: EventAction;
+  timestamp: number;
+  data: {
+    user: ActivityUser;
+  };
 }
+
+
+
 
 export interface RecentUserEvent {
   userId: string;
   userEmail: string;
   userName: string;
-  userRole: string;
+  userRole: UserRole
   action: string;
   timestamp: string;
+  createdAt: string;
   details: { ipAddress: string; loginTime: string };
 }
 
-export interface UserActivityData {
-  recentLogins: RecentLogin[];
-  recentUserEvents: RecentUserEvent[];
-  activitySummary: ActivitySummary;
-}
 
 // Event Payload Interfaces
 export interface LoginEventPayload {

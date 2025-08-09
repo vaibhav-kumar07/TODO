@@ -15,54 +15,16 @@ import {
   Key,
   Mail,
   Settings,
-  Users,
   UserCog,
 } from "lucide-react";
 import { UserRole } from "@/types/auth";
 import { useSocket } from "@/components/provider/socketProvider";
 import { useEffect, useState } from "react";
-import { EventAction, SocketEvent } from "@/types/dashboard";
-import { formatDate } from "@/lib/common/date-utils";
-
-interface RecentLogin {
-  userId: string;
-  userEmail: string;
-  userName: string;
-  userRole: string;
-  timestamp: string;
-  ipAddress: string;
-  userAgent: string;
-}
-
-interface RecentUserEvent {
-  userId: string;
-  userEmail: string;
-  userName: string;
-  userRole: string;
-  action: string;
-  timestamp: string;
-  details: { ipAddress: string; loginTime: string };
-}
-
-interface ActivitySummary {
-  totalActivities: number;
-  activitiesToday: number;
-  activitiesThisWeek: number;
-  activitiesThisMonth: number;
-}
-
-interface UserActivityData {
-  recentLogins: RecentLogin[];
-  recentUserEvents: RecentUserEvent[];
-  activitySummary: ActivitySummary;
-}
-
-interface UserActivityProps {
-  data: UserActivityData;
-}
+import { EventAction, RecentUserEvent, SocketEvent } from "@/types/dashboard";
+import {  formatRelativeOrDate } from "@/lib/common/date-utils";
 
 const getRoleColor = (role: string) => {
-  switch (role.toLowerCase()) {
+  switch (role.toUpperCase() as UserRole) {
     case UserRole.ADMIN:
       return "bg-chart-1/20 text-chart-1 border-chart-1/30";
     case UserRole.MANAGER:
@@ -98,8 +60,6 @@ const getEventIcon = (action: string) => {
       return <AlertTriangle className="w-4 h-4" />;
     case EventAction.PROFILE_UPDATE:
       return <Settings className="w-4 h-4" />;
-    case EventAction.USER_INVITED:
-      return <Users className="w-4 h-4" />;
     case EventAction.BECOME_MANAGER:
       return <UserCog className="w-4 h-4" />;
     default:
@@ -129,8 +89,6 @@ const getEventColor = (action: string) => {
       return "bg-red-500/20 text-red-600 border-red-500/30";
     case EventAction.PROFILE_UPDATE:
       return "bg-indigo-500/20 text-indigo-600 border-indigo-500/30";
-    case EventAction.USER_INVITED:
-      return "bg-pink-500/20 text-pink-600 border-pink-500/30";
     case EventAction.BECOME_MANAGER:
       return "bg-amber-500/20 text-amber-600 border-amber-500/30";
     default:
@@ -160,8 +118,6 @@ const getEventLabel = (action: string) => {
       return "Login Failed";
     case EventAction.PROFILE_UPDATE:
       return "Profile Updated";
-    case EventAction.USER_INVITED:
-      return "User Invited";
     case EventAction.BECOME_MANAGER:
       return "Role Changed";
     default:
@@ -187,95 +143,57 @@ const ActivityCard = ({
   </Card>
 );
 
-export default function UserActivity({ data }: UserActivityProps) {
+export default function UserActivity({ data }: { data: RecentUserEvent[] }) {
   const { socket, connected } = useSocket();
-  const [activityData, setActivityData] = useState<UserActivityData>(data);
+  const [activityData, setActivityData] = useState<RecentUserEvent[]>(data);
 
   useEffect(() => {
-    if (socket && connected) {
-      socket.on(SocketEvent.USER_EVENT, (data: any) => {
-        console.log("LOGIN event received:", data);
+    if (!socket || !connected) return;
 
-        setActivityData((prevData) => ({
-          ...prevData,
-          recentLogins: [...prevData.recentLogins, data],
-        }));
-      });
-      socket.on(SocketEvent.USER_EVENT, (data: any) => {
-        console.log("USER_CREATED event received:", data);
-        setActivityData((prevData) => ({
-          ...prevData,
-          recentUserEvents: [...prevData.recentUserEvents, data],
-        }));
-      });
+    const MAX_EVENTS = 5
+    const addToFront = (prev: RecentUserEvent[], evt: RecentUserEvent) =>
+      [evt, ...prev].slice(0, MAX_EVENTS);
 
-      socket.on(SocketEvent.USER_EVENT, (data: any) => {
-        console.log("USER_DELETED event received:", data);
-        setActivityData((prevData) => ({
-          ...prevData,
-          recentUserEvents: [...prevData.recentUserEvents, data],
-        }));
-      });
-      socket.on(SocketEvent.USER_EVENT, (data: any) => {
-        console.log("USER_ACTIVATED event received:", data);
-        setActivityData((prevData) => ({
-          ...prevData,
-          recentUserEvents: [...prevData.recentUserEvents, data],
-        }));
-      });
-      socket.on(SocketEvent.USER_EVENT, (data: any) => {
-        console.log("USER_DEACTIVATED event received:", data);
-        setActivityData((prevData) => ({
-          ...prevData,
-          recentUserEvents: [...prevData.recentUserEvents, data],
-        }));
-      });
-      socket.on(SocketEvent.USER_EVENT, (data: any) => {
-        console.log("PASSWORD_RESET event received:", data);
-        setActivityData((prevData) => ({
-          ...prevData,
-          recentUserEvents: [...prevData.recentUserEvents, data],
-        }));
-      });
-      socket.on(SocketEvent.USER_EVENT, (data: any) => {
-        console.log("FORGOT_PASSWORD event received:", data);
-        setActivityData((prevData) => ({
-          ...prevData,
-          recentUserEvents: [...prevData.recentUserEvents, data],
-        }));
-      });
-      socket.on(SocketEvent.USER_EVENT, (data: any) => {
-        console.log("LOGIN_FAILED event received:", data);
-        setActivityData((prevData) => ({
-          ...prevData,
-          recentUserEvents: [...prevData.recentUserEvents, data],
-        }));
-      });
+    const userEventHandlers: Partial<Record<EventAction, (prev: RecentUserEvent[], evt: RecentUserEvent) => RecentUserEvent[]>> = {
+      [EventAction.LOGIN]: addToFront,
+      [EventAction.LOGOUT]: addToFront,
+      [EventAction.USER_CREATED]: addToFront,
+      [EventAction.USER_DELETED]: addToFront,
+      [EventAction.USER_ACTIVATED]: addToFront,
+      [EventAction.USER_DEACTIVATED]: addToFront,
+      [EventAction.PASSWORD_RESET]: addToFront,
+      [EventAction.PROFILE_UPDATE]: addToFront,
+      [EventAction.BECOME_MANAGER]: addToFront,
+      [EventAction.USER_INVITED]: addToFront,
+      [EventAction.USER_INVITATION_SUCCESS]: addToFront,
+      [EventAction.USER_INVITATION_FAILED]: addToFront,
+      [EventAction.USER_INVITATION_EXPIRED]: addToFront,
+      [EventAction.USER_REGISTER]: addToFront,
+    };
 
-      socket.on(SocketEvent.USER_EVENT, (data: any) => {
-        console.log("PROFILE_UPDATE event received:", data);
-        setActivityData((prevData) => ({
-          ...prevData,
-          recentUserEvents: [...prevData.recentUserEvents, data],
-        }));
+    const handleUserEvent = (evt: RecentUserEvent) => {
+      console.log("evt", evt);
+      setActivityData((prev) => {
+        if (!prev) return prev;
+        const handler = userEventHandlers[evt.action as EventAction];
+        return handler ? handler(prev, evt) : addToFront(prev, evt);
       });
+    };
 
-      socket.on(SocketEvent.USER_EVENT, (data: any) => {
-        console.log("USER_INVITED event received:", data);
-        setActivityData((prevData) => ({
-          ...prevData,
-          recentUserEvents: [...prevData.recentUserEvents, data],
-        }));
-      });
-    }
+    socket.on(SocketEvent.ACTIVITY_EVENT, handleUserEvent);
+    return () => {
+      socket.off(SocketEvent.ACTIVITY_EVENT, handleUserEvent);
+    };
   }, [socket, connected]);
+
+  console.log("activityData", activityData);
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-1 gap-6 rounded-lg ">
       {/* Recent User Events */}
       <ActivityCard title="Recent User Events ">
         <div className="space-y-3 rounded-lg">
-          {activityData.recentUserEvents.slice(0, 5).map((event, index) => (
+          {activityData.slice(0,5).map((event: RecentUserEvent, index: number) => (
             <div
               key={index}
               className="flex items-center gap-3 p-3 rounded-lg bg-muted/30 border border-border/50"
@@ -290,7 +208,7 @@ export default function UserActivity({ data }: UserActivityProps) {
                   </span>
                   <Badge
                     variant="secondary"
-                    className={`text-xs ${getRoleColor(event.userRole)}`}
+                    className={`text-xs capitalize ${getRoleColor(event.userRole)}`}
                   >
                     {event.userRole}
                   </Badge>
@@ -303,9 +221,7 @@ export default function UserActivity({ data }: UserActivityProps) {
                   </div>
                   <div className="flex items-center gap-1 text-xs text-muted-foreground">
                     <Clock className="w-3 h-3" />
-                    <span>
-                      {formatDate(event.details.loginTime, "DD-MM-YYYY ")}
-                    </span>
+                    <span>{formatRelativeOrDate(event.details.loginTime, "DD-MM-YYYY")}</span>
                   </div>
                 </div>
                 {event.details?.ipAddress && (

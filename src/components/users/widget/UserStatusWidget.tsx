@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 import { User } from '@/lib/user-api';
 import { Badge } from '@/components/ui/badge';
@@ -9,8 +10,13 @@ interface UserStatusWidgetProps {
 
 export default function UserStatusWidget({ user }: UserStatusWidgetProps) {
   const isActive = user.isActive;
+
+  console.log("isActive", user);
   return (
     <div className="flex items-center justify-center">
+
+
+
       <Badge 
         variant={isActive ? "default" : "secondary"}
         className={cn(

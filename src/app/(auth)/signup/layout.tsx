@@ -5,8 +5,8 @@ import TopLoader from "nextjs-toploader";
 
 
 export const metadata: Metadata = {
-  title: "Login - Task Management System",
-  description: "Login page for the task management system",
+  title: "Signup - Task Management System",
+  description: "Signup page for the task management system",
 };
 
 export default function AuthLayout({

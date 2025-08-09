@@ -3,13 +3,15 @@ import UserActivity from "./UserActivity";
 import QuickStatsOverview from "./QuickStatsOverview";
 import { SocketProvider } from "@/components/provider/socketProvider";
 import PageHeaderWithButton from "@/components/common/PageHeaderWithButton";
-import { AdminDashboardStats, UserActivityData } from "@/types/dashboard";
+import { AdminDashboardStats, RecentUserEvent } from "@/types/dashboard";
 import WebsocketConnectionStatus from "../../provider/WebsocketConnectionStatus";
 
 interface AdminDashboardProps {
   token: string;
   initialStats?: AdminDashboardStats;
-  initialActivity?: UserActivityData;
+  initialActivity?: {
+    recentUserEvents: RecentUserEvent[];
+  }
 }
 
 function DashboardContent({
@@ -17,11 +19,13 @@ function DashboardContent({
   initialActivity,
 }: {
   initialStats?: AdminDashboardStats;
-  initialActivity?: UserActivityData;
+  initialActivity?: {
+    recentUserEvents: RecentUserEvent[];
+  }
 }) {
   const displayStats = initialStats;
   const displayActivity = initialActivity;
-  console.log("initialStats", initialStats);
+  console.log("displayActivity", displayActivity);
 
   return (
     <div className="w-full space-y-4 px-3 py-2">
@@ -29,10 +33,10 @@ function DashboardContent({
         title="Admin Dashboard"
         description="Monitor system activity and user statistics"
         action={<WebsocketConnectionStatus />}
-        titleClassName="hidden sm:block"
+        titleClassName="hidden sm:block sm:w-full sm:flex sm:flex-col"
       />
       <QuickStatsOverview stats={displayStats as AdminDashboardStats} />
-      <UserActivity data={displayActivity as UserActivityData} />
+      <UserActivity data={displayActivity?.recentUserEvents || []} />
     </div>
   );
 }
