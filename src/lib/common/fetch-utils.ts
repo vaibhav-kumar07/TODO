@@ -33,36 +33,26 @@ const fetchRequest = async (
   
 
   const response = await fetch(url, requestInput);
-  
+ const responseData = await response.json();
   // Handle 401 Unauthorized - try to refresh token
-  if (response.status ==401 && requestOption.isWithToken) {
-    
-    
+  if (response.status === 401 && requestOption.isWithToken) {
     const refreshSuccess = await refreshToken();
     if (refreshSuccess) {
-      
-      
-     setTimeout(async () => {
       // Retry the original request with new token
       const retryRequestInput = await _getRequestInput(method, body, requestOption);
       const retryResponse = await fetch(url, retryRequestInput);
-      const retryResponseData = await retryResponse.json();
-      return retryResponseData;
-     }, 2000);
+      return await retryResponse.json();
     } else {
-      
-      
-      
       // Clear all auth cookies on refresh failure
       await deleteCookieValue(ICookieKeys.TOKEN);
       await deleteCookieValue(ICookieKeys.REFRESH_TOKEN);
       await deleteCookieValue(ICookieKeys.USER_ROLE);   
       redirect('/login');
     }
-
-}else{
-  return await response.json()
-}
+  }
+ 
+  // Default return (parse once)
+  return responseData;
 
 }
 // HTTP Methods

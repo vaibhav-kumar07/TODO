@@ -31,7 +31,7 @@ export default function DeleteTaskWidget({
   const handleDelete = async () => {
     setIsLoading(true);
     try {
-      const result = await deleteTaskAction(taskId);
+       await deleteTaskAction(taskId);
 
   
         successToast("Task deleted successfully");
