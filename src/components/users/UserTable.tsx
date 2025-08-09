@@ -2,11 +2,11 @@ import React from "react";
 import TableHeader from "@/components/common/table/TableHeader";
 import TableRow from "@/components/common/table/TableRow";
 import { User } from "@/lib/user-api";
-import { ITableMetadata } from "@/components/common/table/Table";
 import { Label } from "@/components/common/Label";
 import { cn } from "@/lib/utils";
 import { formatDate } from "@/lib/common/date-utils";
 import { UserRole } from "@/types/auth";
+import { getUserTableMetadata } from "@/lib/user-table-metadata";
 
 interface UserTableProps {
   users: User[];
@@ -14,70 +14,8 @@ interface UserTableProps {
   rowClassName?: string;
 }
 
-const userTableMetadata: ITableMetadata[] = [
-  {
-    columnName: "fullName",
-    headerLabel: "User",
-    sortable: true,
-    columnClass:
-      "w-full md:w-[30%] lg:w-[25%] text-left text-muted-foreground md:pl-4",
-    cellClass: "w-full md:w-[30%] lg:w-[25%] text-left md:pl-2",
-    // type: "widget",
-    // widgetName: "userDetailWidget",
-  },
-  {
-    columnName: "email",
-    headerLabel: "Email",
-    sortable: true,
-    columnClass: "w-full md:w-[25%] lg:w-[25%] text-left text-muted-foreground truncate",
-    cellClass: "w-full md:w-[25%] lg:w-[25%] truncate",
-  },
-  {
-    columnName: "role",
-    headerLabel: "Role",
-    sortable: true,
-    columnClass: "w-full md:w-[15%] lg:w-[15%] text-left text-muted-foreground",
-    cellClass: "w-full md:w-[15%] lg:w-[15%]",
-    // type: "widget",
-    // widgetName: "userRoleWidget",
-  },
-  {
-    columnName: "status",
-    headerLabel: "Status",
-    sortable: true,
-    columnClass: "w-full md:w-[15%] lg:w-[15%] text-muted-foreground",
-    cellClass: "w-full md:w-[15%] lg:w-[15%] md:px-0 md:text-center",
-    type: "widget",
-    widgetName: "updateStatusWidget",
-  },
-  {
-    columnName: "createdAt",
-    headerLabel: "Created",
-    sortable: true,
-    columnClass: "w-full md:w-[15%] lg:w-[15%] text-left text-muted-foreground",
-    cellClass: "w-full md:w-[15%] lg:w-[15%]",
-  },
-  {
-    columnName: "actions",
-    headerLabel: "Actions",
-    sortable: false,
-    columnClass: "w-full md:w-[10%] lg:w-[10%] text-left text-muted-foreground",
-    cellClass: "w-full md:w-[10%] lg:w-[10%]",
-    type: "widget",
-    widgetName: "userUpdateWidget",
-  },
-  {
-    columnName: "password",
-    headerLabel: " Set Password",
-    sortable: false,
-    columnClass: "w-full md:w-[15%] lg:w-[15%] text-left text-muted-foreground",
-    cellClass: "w-full md:w-[15%] lg:w-[15%]",
-    type: "widget",
-    widgetName: "changePasswordWidget",
-  },
-];
-
-export default function UserTable(props: UserTableProps) {
+export default async function UserTable(props: UserTableProps) {
+  const metadata =  await getUserTableMetadata();
   return (
     <div
       className={cn(
@@ -86,7 +24,7 @@ export default function UserTable(props: UserTableProps) {
       )}
     >
       <TableHeader
-        metadata={userTableMetadata}
+        metadata={metadata}
         className="border-none rounded-none md:px-0 md:py-1.5 md:gap-0 text-foreground rounded-t-xl"
       />
       {props.users?.length ? (
@@ -105,10 +43,10 @@ export default function UserTable(props: UserTableProps) {
                 : "Manager",
           };
           return (
-            <TableRow
+              <TableRow
               key={user.id}
               data={userData}
-              metadata={userTableMetadata}
+              metadata={metadata}
               className={cn(
                 "w-full border-x-0 border-b-0 px-4 py-2 md:py-1 md:px-0",
                 props.rowClassName

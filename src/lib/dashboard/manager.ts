@@ -1,9 +1,9 @@
 import { get } from "@/lib/common/fetch-utils";
-import { ManagerStats, ManagerActivityData } from "@/types/dashboard";
+import { ManagerDashboardStats, ManagerActivityData } from "@/types/dashboard";
 
 const API_BASE_URL = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/dashboard/manager`;
 
-export async function getManagerDashboardStats(): Promise<ManagerStats> {
+export async function getManagerDashboardStats(): Promise<ManagerDashboardStats> {
   const response = await get(`${API_BASE_URL}/stats`, { isWithToken: true });
 //   console.log("response", response);
   return response.data;

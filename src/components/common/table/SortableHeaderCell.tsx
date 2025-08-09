@@ -40,10 +40,7 @@ export default function SortableHeaderCell({
 
   const handleSort = (column: string) => {
     if (column === sortColumn) {
-      const order =
-        sortOrder === _sortOrder.asc ? _sortOrder.desc : _sortOrder.asc;
-
-      //   router.push(appendSearchParams(_paramKeys.sortOrder as string, order));
+      //   router.push(appendSearchParams(_paramKeys.sortOrder as string, nextOrder));
     } else {
       //   router.push(appendSearchParams(_paramKeys.sortColumn as string, column));
     }

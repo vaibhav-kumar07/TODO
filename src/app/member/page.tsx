@@ -8,7 +8,7 @@ import { getAllTasks } from "@/lib/task-api";
 import { paginationLimit } from "@/types/common";
 import { UserRole } from "@/types/auth";
 import { TaskFilters } from "@/types/task";
-import { getTaskTableMetadataForSSR } from "@/lib/table-metadata";
+import { getTaskTableMetadataForSSR } from "@/lib/task-table-metadata";
 import Pagination from "@/components/common/pagination/Pagination";
 
 interface TaskManagementPageProps {

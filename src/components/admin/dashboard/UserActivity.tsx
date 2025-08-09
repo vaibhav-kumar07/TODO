@@ -21,7 +21,7 @@ import {
 import { UserRole } from "@/types/auth";
 import { useSocket } from "@/components/provider/socketProvider";
 import { useEffect, useState } from "react";
-import { EventType } from "@/types/dashboard";
+import { EventAction, SocketEvent } from "@/types/dashboard";
 import { formatDate } from "@/lib/common/date-utils";
 
 interface RecentLogin {
@@ -78,29 +78,29 @@ const getRoleColor = (role: string) => {
 
 const getEventIcon = (action: string) => {
   switch (action) {
-    case EventType.LOGIN:
+    case EventAction.LOGIN:
       return <LogIn className="w-4 h-4" />;
-    case EventType.LOGOUT:
+    case EventAction.LOGOUT:
       return <LogOut className="w-4 h-4" />;
-    case EventType.USER_CREATED:
+    case EventAction.USER_CREATED:
       return <UserPlus className="w-4 h-4" />;
-    case EventType.USER_DELETED:
+    case EventAction.USER_DELETED:
       return <UserMinus className="w-4 h-4" />;
-    case EventType.USER_ACTIVATED:
+    case EventAction.USER_ACTIVATED:
       return <UserCheck className="w-4 h-4" />;
-    case EventType.USER_DEACTIVATED:
+    case EventAction.USER_DEACTIVATED:
       return <UserX className="w-4 h-4" />;
-    case EventType.PASSWORD_RESET:
+    case EventAction.PASSWORD_RESET:
       return <Key className="w-4 h-4" />;
-    case EventType.FORGOT_PASSWORD:
+    case EventAction.PASSWORD_RESET_SUCCESS:
       return <Mail className="w-4 h-4" />;
-    case EventType.LOGIN_FAILED:
+    case EventAction.PASSWORD_RESET_FAILED:
       return <AlertTriangle className="w-4 h-4" />;
-    case EventType.PROFILE_UPDATE:
+    case EventAction.PROFILE_UPDATE:
       return <Settings className="w-4 h-4" />;
-    case EventType.USER_INVITED:
+    case EventAction.USER_INVITED:
       return <Users className="w-4 h-4" />;
-    case EventType.ROLE_CHANGED:
+    case EventAction.BECOME_MANAGER:
       return <UserCog className="w-4 h-4" />;
     default:
       return <Activity className="w-4 h-4" />;
@@ -109,29 +109,29 @@ const getEventIcon = (action: string) => {
 
 const getEventColor = (action: string) => {
   switch (action) {
-    case EventType.LOGIN:
+    case EventAction.LOGIN:
       return "bg-green-500/20 text-green-600 border-green-500/30";
-    case EventType.LOGOUT:
+    case EventAction.LOGOUT:
       return "bg-blue-500/20 text-blue-600 border-blue-500/30";
-    case EventType.USER_CREATED:
+    case EventAction.USER_CREATED:
       return "bg-emerald-500/20 text-emerald-600 border-emerald-500/30";
-    case EventType.USER_DELETED:
+    case EventAction.USER_DELETED:
       return "bg-red-500/20 text-red-600 border-red-500/30";
-    case EventType.USER_ACTIVATED:
+    case EventAction.USER_ACTIVATED:
       return "bg-green-500/20 text-green-600 border-green-500/30";
-    case EventType.USER_DEACTIVATED:
+    case EventAction.USER_DEACTIVATED:
       return "bg-orange-500/20 text-orange-600 border-orange-500/30";
-    case EventType.PASSWORD_RESET:
+    case EventAction.PASSWORD_RESET:
       return "bg-purple-500/20 text-purple-600 border-purple-500/30";
-    case EventType.FORGOT_PASSWORD:
+    case EventAction.PASSWORD_RESET_SUCCESS:
       return "bg-cyan-500/20 text-cyan-600 border-cyan-500/30";
-    case EventType.LOGIN_FAILED:
+    case EventAction.PASSWORD_RESET_FAILED:
       return "bg-red-500/20 text-red-600 border-red-500/30";
-    case EventType.PROFILE_UPDATE:
+    case EventAction.PROFILE_UPDATE:
       return "bg-indigo-500/20 text-indigo-600 border-indigo-500/30";
-    case EventType.USER_INVITED:
+    case EventAction.USER_INVITED:
       return "bg-pink-500/20 text-pink-600 border-pink-500/30";
-    case EventType.ROLE_CHANGED:
+    case EventAction.BECOME_MANAGER:
       return "bg-amber-500/20 text-amber-600 border-amber-500/30";
     default:
       return "bg-muted text-muted-foreground";
@@ -140,29 +140,29 @@ const getEventColor = (action: string) => {
 
 const getEventLabel = (action: string) => {
   switch (action) {
-    case EventType.LOGIN:
+      case EventAction.LOGIN:
       return "Login";
-    case EventType.LOGOUT:
+    case EventAction.LOGOUT:
       return "Logout";
-    case EventType.USER_CREATED:
+    case EventAction.USER_CREATED:
       return "User Created";
-    case EventType.USER_DELETED:
+    case EventAction.USER_DELETED:
       return "User Deleted";
-    case EventType.USER_ACTIVATED:
+    case EventAction.USER_ACTIVATED:
       return "User Activated";
-    case EventType.USER_DEACTIVATED:
+    case EventAction.USER_DEACTIVATED:
       return "User Deactivated";
-    case EventType.PASSWORD_RESET:
+    case EventAction.PASSWORD_RESET:
       return "Password Reset";
-    case EventType.FORGOT_PASSWORD:
+    case EventAction.PASSWORD_RESET_SUCCESS:
       return "Forgot Password";
-    case EventType.LOGIN_FAILED:
+    case EventAction.PASSWORD_RESET_FAILED:
       return "Login Failed";
-    case EventType.PROFILE_UPDATE:
+    case EventAction.PROFILE_UPDATE:
       return "Profile Updated";
-    case EventType.USER_INVITED:
+    case EventAction.USER_INVITED:
       return "User Invited";
-    case EventType.ROLE_CHANGED:
+    case EventAction.BECOME_MANAGER:
       return "Role Changed";
     default:
       return action;
@@ -193,7 +193,7 @@ export default function UserActivity({ data }: UserActivityProps) {
 
   useEffect(() => {
     if (socket && connected) {
-      socket.on(EventType.LOGIN, (data: any) => {
+      socket.on(SocketEvent.USER_EVENT, (data: any) => {
         console.log("LOGIN event received:", data);
 
         setActivityData((prevData) => ({
@@ -201,7 +201,7 @@ export default function UserActivity({ data }: UserActivityProps) {
           recentLogins: [...prevData.recentLogins, data],
         }));
       });
-      socket.on(EventType.USER_CREATED, (data: any) => {
+      socket.on(SocketEvent.USER_EVENT, (data: any) => {
         console.log("USER_CREATED event received:", data);
         setActivityData((prevData) => ({
           ...prevData,
@@ -209,42 +209,42 @@ export default function UserActivity({ data }: UserActivityProps) {
         }));
       });
 
-      socket.on(EventType.USER_DELETED, (data: any) => {
+      socket.on(SocketEvent.USER_EVENT, (data: any) => {
         console.log("USER_DELETED event received:", data);
         setActivityData((prevData) => ({
           ...prevData,
           recentUserEvents: [...prevData.recentUserEvents, data],
         }));
       });
-      socket.on(EventType.USER_ACTIVATED, (data: any) => {
+      socket.on(SocketEvent.USER_EVENT, (data: any) => {
         console.log("USER_ACTIVATED event received:", data);
         setActivityData((prevData) => ({
           ...prevData,
           recentUserEvents: [...prevData.recentUserEvents, data],
         }));
       });
-      socket.on(EventType.USER_DEACTIVATED, (data: any) => {
+      socket.on(SocketEvent.USER_EVENT, (data: any) => {
         console.log("USER_DEACTIVATED event received:", data);
         setActivityData((prevData) => ({
           ...prevData,
           recentUserEvents: [...prevData.recentUserEvents, data],
         }));
       });
-      socket.on(EventType.PASSWORD_RESET, (data: any) => {
+      socket.on(SocketEvent.USER_EVENT, (data: any) => {
         console.log("PASSWORD_RESET event received:", data);
         setActivityData((prevData) => ({
           ...prevData,
           recentUserEvents: [...prevData.recentUserEvents, data],
         }));
       });
-      socket.on(EventType.FORGOT_PASSWORD, (data: any) => {
+      socket.on(SocketEvent.USER_EVENT, (data: any) => {
         console.log("FORGOT_PASSWORD event received:", data);
         setActivityData((prevData) => ({
           ...prevData,
           recentUserEvents: [...prevData.recentUserEvents, data],
         }));
       });
-      socket.on(EventType.LOGIN_FAILED, (data: any) => {
+      socket.on(SocketEvent.USER_EVENT, (data: any) => {
         console.log("LOGIN_FAILED event received:", data);
         setActivityData((prevData) => ({
           ...prevData,
@@ -252,7 +252,7 @@ export default function UserActivity({ data }: UserActivityProps) {
         }));
       });
 
-      socket.on(EventType.PROFILE_UPDATE, (data: any) => {
+      socket.on(SocketEvent.USER_EVENT, (data: any) => {
         console.log("PROFILE_UPDATE event received:", data);
         setActivityData((prevData) => ({
           ...prevData,
@@ -260,7 +260,7 @@ export default function UserActivity({ data }: UserActivityProps) {
         }));
       });
 
-      socket.on(EventType.USER_INVITED, (data: any) => {
+      socket.on(SocketEvent.USER_EVENT, (data: any) => {
         console.log("USER_INVITED event received:", data);
         setActivityData((prevData) => ({
           ...prevData,

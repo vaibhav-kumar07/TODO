@@ -2,12 +2,12 @@
 
 import { ClipboardList, Clock, AlertTriangle, Users } from "lucide-react";
 import TaskStatsCard from "./TaskStatsCard";
-import { ManagerStats, EventType } from "@/types/dashboard";
+import { ManagerDashboardStats, EventAction, SocketEvent, TaskEventPayload, SocketRoomEvent } from "@/types/dashboard";
 import { useSocket } from "@/components/provider/socketProvider";
 import { useEffect, useState } from "react";
 
 interface TaskStatsOverviewProps {
-  stats: ManagerStats;
+  stats: ManagerDashboardStats;
 }
 
 interface TaskStatItem {
@@ -18,93 +18,64 @@ interface TaskStatItem {
 }
 
 export default function TaskStatsOverview({ stats }: TaskStatsOverviewProps) {
-  const [dashboardStats, setDashboardStats] = useState<ManagerStats | null>(
+  const [dashboardStats, setDashboardStats] = useState<ManagerDashboardStats | null>(
     stats || null
   );
   const { socket, connected } = useSocket();
+  
 
   useEffect(() => {
-    if (socket && connected) {
-      // Task creation events
-      socket.on(EventType.TASK_CREATED, (data: any) => {
-        console.log("TASK_CREATED event received:", data);
-        setDashboardStats((prevStats) => {
-          if (!prevStats) return prevStats;
-          return {
-            ...prevStats,
-            totalTasks: prevStats.totalTasks + 1,
-            tasksCreatedToday: prevStats.tasksCreatedToday + 1,
-            todaysSummary: {
-              ...prevStats.todaysSummary,
-              tasksCreated: prevStats.todaysSummary.tasksCreated + 1,
-            },
-            pendingTasks: prevStats.pendingTasks + 1,
-          };
-        });
-      });
+    if (!socket || !connected) return;
 
-      // Task completion events
-      socket.on(EventType.TASK_COMPLETED, (data: any) => {
-        console.log("TASK_COMPLETED event received:", data);
-        setDashboardStats((prevStats) => {
-          if (!prevStats) return prevStats;
-          return {
-            ...prevStats,
-            completedTasks: prevStats.completedTasks + 1,
-            todaysSummary: {
-              ...prevStats.todaysSummary,
-              tasksCompleted: prevStats.todaysSummary.tasksCompleted + 1,
-            },
-            pendingTasks: Math.max(0, prevStats.pendingTasks - 1),
-          };
-        });
+    const handleTaskEvent = (evt: TaskEventPayload) => {
+      console.log('TASK_EVENT', evt);
+      setDashboardStats((prev) => {
+        if (!prev) return prev;
+        const handler = taskEventHandlers[evt.action as EventAction];
+        return handler ? handler(prev, evt) : prev;
       });
+    };
 
-      // Task assignment events
-      socket.on(EventType.TASK_ASSIGNED, (data: any) => {
-        console.log("TASK_ASSIGNED event received:", data);
-        setDashboardStats((prevStats) => {
-          if (!prevStats) return prevStats;
-          return {
-            ...prevStats,
-            todaysSummary: {
-              ...prevStats.todaysSummary,
-              tasksAssigned: prevStats.todaysSummary.tasksAssigned + 1,
-            },
-          };
-        });
-      });
+    const managerId = stats?.info?.managerId;
+    socket.emit(SocketRoomEvent.JOIN_MANAGER_ROOM, managerId);
+    socket.on('JOINED_MANAGER_ROOM', (data) => {
+      console.log(`✅ Joined room: ${data.room}`);
+    });
+   
+    socket.on(SocketEvent.TASK_EVENT, handleTaskEvent);
 
-      // Task status change events
-      socket.on(EventType.TASK_STATUS_CHANGED, (data: any) => {
-        console.log("TASK_STATUS_CHANGED event received:", data);
-        setDashboardStats((prevStats) => {
-          if (!prevStats) return prevStats;
-          return {
-            ...prevStats,
-            todaysSummary: {
-              ...prevStats.todaysSummary,
-              statusChanges: prevStats.todaysSummary.statusChanges + 1,
-            },
-          };
-        });
-      });
+    const taskEventHandlers: Partial<Record<EventAction, (prev: ManagerDashboardStats, evt: TaskEventPayload) => ManagerDashboardStats>> = {
+      [EventAction.TASK_CREATED]: (prev, evt) => ({
+        ...prev,
+        totalTasks: Math.max(0, (prev.totalTasks ?? 0) + (evt.isIncrement ? 1 : -1)),
+      }),
+        [EventAction.TASK_COMPLETED]: (prev, evt) => {
+          console.log('TASK_COMPLETED', evt);
+        return {
+        ...prev,
+        completedTasks: Math.max(0, (prev.completedTasks ?? 0) + (evt.isIncrement ? 1 : -1)),
+        }
+       
+      },
+      [EventAction.TASK_DUE_DATE]: (prev, evt) => ({
+        ...prev,
+        overdueTasks: Math.max(0, prev.overdueTasks + (evt.isIncrement ? 1 : -1)),
+      }),
+      [EventAction.TASK_IN_PROGRESS]: (prev, evt) => {
+        console.log('TASK_IN_PROGRESS', evt);
+        return {
+        ...prev,
+        inProgressTasks: Math.max(0, (prev.inProgressTasks ?? 0) + (evt.isIncrement ? 1 : -1)),
+      }}
+    };
 
-      // Member added events
-      socket.on(EventType.MEMBER_ADDED, (data: any) => {
-        console.log("MEMBER_ADDED event received:", data);
-        setDashboardStats((prevStats) => {
-          if (!prevStats) return prevStats;
-          return {
-            ...prevStats,
-            totalMembers: prevStats.totalMembers + 1,
-            membersAddedToday: prevStats.membersAddedToday + 1,
-            membersWithoutTasks: prevStats.membersWithoutTasks + 1,
-          };
-        });
-      });
-    }
-  }, [socket, connected]);
+   
+
+   
+    return () => {
+      socket.off(SocketEvent.TASK_EVENT, handleTaskEvent);
+    };
+  }, [socket, connected, stats?.info?.managerId]);
 
   const taskStatsData: TaskStatItem[] = [
     {
@@ -114,8 +85,8 @@ export default function TaskStatsOverview({ stats }: TaskStatsOverviewProps) {
       color: "chart-2",
     },
     {
-      title: "High Priority",
-      value: dashboardStats?.highPriorityTasks ?? 0,
+      title: "Completed Tasks",
+      value: dashboardStats?.completedTasks ?? 0,
       icon: AlertTriangle,
       color: "chart-2",
     },
@@ -126,8 +97,8 @@ export default function TaskStatsOverview({ stats }: TaskStatsOverviewProps) {
       color: "chart-2",
     },
     {
-      title: "Team Members",
-      value: dashboardStats?.totalMembers ?? 0,
+      title: "In Progress Tasks",
+      value: dashboardStats?.inProgressTasks ?? 0,
       icon: Users,
       color: "chart-2",
     },
