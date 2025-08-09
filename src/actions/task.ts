@@ -44,6 +44,7 @@ export async function deleteTaskAction(taskId: string) {
     revalidatePath('/manager/tasks');
     return result;
   } catch (error) {
+    revalidatePath('/manager/tasks');
     console.error('Delete task failed:', error);
     return {
       success: false,
