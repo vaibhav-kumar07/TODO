@@ -4,12 +4,13 @@ import React, { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import CommonButton from "@/components/common/Button";
 import { TaskPriority } from "@/types/task";
+import { cn } from "@/lib/utils";
 
 interface PriorityFilterProps {
   className?: string;
 }
 
-export default function PriorityFilter({}: PriorityFilterProps) {
+export default function PriorityFilter({className}: PriorityFilterProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [priority, setPriority] = useState<string | null>(null);
@@ -68,7 +69,7 @@ export default function PriorityFilter({}: PriorityFilterProps) {
   ];
 
   return (
-    <div className=" sm:flex items-center gap-2">
+    <div className={cn(` sm:flex items-center gap-2 w-full sm:w-fit `, className)}>
       {priorityOptions.map((option) => (
         <CommonButton
           key={option.value}

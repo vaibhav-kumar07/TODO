@@ -33,13 +33,10 @@ export default function DeleteTaskWidget({
     try {
       const result = await deleteTaskAction(taskId);
 
-      if (result.success) {
+  
         successToast("Task deleted successfully");
         setIsOpen(false);
         onDelete?.(); // Callback to refresh the table
-      } else {
-        errorToast(result.message || "Failed to delete task");
-      }
     } catch (error) {
       console.error("Error deleting task:", error);
       errorToast("Failed to delete task");

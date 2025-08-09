@@ -54,10 +54,12 @@ export default function SidebarClient({ items, userRole, className }: SidebarCli
     <div className={cn("w-64 h-screen border-r bg-card text-card-foreground border-border", className)}>
       <div className="flex flex-col h-full">
         {/* Header */}
-        <div className="flex items-center justify-between h-16 px-6 border-b border-border">
+        <div className="flex items-center justify-between h-16 px-6 border-b border-border ">
           <div className="flex items-center">
             <h1 className="text-lg font-semibold text-card-foreground">
+              <Link href="/" className="flex items-center gap-2 ">
               {userRole.charAt(0).toUpperCase() + userRole.slice(1).toLowerCase()} Panel
+              </Link>
             </h1>
           </div>
         </div>

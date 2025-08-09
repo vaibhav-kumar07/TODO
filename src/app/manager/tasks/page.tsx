@@ -1,9 +1,9 @@
 import { getCookieValue } from "@/lib/common/cookie-utils";
 import { ICookieKeys } from "@/types/common";
 import { redirect } from "next/navigation";
-import TaskManagementHeader from "@/components/manager/tasks/TaskManagementHeader";
-import TaskTable from "@/components/manager/tasks/TaskTable";
-import FilterContainer from "@/components/manager/tasks/filters/FilterContainer";
+import TaskManagementHeader from "@/components/tasks/TaskManagementHeader";
+import TaskTable from "@/components/tasks/TaskTable";
+import FilterContainer from "@/components/tasks/filters/FilterContainer";
 import { getAllTasks } from "@/lib/task-api";
 import { paginationLimit } from "@/types/common";
 import { UserRole } from "@/types/auth";

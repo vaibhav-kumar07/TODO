@@ -80,7 +80,9 @@ export default function MobileSidebar({ items, userRole }: MobileSidebarProps) {
         <SheetContent side="left" className="w-80 p-0">
           <SheetHeader className="px-6 py-4 border-b border-border">
             <SheetTitle className="text-left">
+              <Link href="/" className="flex items-center gap-2 bg-green-500">
               {userRole.charAt(0).toUpperCase() + userRole.slice(1).toLowerCase()} Panel
+              </Link>
             </SheetTitle>
           </SheetHeader>
           
